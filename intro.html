@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Introduction</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --void: #0D1210;
+    --panel: #17211D;
+    --amber: #D9A54A;
+    --ember: #B85C2E;
+    --paper: #F3EEE2;
+    --fog: #9C978A;
+    --font-display: 'Fraunces', Georgia, serif;
+    --font-body: 'Space Grotesk', 'Helvetica Neue', Arial, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: var(--void);
+  }
+
+  body {
+    font-family: var(--font-body);
+    color: var(--paper);
+    position: relative;
+  }
+
+  /* ---------- Deck ---------- */
+
+  #deck {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    cursor: pointer;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 1;
+    transform: translateX(0) scale(1);
+    transition:
+      opacity 1.15s cubic-bezier(.22,1,.36,1),
+      transform 1.15s cubic-bezier(.22,1,.36,1);
+  }
+
+  .slide.active {
+    opacity: 1;
+    pointer-events: auto;
+    z-index: 2;
+  }
+
+  .slide__media {
+    position: absolute;
+    inset: -6%;
+    background-size: cover;
+    background-position: center;
+    filter: saturate(0.85) contrast(1.08) brightness(0.92);
+  }
+
+  .slide__media.pan-a { animation: kenburns-a 22s ease-in-out infinite alternate; animation-play-state: paused; }
+  .slide__media.pan-b { animation: kenburns-b 22s ease-in-out infinite alternate; animation-play-state: paused; }
+  .slide.active .slide__media { animation-play-state: running; }
+
+  @keyframes kenburns-a {
+    from { transform: scale(1) translate(0, 0); }
+    to   { transform: scale(1.16) translate(-2.5%, -2%); }
+  }
+  @keyframes kenburns-b {
+    from { transform: scale(1.08) translate(-1%, 1.5%); }
+    to   { transform: scale(1.2) translate(1.5%, -2.5%); }
+  }
+
+  .slide__grade {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgba(13,18,16,0.05) 0%, rgba(13,18,16,0.22) 50%, rgba(10,15,13,0.62) 82%, rgba(9,13,11,0.70) 100%),
+      linear-gradient(115deg, rgba(11,20,18,0.40) 0%, rgba(184,92,46,0.08) 60%, transparent 100%);
+  }
+
+  /* ---------- Text block (lower-third, consistent across slide types) ---------- */
+
+  .slide__content {
+    position: absolute;
+    left: 7%;
+    right: 7%;
+    bottom: 16%;
+    max-width: 640px;
+  }
+
+  .slide__content > * { opacity: 0; transition: opacity 0.4s ease; }
+
+  .slide.active .slide__content > * {
+    animation: riseIn 0.9s cubic-bezier(.16,.84,.44,1) forwards;
+  }
+  .slide.active .slide__content > *:nth-child(1) { animation-delay: 0.05s; }
+  .slide.active .slide__content > *:nth-child(2) { animation-delay: 0.20s; }
+  .slide.active .slide__content > *:nth-child(3) { animation-delay: 0.34s; }
+
+  @keyframes riseIn {
+    from { opacity: 0; transform: translateY(26px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .slide__title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(2.6rem, 6vw, 5.2rem);
+    line-height: 1.04;
+    color: var(--paper);
+    letter-spacing: -0.01em;
+  }
+
+  .slide__text {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: clamp(1rem, 1.3vw, 1.2rem);
+    color: var(--fog);
+    max-width: 480px;
+    line-height: 1.55;
+    margin-top: 0.9rem;
+  }
+
+  .slide--title .slide__title,
+  .slide--closing .slide__title {
+    font-size: clamp(3rem, 8vw, 6.5rem);
+  }
+
+  /* ---------- Timeline component (only on timeline slides) ---------- */
+
+  .timeline-track { margin-bottom: 1.4rem; max-width: 460px; }
+
+  .timeline-line {
+    position: relative;
+    height: 2px;
+    background: rgba(243,238,226,0.2);
+    border-radius: 2px;
+    margin-bottom: 0.7rem;
+  }
+  .timeline-line__fill {
+    position: absolute;
+    left: 0; top: 0; height: 100%;
+    background: var(--paper);
+    border-radius: 2px;
+  }
+
+  .timeline-ticks { display: flex; justify-content: space-between; }
+
+  .tick {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+    opacity: 0.45;
+  }
+  .tick--past { opacity: 0.7; }
+  .tick--active { opacity: 1; }
+
+  .tick__dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--paper);
+  }
+  .tick--active .tick__dot {
+    width: 12px; height: 12px;
+    background: var(--paper);
+    box-shadow: 0 0 0 4px rgba(243,238,226,0.25);
+  }
+
+  .tick__year {
+    font-size: 0.72rem;
+    color: var(--fog);
+  }
+  .tick--active .tick__year { color: var(--paper); }
+
+  /* ---------- Quote slide (no photo — a quiet beat between sections) ---------- */
+
+  .slide--quote .slide__grade {
+    background: radial-gradient(ellipse at 50% 45%, rgba(217,165,74,0.10), transparent 60%);
+  }
+
+  .slide--quote .slide__content {
+    position: absolute;
+    inset: 0;
+    left: 0; right: 0; bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 0 8%;
+  }
+
+  .quote__mark {
+    font-family: var(--font-display);
+    font-size: 3.5rem;
+    color: var(--amber);
+    line-height: 1;
+    opacity: 0.7;
+  }
+
+  .slide__quote {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(1.6rem, 4vw, 2.7rem);
+    line-height: 1.32;
+    color: var(--paper);
+    margin-top: 0.6rem;
+  }
+
+  .slide--quote .slide__text { margin-top: 1.5rem; text-align: center; }
+
+  /* ---------- Hint ---------- */
+
+  .hint {
+    position: fixed;
+    bottom: 36px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.75rem;
+    color: var(--fog);
+    opacity: 0.85;
+    transition: opacity 0.6s ease;
+    pointer-events: none;
+    z-index: 10;
+    white-space: nowrap;
+  }
+  .hint--hidden { opacity: 0; }
+
+  #vignette {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 3;
+    background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.35) 100%);
+  }
+
+  /* ---------- Responsive ---------- */
+
+  @media (max-width: 640px) {
+    .slide__content { left: 6%; right: 6%; bottom: 19%; max-width: none; }
+    .slide__title { font-size: clamp(2.1rem, 9vw, 3.2rem) !important; }
+    .slide--title .slide__title, .slide--closing .slide__title { font-size: clamp(2.4rem, 11vw, 3.6rem) !important; }
+    .tick__year { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .slide__media { animation: none !important; }
+    .slide {
+      transition: opacity 0.3s ease !important;
+      transform: none !important;
+    }
+    .slide__content > * {
+      animation: none !important;
+      transition: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div id="deck"></div>
+<div id="vignette"></div>
+
+<div class="hint" id="hint"></div>
+
+<script>
+/* =========================================================================
+   EDIT ME
+   Swap the `image` URLs below for your own photos, and rewrite the text
+   fields to match your real story. Everything else (layout, animation,
+   navigation) is generated automatically from this array.
+   ========================================================================= */
+
+const SLIDES = [
+  {
+    type: 'title',
+    title: "I'm Chandra",
+    tagline: 'I am currently an Assistant Professor in the Computer Science at the University of Toronto.',
+    image: 'https://github.com/chandra-gummaluru/assets/blob/main/chandra.jpg?raw=true'
+  },
+  {
+    type: 'title',
+    title: "Where I'm From",
+    tagline: "I grew up in Toronto, and it's my favourite city in the world. If you need any recommondations, ask away!",
+    image: 'https://github.com/chandra-gummaluru/assets/blob/main/tor.jpg?raw=true'
+  },
+  {
+    type: 'timeline',
+    year: '2016',
+    title: 'Undergrad',
+    text: 'I studied Electrical and Computer Engineering and graduated in 2021.',
+    image: 'https://github.com/chandra-gummaluru/assets/blob/main/uoft.jpg?raw=true'
+  },
+  {
+    type: 'timeline',
+    year: '2021',
+    title: 'Graduate School',
+    text: 'I then started graduate school. My research focused on using game theoretic algorithms to optimize transit systems.',
+    image: 'https://github.com/chandra-gummaluru/assets/blob/main/ttc.jpg?raw=true'
+  },
+  {
+    type: 'timeline',
+    year: '2025',
+    title: 'Professor G.',
+    text: 'While in graduate school, I discoverd my love of teaching. I became an Assistant Professor in 2025.',
+    image: 'https://github.com/chandra-gummaluru/assets/blob/main/profg.jpg?raw=true'
+  },
+  {
+    type: 'interest',
+    title: 'Urban Planning',
+    text: "I am a huge advocate for creating walkable urban spaces that put people and community first. This is how I give back.",
+    image: 'https://github.com/chandra-gummaluru/assets/blob/main/bikes.jpg?raw=true'
+  },
+  {
+    type: 'interest',
+    title: 'Film',
+    text: 'I love a good movie. My current favourite is Whiplash (2014) by Damien Chazelle.',
+    image: 'https://github.com/chandra-gummaluru/assets/blob/main/tiff.jpg?raw=true'
+  },
+  {
+    type: 'interest',
+    title: 'Live Music',
+    text: 'I’m also a big fan of live music. Give me a full orchestra playing movie soundtracks and I’m at peace. I dabble in making music myself too...',
+    image: 'https://github.com/chandra-gummaluru/assets/blob/main/avatar.jpg?raw=true'
+  },
+  {
+    type: 'interest',
+    title: 'Board Games',
+    text: 'I love board-gaming! My current favourite is Dune: Imperium (yes, I know that is a photo of Terraforming Mars).',
+    image: 'https://meeplelikeus.b-cdn.net/wp-content/uploads/2018/10/IMG_20181021_125129-2048x1536.jpg'
+  },
+  {
+    type: 'interest',
+    title: 'Travel',
+    text: "I think travel is worth every penny, whether it's to the local neighbourhoods or across the planet. Any idea where this photo was taken?",
+    image: 'https://github.com/chandra-gummaluru/assets/blob/main/travel.jpg?raw=true'
+  },
+  {
+    type: 'quote',
+    text: "The trouble with the world is not that people know too little, but that they know so many things that ain't so.",
+    attribution: 'Mark Twain'
+  },
+  {
+    type: 'closing',
+    title: 'Thanks!',
+    tagline: "I look forward to getting to know each of you throughout the term.",
+    image: 'https://github.com/chandra-gummaluru/assets/blob/main/sign.jpg?raw=true'
+  }
+];
+
+/* ========================================================================= */
+
+function slideMarkup(slide, index) {
+  const pan = index % 2 === 0 ? 'pan-a' : 'pan-b';
+
+  if (slide.type === 'title' || slide.type === 'closing') {
+    return `
+      <section class="slide slide--${slide.type}" data-index="${index}">
+        <div class="slide__media ${pan}" style="background-image:url('${slide.image}')"></div>
+        <div class="slide__grade"></div>
+        <div class="slide__content">
+          <h1 class="slide__title">${slide.title}</h1>
+          <p class="slide__text">${slide.tagline}</p>
+        </div>
+      </section>`;
+  }
+
+  if (slide.type === 'timeline') {
+    return `
+      <section class="slide slide--timeline" data-index="${index}">
+        <div class="slide__media ${pan}" style="background-image:url('${slide.image}')"></div>
+        <div class="slide__grade"></div>
+        <div class="slide__content">
+          <div class="timeline-track" data-timeline-track></div>
+          <h1 class="slide__title">${slide.title}</h1>
+          <p class="slide__text">${slide.text}</p>
+        </div>
+      </section>`;
+  }
+
+  if (slide.type === 'interest') {
+    return `
+      <section class="slide slide--interest" data-index="${index}">
+        <div class="slide__media ${pan}" style="background-image:url('${slide.image}')"></div>
+        <div class="slide__grade"></div>
+        <div class="slide__content">
+          <h1 class="slide__title">${slide.title}</h1>
+          <p class="slide__text">${slide.text}</p>
+        </div>
+      </section>`;
+  }
+
+  if (slide.type === 'quote') {
+    return `
+      <section class="slide slide--quote" data-index="${index}">
+        <div class="slide__grade"></div>
+        <div class="slide__content">
+          <p class="quote__mark">&#8220;</p>
+          <p class="slide__quote">${slide.text}</p>
+          ${slide.attribution ? `<p class="slide__text">${slide.attribution}</p>` : ''}
+        </div>
+      </section>`;
+  }
+
+  return '';
+}
+
+function timelineTrackMarkup(posInTimeline, timelineList) {
+  const total = timelineList.length;
+  const fillPct = total > 1 ? (posInTimeline / (total - 1)) * 100 : 0;
+
+  const ticks = timelineList.map((t, i) => {
+    let cls = 'tick';
+    if (i < posInTimeline) cls += ' tick--past';
+    if (i === posInTimeline) cls += ' tick--active';
+    return `<div class="${cls}"><span class="tick__dot"></span><span class="tick__year">${t.year}</span></div>`;
+  }).join('');
+
+  return `
+    <div class="timeline-line"><div class="timeline-line__fill" style="width:${fillPct}%"></div></div>
+    <div class="timeline-ticks">${ticks}</div>`;
+}
+
+const deck = document.getElementById('deck');
+const hint = document.getElementById('hint');
+
+let current = 0;
+const SLIDE_OFFSET = 6;      // % nudge for the directional push on entry/exit
+const TRANSITION_MS = 1150;  // keep in sync with the .slide transition duration in CSS
+
+function build() {
+  deck.innerHTML = SLIDES.map(slideMarkup).join('');
+
+  const timelineList = SLIDES.filter(s => s.type === 'timeline');
+  let pos = 0;
+  SLIDES.forEach((s, i) => {
+    if (s.type !== 'timeline') return;
+    const trackEl = deck.querySelector(`.slide[data-index="${i}"] [data-timeline-track]`);
+    if (trackEl) trackEl.innerHTML = timelineTrackMarkup(pos, timelineList);
+    pos++;
+  });
+
+  goTo(0);
+}
+
+// Cancel any pending cleanup so overlapping transitions (rapid clicks) don't
+// clobber each other's inline styles mid-flight.
+function clearPending(el) {
+  if (el._cleanupTimer) {
+    clearTimeout(el._cleanupTimer);
+    el._cleanupTimer = null;
+  }
+}
+
+// A directional cross-dissolve: the incoming frame is snapped off-screen
+// (no transition) then released into its resting position, while the
+// outgoing frame animates the opposite way — both driven by the CSS
+// `transition` already defined on .slide, so it stays in sync with the
+// ambient Ken Burns drift on the background image.
+function goTo(index) {
+  index = Math.max(0, Math.min(SLIDES.length - 1, index));
+
+  const outgoingEl = deck.querySelector('.slide.active');
+  const incomingEl = deck.querySelector(`.slide[data-index="${index}"]`);
+  const dir = outgoingEl ? (index > current ? 1 : -1) : 0; // 0 = first reveal, no side bias
+
+  if (incomingEl && incomingEl !== outgoingEl) {
+    clearPending(incomingEl);
+    incomingEl.style.transition = 'none';
+    incomingEl.style.transform = `translateX(${dir * SLIDE_OFFSET}%) scale(1.025)`;
+    incomingEl.style.opacity = '0';
+    void incomingEl.offsetWidth; // force reflow so the jump above is registered before animating
+    incomingEl.style.transition = '';
+    incomingEl.classList.add('active');
+    incomingEl.setAttribute('aria-hidden', 'false');
+    incomingEl.style.transform = 'translateX(0) scale(1)';
+    incomingEl.style.opacity = '1';
+    incomingEl._cleanupTimer = setTimeout(() => {
+      incomingEl.style.transform = '';
+      incomingEl.style.opacity = '';
+    }, TRANSITION_MS);
+  }
+
+  if (outgoingEl && outgoingEl !== incomingEl) {
+    clearPending(outgoingEl);
+    outgoingEl.classList.remove('active');
+    outgoingEl.setAttribute('aria-hidden', 'true');
+    outgoingEl.style.transform = `translateX(${dir * -SLIDE_OFFSET}%) scale(1.035)`;
+    outgoingEl.style.opacity = '0';
+    outgoingEl._cleanupTimer = setTimeout(() => {
+      outgoingEl.style.transform = '';
+      outgoingEl.style.opacity = '';
+    }, TRANSITION_MS);
+  }
+
+  current = index;
+}
+
+function next() { goTo(current + 1); }
+function prev() { goTo(current - 1); }
+
+function dismissHint() { hint.classList.add('hint--hidden'); }
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); dismissHint(); next(); }
+  else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); dismissHint(); prev(); }
+  else if (e.key === 'Home') { dismissHint(); goTo(0); }
+  else if (e.key === 'End') { dismissHint(); goTo(SLIDES.length - 1); }
+});
+
+deck.addEventListener('click', (e) => {
+  dismissHint();
+  const x = e.clientX / window.innerWidth;
+  if (x < 0.5) prev(); else next();
+});
+
+let touchStartX = 0;
+deck.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].clientX; }, { passive: true });
+deck.addEventListener('touchend', (e) => {
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  if (Math.abs(dx) > 50) { dismissHint(); dx < 0 ? next() : prev(); }
+}, { passive: true });
+
+setTimeout(dismissHint, 4500);
+
+build();
+</script>
+</body>
+</html>

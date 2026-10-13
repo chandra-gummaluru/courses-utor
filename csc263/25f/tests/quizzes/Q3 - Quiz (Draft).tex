@@ -1,0 +1,140 @@
+\documentclass[12pt]{article}
+
+\usepackage[top=2.2in, left=0.75in,right=0.75in,headsep=1mm,footskip=.5in]{geometry}
+\input{document_includes}
+
+\pagestyle{fancy}
+\let\headrule\empty
+\let\footrule\empty
+\rhead{\hrule}
+\chead{\hrule}
+\lhead{\hrule}
+\lfoot{CSC\,263\,H1, Fall 2025}
+\cfoot{Page \thepage\space of \pageref{LastPage}}
+\rfoot{Quiz 3}
+
+\begin{document}
+
+\begin{center}\large
+UNIVERSITY OF TORONTO\\
+Faculty of Arts and Science\\[1.75ex]
+Department of Computer Science\\[1.75ex]
+\textbf{Quiz 3} \\
+\textbf{{CSC\,263\,H1}}
+\end{center}
+
+\infobox[\textbf{First Name:}]
+\infobox[\textbf{Last Name:}]
+
+\noindent \textbf{Student \# (9 or 10 digits):} \begin{table}[H]
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+\hline
+\hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; \\
+\hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\;\\\hline
+\end{tabular}%
+\end{table}
+\noindent \textbf{UTORid (e.g. \texttt{gummalur}):} \begin{table}[H]
+\begin{tabular}{|c|c|c|c|c|c|c|c|}
+\hline
+\hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; \\
+\hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\;\\\hline
+\end{tabular}%
+\end{table}
+\noindent \textbf{Duration:}\dotfilltext {50 minutes}\\
+\textbf{Instructor:}\dotfilltext Chandra Gummaluru\\
+\textbf{Weight:}\dotfilltext 10\% \\
+%\textbf{Aids Allowed:}
+%\begin{enumerate}
+%    \item[(1)] Non-Programmable Calculator 
+%\end{enumerate}
+\\~\\
+\begin{center}
+\textit{Do NOT turn over the page until you are told to do so.}
+\end{center}
+
+\clearpage
+
+\setlength\parindent{0pt}
+\subsection*{Question 3.1: Unsorted Dictionaries}
+Consider a \texttt{Dictionary} of size 5, which uses the hash function defined below:
+\[
+h(k) = k \bmod 5
+\]
+Suppose the following operations are done in order. For each operation, indicate the number of indices that will be visited before the operation is done. \\
+
+\texttt{insert(12, val1)}: \numbox[2cm] \\
+\texttt{insert(27, val2)}: \numbox[2cm] \\
+\texttt{insert(33, val3)}: \numbox[2cm] \\ 
+\texttt{insert(44, val4)}: \numbox[2cm] \\ 
+\texttt{insert(15, val5)}: \numbox[2cm] \\
+\texttt{delete(27)}:\hspace{13mm} \numbox[2cm] \\
+\texttt{delete(44)}:\hspace{13mm} \numbox[2cm]
+\\~\\
+\textit{Note 1:} During insertion, probing continues until an empty slot is found. If the search returns to the original starting index, the table is considered full and the operation stops.
+\\[2ex]
+\textit{Note 2:} When an element is deleted, it is replaced with a special marker called a \texttt{pass} flag. During probing (for insertion, deletion, or search), continue while encountering \texttt{pass} flags, until the target element is found, an empty slot is reached, or the probe returns to the original starting index.
+
+\newpage
+
+\subsection*{Question 3.2: Tries}
+\points[4] Suppose we use a trie to store DNA sequences (strings composed of \texttt{A}, \texttt{T}, \texttt{C}, and \texttt{G}) in order to identify genetic similarities.
+\begin{enumerate}
+\item[(a)] \points[3] Draw the trie after inserting the following DNA sequences in the specified order: \texttt{ATGCA}, \texttt{ATGCC}, \texttt{ATGTA}, \texttt{ATCGA}, \texttt{CGTAA}
+\vspace{12cm}
+\item[(b)] \points[1] Using the constructed trie, determine and illustrate the longest prefix match for the query sequence \texttt{ATGTCG}. Highlight the path on your tree from (a).
+\end{enumerate}
+
+\newpage 
+
+
+\subsection*{Question 3.3: Queues}
+\points[4] Consider a \texttt{Queue}, \texttt{queue} (built using a binary max-heap) with 5 elements with priorities; \texttt{10}, \texttt{25}, \texttt{30}, \texttt{40}, and \texttt{70}.
+\begin{enumerate}
+\item[(a)]\points[2] Draw a tree for the underlying binary max-heap (assuming the elements were inserted in the order shown above).
+\vspace{6cm}
+\item[(b)] \points[2] Suppose we insert an element with priority \texttt{45} (i.e., we call \texttt{queue.insert(obj, 45)}), and then pop an element (i.e., we call \texttt{queue.pop()}). Draw a tree for the underlying binary max-heap after both operations.
+\end{enumerate}
+
+\clearpage
+
+\subsection*{Question 3.4: Sorted Dictionaries}
+\points[4] Consider a \texttt{Dictionary}, \texttt{dict}, represented by the balanced binary search tree shown below:
+\begin{center}
+\begin{tikzpicture}[scale=0.8, transform shape]
+\node[defaultnode] (n1) at (0,0)  { \texttt{28} };
+\node[defaultnode] (n2) at (-3,-1.5)  { \texttt{21} };
+\node[defaultnode] (n3) at (3,-1.5)  { \texttt{41} };
+\node[defaultnode] (n4) at (1.5,-3)  { \texttt{35} };
+\node[defaultnode] (n5) at (4.5,-3)  { \texttt{47} };
+\node[defaultnode] (n6) at (-4.5,-3) { \texttt{18} };
+\node[defaultnode] (n7) at (-1.5,-3) { \texttt{25} };
+\node[defaultnode] (n8) at (0.5,-4.5) { \texttt{31} };
+
+\draw[->] (n1) -- (n2);
+\draw[->] (n1) -- (n3);
+\draw[->] (n2) -- (n6);
+\draw[->] (n2) -- (n7);
+\draw[->] (n3) -- (n4);
+\draw[->] (n3) -- (n5);
+\draw[->] (n4) -- (n8);
+\end{tikzpicture}
+\end{center}
+
+Suppose a new node with key \texttt{33} is inserted into the dictionary, i.e., we call \texttt{dict.insert(33)}.
+\begin{itemize}
+\item[(a)]\points[1] Indicate where the node would be attached in the tree (before re-balancing) by drawing the new node in the figure above.
+\item[(b)]\points[1] After (a), which node in the tree is an anchor node?
+\numbox[2cm] \checkbox[None]
+\item[(c)]\points[1] Which rotation is needed to re-balance the tree? \\[2mm]
+\checkbox[Left] \checkbox[Right] \checkbox[Left-Right] \checkbox[Right-Left] \checkbox[None]
+\item[(d)] \points[1] Draw the resulting tree (after re-balancing).
+\end{itemize}
+
+\clearpage
+
+\begin{center}
+\textit{(Rough work — this page will not be marked)}
+\end{center}
+\clearpage
+
+\end{document} 

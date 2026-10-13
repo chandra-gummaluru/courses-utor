@@ -1,0 +1,164 @@
+%% ============================================================
+%%  Toggle solutions: set \showsolutionstrue to show, false to hide
+%% ============================================================
+\newif\ifshowsolutions
+\showsolutionstrue   %% <-- change to \showsolutionsfalse to hide solutions
+
+\documentclass[12pt]{article}
+
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{float}
+\usepackage{tikz}
+\usepackage{amsmath}
+\usepackage{pgfplots}
+\usepackage{multirow}
+\usepackage{caption}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{subcaption}
+\usepackage{cancel}
+\usepackage{xcolor}
+\usepackage{mdframed}
+\usetikzlibrary{automata,positioning,arrows,shapes.geometric,fit,decorations.pathmorphing}
+\usepackage[top=1in, left=0.75in, right=0.75in, headsep=1mm, footskip=.5in]{geometry}
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+%% Solution environment — toggled by \ifshowsolutions
+\newmdenv[
+  backgroundcolor=blue!6,
+  linecolor=blue!40,
+  linewidth=1pt,
+  topline=true, bottomline=true, leftline=true, rightline=true,
+  innerleftmargin=8pt, innerrightmargin=8pt,
+  innertopmargin=6pt, innerbottommargin=6pt,
+  skipabove=6pt, skipbelow=6pt
+]{solutionbox}
+
+\newenvironment{solution}{%
+  \ifshowsolutions\begin{solutionbox}\noindent\textbf{\color{blue!70!black}Solution.}\quad\fi
+  \ifshowsolutions\else\expandafter\comment\fi
+}{%
+  \ifshowsolutions\end{solutionbox}\fi
+  \ifshowsolutions\else\expandafter\endcomment\fi
+}
+
+\usepackage{verbatim} %% for \comment / \endcomment
+
+\pagestyle{fancy}
+\let\headrule\empty
+\let\footrule\empty
+\lfoot{ROB\,311\,H1, Winter 2026}
+\cfoot{Page \thepage\space of \pageref{LastPage}}
+\rfoot{Practice Problems - Part 2}
+
+\begin{document}
+
+\begin{center}\large
+  UNIVERSITY OF TORONTO\\
+  Faculty of Applied Science and Engineering\\[1.75ex]
+  Institute of Aerospace Studies\\[1.75ex]
+  \textbf{Practice Problems - Part 2} \\
+  \textbf{ROB\,311\,H1} \\[4mm]
+  Winter 2026
+
+  \vspace{3cm}
+  \textbf{Chandra Gummaluru} \\
+  \href{https://chandra-gummaluru.github.io}{\texttt{chandra-gummaluru.github.io}}
+\end{center}
+
+\clearpage
+
+%% ---- Q7: Replicator Dynamics ----
+\item \textit{Replicator Dynamics and Evolutionary Stability.}
+Consider a large population of agents repeatedly matched to play the symmetric 2-player game below, where $\mathcal{A} = \{H,\,D\}$ (Hawk, Dove).
+\begin{table}[H]
+  \centering
+  \begin{tabular}{|c|c|c|}
+    \hline
+           & $H$         & $D$    \\\hline
+    $H$    & $(-1,-1)$        & $(4,0)$    \\\hline
+    $D$    & $(0,4)$         & $(2,2)$    \\\hline
+  \end{tabular}
+  \caption*{$r(a,a')$}
+\end{table}
+\noindent Let $\rho^{(t)}(H) = x^{(t)}$ denote the fraction of the population playing $H$ at generation $t$, so $\rho^{(t)}(D) = 1 - x^{(t)}$.
+
+\begin{enumerate}
+  \item \textbf{Initialize.} Suppose $\rho^{(0)}(H) = 0.4$. Compute the fitness of each action and the population fitness at $t=0$.
+
+  \begin{solution}
+    \begin{align*}
+      f\!\left(H,\rho^{(0)}\right) &= \rho^{(0)}(H)\cdot r(H,H) + \rho^{(0)}(D)\cdot r(H,D)
+                                    = 0.4(-1) + 0.6(4) = 2.0\\
+      f\!\left(D,\rho^{(0)}\right) &= \rho^{(0)}(H)\cdot r(D,H) + \rho^{(0)}(D)\cdot r(D,D)
+                                    = 0.4(0) + 0.6(2) = 1.2\\
+      \bar{f}\!\left(\rho^{(0)}\right) &= \rho^{(0)}(H)\cdot f(H,\rho^{(0)}) + \rho^{(0)}(D)\cdot f(D,\rho^{(0)})
+                                        = 0.4(2.0) + 0.6(1.2) = 1.52
+    \end{align*}
+  \end{solution}
+
+  \item \textbf{One generation.} Apply proportional replication to compute $\rho^{(1)}$.
+
+  \begin{solution}
+    \begin{align*}
+      \rho^{(1)}(H) &\propto \rho^{(0)}(H)\cdot\frac{f(H,\rho^{(0)})}{\bar{f}(\rho^{(0)})}
+                     = 0.4\cdot\frac{2.0}{1.52} \approx 0.526\\
+      \rho^{(1)}(D) &\propto \rho^{(0)}(D)\cdot\frac{f(D,\rho^{(0)})}{\bar{f}(\rho^{(0)})}
+                     = 0.6\cdot\frac{1.2}{1.52} \approx 0.474
+    \end{align*}
+    These sum to $1$, so no renormalization is needed. $\rho^{(1)}(H) \approx 0.526$.
+
+    Since $f(H,\rho^{(0)}) > \bar{f}(\rho^{(0)}) > f(D,\rho^{(0)})$, the Hawk fraction increased, as expected.
+  \end{solution}
+
+  \item \textbf{Fixed points.} Show that the replicator dynamics has fixed points at $x^* = 0$, $x^* = 1$, and a third value $x^*$ which you should determine. (\textit{Hint:} a fixed point satisfies $\rho^{(t+1)}(a) = \rho^{(t)}(a)$ for all $a$.)
+
+  \begin{solution}
+    At a fixed point, the proportional replication update leaves the distribution unchanged, which requires each action's fitness to equal the population fitness:
+    \[
+      f(a, \rho^*) = \bar{f}(\rho^*) \quad \text{for all } a \text{ with } \rho^*(a) > 0.
+    \]
+    If $x^* = 0$ or $x^* = 1$, the population is monomorphic and trivially fixed. For an interior fixed point, we require $f(H,\rho^*)= f(D,\rho^*)$:
+    \begin{align*}
+      -x^* + 4(1-x^*) &= 2(1-x^*)\\
+      4 - 5x^* &= 2 - 2x^*\\
+      x^* &= \tfrac{2}{3}.
+    \end{align*}
+    The three fixed points are $x^* \in \left\{0,\;\tfrac{2}{3},\;1\right\}$.
+  \end{solution}
+
+  \item \textbf{Stability.} Classify each fixed point as \textbf{stable} or \textbf{unstable} by evaluating $f(H,\rho^*) - f(D,\rho^*)$ in a neighbourhood of each.
+
+  \begin{solution}
+    The direction of change is governed by the fitness advantage of $H$ over $D$:
+    \[
+      f(H,\rho^{(t)}) - f(D,\rho^{(t)}) = (4-5x^{(t)}) - (2-2x^{(t)}) = 2 - 3x^{(t)}.
+    \]
+    When this quantity is positive, $H$ has above-average fitness and $x^{(t)}$ increases; when negative, $x^{(t)}$ decreases.
+    \begin{center}
+    \begin{tabular}{ccc}
+      Interval & Sign of $2-3x^{(t)}$ & Direction \\\hline
+      $x^{(t)} < \tfrac{2}{3}$ & $+$ & $x^{(t)}$ increasing \\
+      $x^{(t)} > \tfrac{2}{3}$ & $-$ & $x^{(t)}$ decreasing
+    \end{tabular}
+    \end{center}
+    \begin{itemize}
+      \item $x^*=0$: population moves away $\Rightarrow$ \textbf{unstable}.
+      \item $x^*=\tfrac{2}{3}$: population returns from both sides $\Rightarrow$ \textbf{stable}.
+      \item $x^*=1$: population moves away $\Rightarrow$ \textbf{unstable}.
+    \end{itemize}
+  \end{solution}
+
+  \item \textbf{Equilibrium.} What is the Nash equilibrium of the underlying stage game? Is it consistent with the stable fixed point of the replicator dynamics?
+
+  \begin{solution}
+    \textbf{Mixed NE.} Setting $f(H,\rho^*) = f(D,\rho^*)$ gives $x^* = \tfrac{2}{3}$, so the unique Nash equilibrium is $\sigma^* = \tfrac{2}{3}H + \tfrac{1}{3}D$.
+
+    This coincides exactly with the stable interior fixed point of the replicator dynamics. This is not a coincidence: in symmetric games, every stable fixed point of the replicator dynamics is a Nash equilibrium. The replicator dynamics can thus be interpreted as a decentralized process by which a population of myopic agents converges to equilibrium play without explicit coordination.
+  \end{solution}
+\end{enumerate}
+
+\end{document}

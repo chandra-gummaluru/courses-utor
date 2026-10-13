@@ -1,0 +1,585 @@
+\setcounter{section}{2}
+\subsection{Normal-Form Games}
+\subsubsection{Pure and Mixed Nash Equilibria}
+
+%% ---- Q1: Nash Equilibria + Dynamics ----
+Consider a 2-player normal-form game defined by the reward matrix below.
+\begin{table}[H]
+  \centering
+  \begin{tabular}{|c|c|c|}
+    \hline
+           & $\texttt{a}$       & $\texttt{b}$       \\\hline
+    \texttt{a}    & $(2,\,2)$ & $(0,\,0)$ \\\hline
+    \texttt{b}    & $(0,\,0)$ & $(1,\,1)$ \\\hline
+  \end{tabular}
+\end{table}
+\begin{enumerate}
+\item \points[2] Determine whether the game admits a \textit{pure} equilibrium. If so, state an equilibrium strategy profile; otherwise, indicate that none exists.
+\\~\\
+An equilibrium pure strategy profile for the game is $a = \left(\numbox[1cm], \numbox[1cm]\right)$.
+\\~\\
+\choice[No equilibrium exists in pure strategies.]
+
+\begin{solution}
+We check best responses for each cell.
+\begin{itemize}
+  \item $(\texttt{a},\texttt{a})$: Agent 1 receives $2$; deviating to \texttt{b} gives $0$. Agent 2 receives $2$; deviating to \texttt{b} gives $0$. Neither agent benefits from deviating. \textbf{Nash equilibrium.}
+  \item $(\texttt{b},\texttt{b})$: Agent 1 receives $1$; deviating to \texttt{a} gives $0$. Agent 2 receives $1$; deviating to \texttt{a} gives $0$. Neither agent benefits from deviating. \textbf{Nash equilibrium.}
+  \item $(\texttt{a},\texttt{b})$ and $(\texttt{b},\texttt{a})$: one agent always prefers to switch. Not NE.
+\end{itemize}
+There are two pure Nash equilibria: $(\texttt{a},\texttt{a})$ and $(\texttt{b},\texttt{b})$.
+
+\medskip
+\noindent The answer boxes should be filled: $a = \bigl(\texttt{a},\,\texttt{a}\bigr)$ (or equivalently $(\texttt{b},\,\texttt{b})$).
+
+Marking scheme: -1 if the answer is the reward (2,2) or (1,1) instead of the strategy profile.
+\end{solution}
+
+\clearpage
+\item \points[4] Find the \textit{mixed} equilibria strategy profile and state whether it is stable or not under best-response dynamics (assuming Agent 1 makes the first best-response update). Show your work.
+\\~\\
+An equilibrium mixed strategy profile for the game is
+\[\pi = \left(\left(\numbox[1cm],\numbox[1cm]\right), \left(\numbox[1cm],\numbox[1cm]\right)\right).\]
+The equilibrium is \raisebox{1.75mm}{\choice[stable]} / \raisebox{1.75mm}{\choice[unstable]}.
+\vspace{3cm}
+
+\begin{solution}
+Let $p = \Pr[\text{Agent 1 plays }\texttt{a}]$ and $q = \Pr[\text{Agent 2 plays }\texttt{a}]$.
+
+\medskip
+\noindent \textbf{Agent 2's indifference condition} (for Agent 1 to mix):
+\[
+\mathbb{E}[\text{Agent 1} \mid \texttt{a}] = \mathbb{E}[\text{Agent 1} \mid \texttt{b}]
+\]
+\[
+2q + 0(1-q) = 0 \cdot q + 1\cdot(1-q)
+\quad\Longrightarrow\quad
+2q = 1-q
+\quad\Longrightarrow\quad
+q = \tfrac{1}{3}.
+\]
+
+\noindent \textbf{Agent 1's indifference condition} (for Agent 2 to mix): by symmetry of the payoff matrix,
+\[
+p = \tfrac{1}{3}.
+\]
+
+\noindent The mixed Nash equilibrium is
+\[
+\pi = \Bigl(\bigl(\tfrac{1}{3},\,\tfrac{2}{3}\bigr),\;\bigl(\tfrac{1}{3},\,\tfrac{2}{3}\bigr)\Bigr).
+\]
+
+\medskip
+\noindent \textbf{Stability under best-response dynamics.}
+Suppose the agents start at the mixed NE $\pi^* = (1/3, 1/3)$ and Agent 1 makes the first update.  At $q=1/3$ Agent 1 is indifferent, so any perturbation away from $q=1/3$ causes Agent 1 to snap to a pure best response.  Similarly Agent 2 then snaps to the corresponding pure best response.  The dynamics therefore converge to one of the two pure NE rather than returning to $\pi^*$.  The mixed equilibrium is \textbf{unstable}.
+\end{solution}
+\vspace{3cm}
+\end{enumerate}
+\clearpage
+
+%% ---- Q2: Subgame Perfect Equilibrium ----
+\subsubsection{Sub-Game Perfect Equilibria}
+Consider a 2-player 2-stage normal form game defined by the reward matrices below.
+\begin{table}[H]
+\begin{minipage}{.5\linewidth}
+  \centering
+  \begin{tabular}{|c|c|c|}
+    \hline
+           & $\texttt{c}$        & $\texttt{d}$        \\\hline
+    $\texttt{c}$    & $(3,\,3)$  & $(0,\,4)$ \\\hline
+    $\texttt{d}$    & $(4,\,0)$ & $(1,\,1)$  \\\hline
+  \end{tabular}
+  \caption*{Stage-1}
+\end{minipage}
+\begin{minipage}{.5\linewidth}
+  \centering
+  \begin{tabular}{|c|c|c|}
+    \hline
+           & $\texttt{e}$        & $\texttt{f}$        \\\hline
+    $\texttt{e}$    & $(4,\,4)$  & $(1,\,0)$ \\\hline
+    $\texttt{f}$    & $(0,\,1)$  & $(0,\,0)$  \\\hline
+  \end{tabular}
+  \caption*{Stage-2}
+\end{minipage}
+\end{table}
+Consider the following strategy profile:
+\begin{itemize}
+\item each agent plays \texttt{c} in Stage 1
+\item in Stage 2, each agent plays \texttt{e} if the Stage 1 outcome was $(\texttt{c}, \texttt{c})$, and plays \texttt{f} otherwise
+\end{itemize}
+\begin{enumerate}
+\item \points[4] Under the proposed strategy profile and with $\gamma=1$, fill in the following
+table for different Stage-1 outcomes.
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{2.5}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+Stage 1 Outcome & Stage 1 Rewards & Stage 2 Outcome & Stage 2 Rewards & Overall Returns \\\hline
+$(\texttt{c},\texttt{c})$ & \ansnt{$(3,3)$} & \ansnt{$(\texttt{e},\texttt{e})$} & \ansnt{$(4,4)$} & \ansnt{$(7,7)$} \\\hline
+$(\texttt{d},\texttt{d})$ & \ansnt{$(1,1)$} & \ansnt{$(\texttt{f},\texttt{f})$} & \ansnt{$(0,0)$} & \ansnt{$(1,1)$} \\\hline
+$(\texttt{c},\texttt{d})$ & \ansnt{$(0,4)$} & \ansnt{$(\texttt{f},\texttt{f})$} & \ansnt{$(0,0)$} & \ansnt{$(0,4)$} \\\hline
+$(\texttt{d},\texttt{c})$ & \ansnt{$(4,0)$} & \ansnt{$(\texttt{f},\texttt{f})$} & \ansnt{$(0,0)$} & \ansnt{$(4,0)$} \\\hline
+\end{tabular}
+\end{table}
+
+\begin{solution}
+The strategy profile prescribes:
+\begin{itemize}
+  \item Stage 2 outcome is $(\texttt{e},\texttt{e})$ if and only if the Stage 1 outcome was $(\texttt{c},\texttt{c})$; otherwise both agents play \texttt{f}, yielding $(\texttt{f},\texttt{f})$.
+  \item The Stage 2 rewards follow directly from the Stage-2 payoff matrix.
+  \item Overall returns $= \text{Stage-1 reward} + \gamma \cdot \text{Stage-2 reward}$ with $\gamma = 1$.
+\end{itemize}
+\end{solution}
+
+\clearpage
+
+\item \points[5] Is the proposed strategy profile a Nash equilibrium of the 2-stage game? Justify your answer.
+\\~\\
+The proposed strategy profile \raisebox{1.75mm}{\choice[is]} / \raisebox{1.75mm}{\choice[is not]}a Nash equilibrium of the 2-stage game.
+\vspace{1cm}
+
+\begin{solution}
+\textbf{Yes, the proposed strategy profile is a Nash equilibrium.}
+
+\medskip
+\noindent We check whether either agent can profitably deviate given the other agent's strategy.
+
+\medskip
+\noindent \textit{On-path play:}  Under $(\texttt{c},\texttt{c})$ in Stage 1, the overall return for each agent is $(3+4)=7$.
+
+\medskip
+\noindent \textit{Can Agent 1 profitably deviate in Stage 1?}
+If Agent 1 deviates to \texttt{d} while Agent 2 plays \texttt{c}, the Stage-1 outcome is $(\texttt{d},\texttt{c})$.  The strategy profile then prescribes $(\texttt{f},\texttt{f})$ in Stage 2.  Agent 1's total return is $4 + 0 = 4 < 7$.  No profitable deviation.
+
+\medskip
+\noindent \textit{Can Agent 2 profitably deviate in Stage 1?}  By symmetry, Agent 2's deviation to \texttt{d} yields $4 + 0 = 4 < 7$.  No profitable deviation.
+
+\medskip
+\noindent \textit{Stage-2 deviations:}  On path (after $(\texttt{c},\texttt{c})$), both agents play \texttt{e}. Given the other plays \texttt{e}, switching to \texttt{f} yields $0$ instead of $4$. No profitable deviation. Off path, both play \texttt{f}; given the other plays \texttt{f}, switching to \texttt{e} yields $1$ instead of $0$---but this off-path subgame is never reached under the proposed profile, so it does not violate the NE condition.
+
+\medskip
+\noindent Since no agent can improve their payoff by deviating, the profile is a Nash equilibrium.
+\end{solution}
+
+\item \points[3] Is the proposed strategy profile a subgame perfect equilibrium? Justify your answer.
+\\~\\
+The proposed strategy profile \raisebox{1.75mm}{\choice[is]} / \raisebox{1.75mm}{\choice[is not]}a subgame perfect equilibrium of the 2-stage game.
+
+\begin{solution}
+\textbf{No, the proposed strategy profile is not a subgame perfect equilibrium.}
+
+\medskip
+\noindent A strategy profile is a subgame perfect equilibrium (SPE) only if it induces a Nash equilibrium in \emph{every} subgame, including off-path ones.
+
+\medskip
+\noindent Consider the Stage-2 subgame that follows any Stage-1 outcome other than $(\texttt{c},\texttt{c})$.  The prescribed play is $(\texttt{f},\texttt{f})$, which yields payoffs $(0,0)$.  However, $(\texttt{f},\texttt{f})$ is \emph{not} a Nash equilibrium of the Stage-2 game: given the opponent plays \texttt{f}, each agent earns $0$ but could earn $1$ by switching to \texttt{e}.  Hence $(\texttt{f},\texttt{f})$ is not a best response, and the threat to play \texttt{f} off path is \emph{not credible}.
+
+\medskip
+\noindent Because the strategy profile does not induce a Nash equilibrium in the off-path Stage-2 subgames, it fails the SPE condition.
+
+\medskip
+\noindent (Note: the unique NE of Stage 2 is $(\texttt{e},\texttt{e})$.  Since Stage 2 has a unique NE, a SPE must play $(\texttt{e},\texttt{e})$ in Stage 2 regardless of Stage-1 history, which removes any ability to punish deviation in Stage 1, and thus $(\texttt{c},\texttt{c})$ cannot be sustained as SPE play in Stage 1 of this Prisoner's Dilemma.)
+\end{solution}
+\clearpage
+
+\end{enumerate}
+
+\clearpage
+
+%% ============================================================
+%%  SECTION 2: EXTENSIVE-FORM GAMES
+%% ============================================================
+\subsection{Extensive-Form Games}
+
+%% ---- Q3: Minimax + Alpha-Beta ----
+\subsubsection{$\alpha$/$\beta$-Pruning}
+\points[10] Consider the 2-player zero-sum game tree below in which the maximizer is the decision maker at $A$ and the reward values at the leaves are those the maximizer would receive. Assume agents alternate turns by depth.
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}[auto, semithick,
+      every state/.style={draw=black, thick, fill=white, minimum size=10mm}]
+    \node[state] at (0,0)    (A) {$A$: \ansnt{4}};
+    \node[state] at (-4,-1.5) (B) {$B$: \ansnt{3}};
+    \node[state] at (4,-1.5)  (C) {$C$: \ansnt{4}};
+    \node[state] at (-6,-3)   (D) {$D$: \ansnt{3}};
+    \node[state] at (-2,-3)   (E) {$E$: \ansnt{5}};
+    \node[state] at (2,-3)    (F) {$F$: \ansnt{6}};
+    \node[state] at (6,-3)    (G) {$G$: \ansnt{4}};
+    \node[state] at (-1,-4.5) (H) {$H$: \ansnt{X}};
+    \node[state] at (5,-4.5)  (I) {$I$: \ansnt{3}};
+
+    \node[state, rectangle] at (-7,-4.5) (l1)  {$l_1$: {3}};
+    \node[state, rectangle] at (-5,-4.5) (l2)  {$l_2$: {2}};
+    \node[state, rectangle] at (-3,-4.5) (l3)  {$l_3$: {5}};
+    \node[state, rectangle] at (-2,-6)   (l4)  {$l_4$: {6}};
+    \node[state, rectangle] at (0,-6)    (l5)  {$l_5$: {7}};
+    \node[state, rectangle] at (1,-4.5)  (l6)  {$l_6$: {6}};
+    \node[state, rectangle] at (3,-4.5)  (l7)  {$l_7$: {2}};
+    \node[state, rectangle] at (4,-6)    (l8)  {$l_8$: {3}};
+    \node[state, rectangle] at (6,-6)    (l9)  {$l_9$: {1}};
+    \node[state, rectangle] at (7,-4.5)  (l10) {$l_{10}$: {4}};
+
+    \path (A) edge node[above left]  {$a_1$} (B);
+    \path (A) edge node[above right] {$a_2$} (C);
+    \path (B) edge (D);  \path (B) edge (E);
+    \path (C) edge (F);  \path (C) edge (G);
+    \path (D) edge (l1); \path (D) edge (l2);
+    \path (E) edge (l3); \path (E) edge (H);
+    \path (H) edge (l4); \path (H) edge (l5);
+    \path (F) edge (l6); \path (F) edge (l7);
+    \path (G) edge (I);  \path (G) edge (l10);
+    \path (I) edge (l8); \path (I) edge (l9);
+  \end{tikzpicture}
+\end{figure}
+
+\noindent
+Apply $\alpha$/$\beta$-pruning (depth-first, left-to-right). Fill in the final
+value for every \textit{explored} node and cross out any \textit{unexplored} node (including leaf nodes). You do not need to show $\alpha$/$\beta$ values.
+
+\begin{solution}
+Depth structure: $A$ (max) $\to$ $B,C$ (min) $\to$ $D,E,F,G$ (max) $\to$ $H,I$ (min) $\to$ leaves (max).
+
+\medskip
+\noindent \textbf{Left subtree ($a_1 \to B$):}
+
+\smallskip
+$D$ (max): explore $l_1=3$, then $l_2=2$. Thus $D = \max(3,2) = 3$.
+
+$B$ (min): $D=3$ gives current best value $B \le 3$. Now explore $E$.
+
+$E$ (max): explore $l_3=5$. Now $E \ge 5 > 3$, so the rest of $E$ cannot affect the value of $B$. Therefore prune $H$ (and its children $l_4, l_5$). Thus $E = 5$ for the search.
+
+Hence $B = \min(3, 5) = 3$. Therefore after finishing the left subtree, $A \ge 3$.
+
+\medskip
+\noindent \textbf{Right subtree ($a_2 \to C$):}
+
+\smallskip
+$F$ (max): explore $l_6=6$, then $l_7=2$. Thus $F = \max(6,2) = 6$.
+
+$C$ (min): $F=6$, so current best value $C \le 6$. Now explore $G$.
+
+$G$ (max): explore $I$ (min).
+
+$I$ (min): explore $l_8=3$. Now $I \le 3$, which is enough to stop because the root already has an alternative worth $3$. Therefore prune $l_9$. Thus $I = 3$ for the search.
+
+$G = \max(I, l_{10})$: with $I=3$, explore $l_{10}=4$. Hence $G = \max(3,4) = 4$.
+
+Thus $C = \min(6, 4) = 4$.
+
+Finally, $A = \max(3, 4) = 4$.
+
+\medskip
+\noindent \textbf{Summary of explored/pruned nodes:}
+\begin{itemize}
+  \item \textbf{Explored:} $A=4$, $B=3$, $C=4$, $D=3$, $E=5$, $F=6$, $G=4$, $I=3$.
+  \item \textbf{Pruned:} $H$, $l_4$, $l_5$, and $l_9$.
+\end{itemize}
+
+\medskip
+\noindent \textit{Note}: $H$, $l_4$, $l_5$, and $l_9$ are crossed out (unexplored). All other explored nodes and leaves are filled with their search-time backed-up values.
+\\~\\
+\noindent Marking scheme: roughly $-0.5$ for each wrongly pruned/unpruned node or wrong node values, though that's just a heuristic. E.g. a long chain of error carried forward (ECF) may just be penalized once or twice, while very incorrect prunes or having no prunes at all may be penalized more.
+\end{solution}
+
+\clearpage
+
+%% ---- Q4: MCTS ----
+\subsubsection{Monte-Carlo Tree Search}
+The following questions are independent of each other.
+\begin{enumerate}
+\item \points[4] Consider a 2-player game in which both agents are learning a policy using monte-carlo tree search (MCTS). The state of the game tree after 8 iterations of the algorithm is shown below. Edge labels are expressed in the form $w/n$, where $n$ is the number of times the action was selected, and $w$ is the number of wins for the agent who
+took that action. Assume agents alternate turns by depth with Agent 1 starting at the root. During the 9\textsuperscript{th} iteration, the
+selection phase follows path $\langle A, B, F, I \rangle$ and node $L$ is expanded. The simulation
+runs 9 transitions from $L$, and the \textit{last turn-taker} wins the game.
+
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}[auto, semithick,
+      every state/.style={draw=black, thick, fill=white, minimum size=5mm}]
+    \node[state] at (0,0)   (A) {$A$};
+    \node[state] at (-4,-2) (B) {$B$};
+    \node[state] at (0,-2)  (C) {$C$};
+    \node[state] at (4,-2)  (D) {$D$};
+    \node[state] at (-5,-4) (E) {$E$};
+    \node[state] at (-3,-4) (F) {$F$};
+    \node[state] at (-4,-6) (I) {$I$};
+    \node[state] at (-2,-6) (J) {$J$};
+    \node[state] at (-5,-8) (L) {$L$};
+    \node[state] at (-3,-8) (M) {$M$};
+    \node[state] at (-1,-4) (G) {$G$};
+    \node[state] at (1,-4)  (H) {$H$};
+
+    \path (A) edge node[midway, above left]  {$2/4$} (B);
+    \path (A) edge node[midway, left]        {$1/2$} (C);
+    \path (A) edge node[midway, above right] {$0/2$} (D);
+    \path (B) edge node[midway, above left]  {$1/2$} (E);
+    \path (B) edge node[midway, above right] {$2/2$} (F);
+    \path (F) edge node[midway, above left]  {$1/1$} (I);
+    \path (F) edge node[midway, above right] {$0/1$} (J);
+    \path (I) edge node[midway, above left]  {$??$} (L);
+    \path (I) edge node[midway, above right] {$1/2$} (M);
+    \path (C) edge node[midway, above left]  {$0/1$} (G);
+    \path (C) edge node[midway, above right] {$1/1$} (H);
+  \end{tikzpicture}
+\end{figure}
+\noindent
+Compute the updated Q-value estimates. Keep your answers in the form $w/n$.
+\begin{solution}
+The intended solution is alternating increases in $w$, since we emphasized that "$w$ is the number of wins for the agent who took that action". However, since this wasn't super clear and different than in the practice problems, we also accept the alternative solution for the convention that the whole tree is in root perspective of Agent 1, with a small $-0.5$ mark penalty.
+
+If the student got Agent 2 as the winning player (which is incorrect) but the rest of the responses are consistent with that, only $-1$ penalty.
+\end{solution}
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{2.5}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+& $q(A,\langle A,B\rangle)$ & $q(B,\langle B,F\rangle)$ & $q(F,\langle F,J\rangle)$ & $q(I,\langle I,L\rangle)$ \\
+\hline
+Q-value ($w/n$) & \ansnt{$3/5$} & \ansnt{$2/3$ (alt: $3/3$)} & \ansnt{$0/1$} & \ansnt{$0/1$ (alt: $1/1$)} \\
+\hline
+\end{tabular}
+\end{table}
+
+\clearpage
+\item \points[4] Consider a 2-player game in which both agents are learning a policy using monte-carlo tree search (MCTS). The state of the game tree after 25 iterations of the algorithm is shown below. Edge labels are expressed in the form $w/n$, where $n$ is the number of times the action was selected, and $w$ is the number of wins for the agent who
+took that action. Assume agents alternate turns by depth with Agent 1 starting at the root.
+  \begin{figure}[H]
+  \centering
+  \begin{tikzpicture}[auto, semithick,
+      every state/.style={draw=black, thick, fill=white, minimum size=5mm}]
+    \node[state] at (0,0)    (A) {$A$};
+    \node[state] at (-4,-2)  (B) {$B$};
+    \node[state] at (0,-2)   (C) {$C$};
+    \node[state] at (4,-2)   (D) {$D$};
+    \node[state] at (-5,-4)  (E) {$E$};
+    \node[state] at (-3,-4)  (F) {$F$};
+    \node[state] at (-1.5,-4)(G) {$G$};
+    \node[state] at (0,-4)   (H) {$H$};
+    \node[state] at (1.5,-4) (I) {$I$};
+    \node[state] at (3,-4)   (J) {$J$};
+    \node[state] at (5,-4)   (K) {$K$};
+
+    \path (A) edge node[midway, above left]  {$8/12$} (B);
+    \path (A) edge node[midway, left]        {$7/10$} (C);
+    \path (A) edge node[midway, above right] {$0/3$}  (D);
+    \path (B) edge node[midway, above left]  {$5/8$}  (E);
+    \path (B) edge node[midway, above right] {$3/4$}  (F);
+    \path (C) edge node[midway, above left]  {$3/6$}  (G);
+    \path (C) edge node[midway, above, yshift=-12pt] {$2/3$} (H);
+    \path (C) edge node[midway, above right] {$0/1$}  (I);
+    \path (D) edge node[midway, above left]  {$0/1$}  (J);
+    \path (D) edge node[midway, above right] {$1/2$}  (K);
+  \end{tikzpicture}
+  \end{figure}
+
+Determine the path that the selection phase follows during the 26\textsuperscript{th} iteration, assuming both players use the UCB formula:
+\[
+\mathrm{UCB} = \frac{w}{n} + c\sqrt{\frac{\ln N}{n}}
+\]
+with $c = \sqrt{2}$. Break ties by choosing the leftmost child. Show your work.
+
+\begin{solution}
+The tree has 25 iterations recorded.
+
+\medskip
+\noindent At each node, $N$ = total visit count of that node = sum of $n$ over its children.
+
+\medskip
+\noindent \textbf{Node $A$} ($N_A = 12+10+3 = 25$, Agent 1 selects):
+
+\[
+\mathrm{UCB}(A \to B) = \frac{8}{12} + \sqrt{2}\sqrt{\frac{\ln 25}{12}} = 0.667 + \sqrt{2 \cdot \frac{3.219}{12}} = 0.667 + \sqrt{0.5365} = 0.667 + 0.733 = 1.400
+\]
+\[
+\mathrm{UCB}(A \to C) = \frac{7}{10} + \sqrt{2}\sqrt{\frac{\ln 25}{10}} = 0.700 + \sqrt{\frac{6.438}{10}} = 0.700 + \sqrt{0.6438} = 0.700 + 0.802 = 1.502
+\]
+\[
+\mathrm{UCB}(A \to D) = \frac{0}{3} + \sqrt{2}\sqrt{\frac{\ln 25}{3}} = 0 + \sqrt{\frac{6.438}{3}} = \sqrt{2.146} = 1.465
+\]
+
+Maximum is $\mathrm{UCB}(A \to C) = 1.502$. \textbf{Select $C$.}
+
+\medskip
+\noindent \textbf{Node $C$} ($N_C = 6+3+1 = 10$, Agent 2 selects):
+
+\[
+\mathrm{UCB}(C \to G) = \frac{3}{6} + \sqrt{2}\sqrt{\frac{\ln 10}{6}} = 0.500 + \sqrt{\frac{4.605}{3}} = 0.500 + \sqrt{1.535} = 0.500 + 0.876 = 1.376
+\]
+\[
+\mathrm{UCB}(C \to H) = \frac{2}{3} + \sqrt{2}\sqrt{\frac{\ln 10}{3}} = 0.667 + \sqrt{2 \cdot \frac{2.303}{3}} = 0.667 + \sqrt{1.535} = 0.667 + 1.239 = 1.906
+\]
+\[
+\mathrm{UCB}(C \to I) = \frac{0}{1} + \sqrt{2}\sqrt{\frac{\ln 10}{1}} = 0 + \sqrt{2 \cdot 2.303} = \sqrt{4.606} = 2.146
+\]
+
+Maximum is $\mathrm{UCB}(C \to I) = 2.146$. \textbf{Select $I$.}
+
+\medskip
+\noindent Node $I$ has no children in the tree, so it is a leaf node that has been visited once ($n=1$). Since it has no expanded children, the selection phase terminates here and $I$ is expanded.
+
+\medskip
+\noindent \textbf{Selection path: $\langle A, C, I \rangle$.}
+Note that using $\ln 25$ instead of $\ln 10$ for the second part would be a mistake. It didn't change the final result here, but it very well could have. Penalty: $-1$
+\end{solution}
+\end{enumerate}
+\clearpage
+
+%% ============================================================
+%%  SECTION 3: STOCHASTIC GAMES
+%% ============================================================
+\subsection{Stochastic Games}
+
+\subsubsection{Nash Value-Iteration}
+
+\points[10] Consider the following 2-player symmetric stochastic game with states $\mathcal{S} = \{\texttt{s1}, \texttt{s2}\}$ and
+joint actions \[\mathcal{A}=\{(\texttt{c,c}),\,(\texttt{c,d}),\,(\texttt{d,c}),\,(\texttt{d,d})\}.\]
+\\~\\
+The rewards that Agent 1 would receive for each state and joint action is shown below:
+\begin{table}[H]
+  \centering
+  \begin{tabular}{|c|c|c|c|c|}
+    \hline
+    $s$ & \texttt{c,c} & \texttt{c,d} & \texttt{d,c} & \texttt{d,d} \\\hline
+    \texttt{s1} & $2.0$ & $4.0$ & $0.0$ & $3.0$ \\\hline
+    \texttt{s2} & $2.5$ & $5.0$ & $3.5$ & $4.0$ \\\hline
+  \end{tabular}
+\end{table}
+\noindent The probability of transitioning to state \texttt{s2} given each state and joint action is shown below:
+\begin{table}[H]
+  \centering
+  \begin{tabular}{|c|c|c|c|c|}
+    \hline
+    $s$ & \texttt{c,c} & \texttt{c,d} & \texttt{d,c} & \texttt{d,d} \\\hline
+    \texttt{s1} & $0.10$ & $0.35$ & $0.35$ & $0.85$ \\\hline
+    \texttt{s2} & $0.80$ & $0.65$ & $0.65$ & $0.95$ \\\hline
+  \end{tabular}
+\end{table}
+\noindent Assume that $T=2$ and the agents use a discount factor $\gamma=1.0$.
+Compute $q_i^*(s,a;t=0)$, where
+  \[q_i^*(s,a;t=0) = r_i(s,a)+\gamma\sum_{s'}p(s'\mid s,a)\,v_i^*(s';t=1)\]
+If multiple pure equilibria exist for a state, break ties by selecting the right-most action in $\mathcal{A}$. Clearly show all steps and present a well-structured argument. You may choose to leave this question blank to receive 2 out of 10 points.
+
+\vspace{0.5em}
+\noindent \choice[I choose to leave this question blank and receive 2 out of 10 points.]
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{2.5}
+\begin{tabular}{|c|c|c|c|c|}
+  \hline
+  $s$ & \texttt{c,c} & \texttt{c,d} & \texttt{d,c} & \texttt{d,d} \\\hline
+  \texttt{s1} & \ansnt{$4.15$} & \ansnt{$6.525$} & \ansnt{$2.525$} & \ansnt{$6.275$} \\\hline
+  \texttt{s2} & \ansnt{$5.70$} & \ansnt{$7.975$} & \ansnt{$6.475$} & \ansnt{$7.425$} \\\hline
+\end{tabular}
+\end{table}
+
+\begin{solution}
+\textbf{Step 1: Compute $v_i^*(s; t=1)$ for $t=1$ (last stage).}
+
+At $t=1$, no future stages remain, so $v_i^*(s;t=1) = r_i(s, a^*)$ where $a^*$ is the Nash equilibrium of the one-shot game at state $s$.
+
+\medskip
+\noindent \textit{State \texttt{s1} at $t=1$:}
+
+Since the game is symmetric, we write the payoff matrix for Agent 1 (Agent 2's payoffs follow by symmetry):
+\[
+\begin{array}{c|cc}
+ & \texttt{c} & \texttt{d} \\\hline
+\texttt{c} & 2.0 & 4.0 \\
+\texttt{d} & 0.0 & 3.0
+\end{array}
+\]
+For Agent 1: action \texttt{c} dominates \texttt{d} when $2.0 > 0.0$ (if opponent plays \texttt{c}) and $4.0 > 3.0$ (if opponent plays \texttt{d}). This means \texttt{c} is strictly dominant for Agent 1 at \texttt{s1}. By symmetry, \texttt{c} is also dominant for Agent 2. Nash equilibrium at \texttt{s1}: $(\texttt{c},\texttt{c})$, with value $v_1^*(\texttt{s1};t=1) = 2.0$.
+
+\medskip
+\noindent \textit{State \texttt{s2} at $t=1$:}
+\[
+\begin{array}{c|cc}
+ & \texttt{c} & \texttt{d} \\\hline
+\texttt{c} & 2.5 & 5.0 \\
+\texttt{d} & 3.5 & 4.0
+\end{array}
+\]
+Agent 1: if Agent 2 plays \texttt{c}, then Agent 1 prefers \texttt{d} since $3.5 > 2.5$. If Agent 2 plays \texttt{d}, then Agent 1 prefers \texttt{c} since $5.0 > 4.0$. By symmetry, the same structure holds for Agent 2.
+
+Now check the pure joint actions:
+\begin{itemize}
+  \item $(\texttt{c},\texttt{c})$: Agent 1 can deviate to \texttt{d} and get $3.5 > 2.5$. Not a Nash equilibrium.
+  \item $(\texttt{d},\texttt{d})$: Agent 1 can deviate to \texttt{c} and get $5.0 > 4.0$. Not a Nash equilibrium.
+  \item $(\texttt{c},\texttt{d})$: Agent 1 gets $5.0$; deviating to \texttt{d} gives $4.0 < 5.0$. Agent 2 gets $3.5$ by symmetry; deviating to \texttt{c} gives $2.5 < 3.5$. So $(\texttt{c},\texttt{d})$ is a Nash equilibrium.
+  \item $(\texttt{d},\texttt{c})$: by symmetry, this is also a Nash equilibrium.
+\end{itemize}
+
+There are two pure NE at \texttt{s2}: $(\texttt{c},\texttt{d})$ and $(\texttt{d},\texttt{c})$. The tie-breaking rule says select the \emph{right-most} action in $\mathcal{A} = \{(\texttt{c,c}),(\texttt{c,d}),(\texttt{d,c}),(\texttt{d,d})\}$. Since $(\texttt{d},\texttt{c})$ appears to the right of $(\texttt{c},\texttt{d})$, we select $(\texttt{d},\texttt{c})$.
+
+Agent 1's value is therefore
+\[
+v_1^*(\texttt{s2};t=1) = r_1(\texttt{s2},(\texttt{d},\texttt{c})) = 3.5.
+\]
+
+\medskip
+\noindent \textbf{Summary:} $v_1^*(\texttt{s1};t=1) = 2.0$, \quad $v_1^*(\texttt{s2};t=1) = 3.5$.
+
+\bigskip
+\noindent \textbf{Step 2: Compute $q_i^*(s,a;t=0)$.}
+
+Use
+\[
+q_i^*(s,a;t=0) = r_i(s,a) + \gamma\bigl[p(\texttt{s1}\mid s,a)\cdot v_i^*(\texttt{s1};t=1) + p(\texttt{s2}\mid s,a)\cdot v_i^*(\texttt{s2};t=1)\bigr]
+\]
+with $\gamma=1$, $v_1^*(\texttt{s1};t=1)=2.0$, and $v_1^*(\texttt{s2};t=1)=3.5$.
+
+\medskip
+\noindent \textit{State \texttt{s1}:}
+
+\begin{align*}
+q(\texttt{s1},\texttt{c,c};t=0) &= 2.0 + 0.90(2.0) + 0.10(3.5) = 2.0 + 1.8 + 0.35 = \mathbf{4.15}\\
+q(\texttt{s1},\texttt{c,d};t=0) &= 4.0 + 0.65(2.0) + 0.35(3.5) = 4.0 + 1.3 + 1.225 = \mathbf{6.525}\\
+q(\texttt{s1},\texttt{d,c};t=0) &= 0.0 + 0.65(2.0) + 0.35(3.5) = 0.0 + 1.3 + 1.225 = \mathbf{2.525}\\
+q(\texttt{s1},\texttt{d,d};t=0) &= 3.0 + 0.15(2.0) + 0.85(3.5) = 3.0 + 0.3 + 2.975 = \mathbf{6.275}
+\end{align*}
+
+\medskip
+\noindent \textit{State \texttt{s2}:}
+
+\begin{align*}
+q(\texttt{s2},\texttt{c,c};t=0) &= 2.5 + 0.20(2.0) + 0.80(3.5) = 2.5 + 0.4 + 2.8 = \mathbf{5.70}\\
+q(\texttt{s2},\texttt{c,d};t=0) &= 5.0 + 0.35(2.0) + 0.65(3.5) = 5.0 + 0.7 + 2.275 = \mathbf{7.975}\\
+q(\texttt{s2},\texttt{d,c};t=0) &= 3.5 + 0.35(2.0) + 0.65(3.5) = 3.5 + 0.7 + 2.275 = \mathbf{6.475}\\
+q(\texttt{s2},\texttt{d,d};t=0) &= 4.0 + 0.05(2.0) + 0.95(3.5) = 4.0 + 0.1 + 3.325 = \mathbf{7.425}
+\end{align*}
+
+Marking scheme:
+\begin{itemize}
+\item 2 for using (c,c) for $s1$
+\item 3 for using (d,c) for $s2$
+\begin{itemize}
+\item 2 if used (c,d) instead of (d,c)
+\item 1 if used mixed equilibrium ($v=3.75$) instead of applying tie-break rule
+\item 0 if wrong equilibrium not in the cases above 
+\end{itemize}
+\item 5 for backup
+\end{itemize}
+\end{solution}
+
+\clearpage
+
+\begin{center}
+    \textit{(extra space)}
+\end{center}
+
+\clearpage
+
+\begin{center}
+    \textit{(extra space)}
+\end{center}
+
+\clearpage
+
+\begin{center}
+    \textit{(extra space)}
+\end{center}

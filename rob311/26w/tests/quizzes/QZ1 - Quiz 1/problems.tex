@@ -1,0 +1,628 @@
+\section{Search Problems}
+\subsection{Tracing}
+Consider a search problem over the graph shown below. The numbers next to edges are path costs, and the numbers in parentheses next to nodes are heuristic values $h(n)$ used by A*. Assume the initial state is $s_0 = A$ and the goal set is $\mathcal{G} = \lbrace H \rbrace $. For each algorithm, provide
+\begin{itemize}
+    \item the path, $p$ (as a sequence of states),
+    \item the cost, $\textsf{cst}(p)$,
+\end{itemize}
+\textbf{Example:}
+If the algorithm expands $A$, then $B$, then $C$, then $E$, then $G$, then $H$, then
+$p = (A, C, E, G, H)$, and $\textsf{cst}(p)=27$.
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+    auto,
+    node distance = 2cm,
+    semithick
+]
+
+\tikzstyle{every state}=[
+    draw = black,
+    thick,
+    fill = white,
+    minimum size = 4mm
+]
+
+\node[state] (a) at (0, 0) {$A$};
+
+\node[state] (b) at (-3, -1) {$B$};
+\node[state] (c) at (3, -1) {$C$};
+
+\node[state] (d) at (-3, -2.5) {$D$};
+\node[state] (e) at (3, -2.5) {$E$};
+
+\node[state] (f) at (0, -3) {$F$};
+
+\node[state] (g) at (0, -4.5) {$G$};
+\node[state] (h) at (0, -6) {$H$};
+
+% Edges from start
+\path[->] (a) edge node[left] {$6$} (b);
+\path[->] (a) edge node[right] {$5$} (c);
+
+% Left branch
+\path[->] (b) edge node[left] {$1$} (d);
+\path[->] (d) edge node[left] {$1$} (g);
+
+% Right branch
+\path[->] (c) edge node[right] {$1$} (e);
+\path[->] (e) edge node[right] {$20$} (g);
+
+% Cycle near goal (short repeated segment)
+\path[->] (d) edge[bend right] node[above] {$1$} (f);
+\path[->] (f) edge[bend right] node[below] {$1$} (b);
+
+% Optional extra near-goal edge to keep choices interesting
+\path[->] (f) edge node[right] {$2$} (g);
+
+\path[->] (g) edge node[right] {$1$} (h);
+
+% Heuristic labels h(n)
+\node [above=0.125cm of a] {$(2)$};
+\node [left=0.125cm of b] {$(30)$};
+\node [right=0.125cm of c] {$(2)$};
+\node [left=0.125cm of d] {$(1)$};
+\node [right=0.125cm of e] {$(1)$};
+\node [right=0.10cm of f] {$(1)$};
+\node [right=0.125cm of g] {$(0)$};
+\node [right=0.125cm of h] {$(0)$};
+
+\end{tikzpicture}
+\end{figure}
+
+\paragraph{Assumptions:}
+\begin{itemize}
+  \item when exploring a node, break ties in alphabetic order
+  \item if an algorithm will not terminate, state the cycle responsible
+  \item cycle-checking (if applicable): is at \emph{export time} (when adding the successor to the open set)
+\end{itemize}
+\textbf{Hints}:
+\begin{itemize}
+    \item for most of the problems, you do not need to actually trace through the algorithm, but can arrive at the solution using its properties
+\end{itemize}
+
+\begin{enumerate}
+\item \points[3] Breadth-First Search
+
+\begin{solution}
+BFS explores level by level. Without cycle checking, when $F$ is expanded it re-enqueues $B$, but $H$ is found (when $G$ is expanded) before any of those re-enqueued nodes are dequeued.
+
+Expansion order: $A, B, C, D, E, F, G \to H$ found.
+
+The path is traced back through the tree: $G$ was enqueued from $D$, $D$ from $B$, $B$ from $A$.
+
+\[
+p = (A,\,B,\,D,\,G,\,H),\quad \textsf{cst}(p) = 6+1+1+1 = 9,\quad P = (A,\,B,\,C,\,D,\,E,\,F,\,G,\,H).
+\]
+\end{solution}
+\vspace{50pt}
+
+\item \points[3] Breadth-First Search with Inter-Path Cycle Checking
+
+\begin{solution}
+With inter-path cycle checking, when $F$ is expanded it attempts to enqueue $B$, but $B$ has already been added to the open set (visited), so it is skipped. The expansion order and the path returned are identical to Q1.1.
+
+\[
+p = (A,\,B,\,D,\,G,\,H),\quad \textsf{cst}(p) = 9,\quad P = (A,\,B,\,C,\,D,\,E,\,F,\,G,\,H).
+\]
+\end{solution}
+\vspace{50pt}
+
+\item \points[3] Depth-First Search
+
+\begin{solution}
+DFS without cycle checking follows $A \to B \to D \to F \to B \to D \to F \to \cdots$\,. This cycle never terminates.
+
+\texttt{N/A} (does not terminate; responsible cycle: $B \to D \to F \to B \to \cdots$).
+\end{solution}
+\vspace{50pt}
+
+\item \points[3] Depth-First Search with Intra-Path Cycle Checking
+
+\begin{solution}
+DFS with intra-path cycle checking tracks the current path and prunes any successor already on it.
+
+Trace: expand $A \to B \to D$. From $D$, successors are $F$ and $G$ (alphabetic order, so $F$ first). Expand $F$: successors are $B$ (on path --- pruned) and $G$. Expand $G \to H$. Goal found.
+
+\[
+p = (A,\,B,\,D,\,F,\,G,\,H),\quad \textsf{cst}(p) = 6+1+1+2+1 = 11,\quad P = (A,\,B,\,D,\,F,\,G,\,H).
+\]
+\end{solution}
+\vspace{50pt}
+
+\item \points[3] Cheapest-First Search (Uniform Cost Search) with Inter-Path Cycle Checking
+
+\begin{solution}
+UCS expands in order of cumulative path cost. Tracking the frontier costs:
+
+\begin{itemize}
+  \item Expand $A$ (cost 0): enqueue $B$ (6), $C$ (5).
+  \item Expand $C$ (5): enqueue $E$ (6).
+  \item Expand $B$ (6) [tie with $E$, alphabetic]: enqueue $D$ (7).
+  \item Expand $E$ (6): enqueue $G$ (26).
+  \item Expand $D$ (7): enqueue $F$ (8), $G$ (8).
+  \item Expand $F$ (8): $B$ already visited --- skip; enqueue $G$ (10) --- $G$ already queued at cost 8 --- skip.
+  \item Expand $G$ (8): enqueue $H$ (9).
+  \item Expand $H$ (9): goal found.
+\end{itemize}
+
+\[
+p = (A,\,B,\,D,\,G,\,H),\quad \textsf{cst}(p) = 9,\quad P = (A,\,C,\,B,\,E,\,D,\,F,\,G,\,H).
+\]
+\end{solution}
+\vspace{50pt}
+
+\item \points[3] A* Search with Intra-Path Cycle Checking
+
+\begin{solution}
+A* uses $f = g + h$. Note that $h(B) = 30$ while the true distance from $B$ to $H$ is only $3$, so the heuristic is \emph{inadmissible}; A* is not guaranteed to return an optimal path.
+
+Trace (intra-path cycle checking only):
+\begin{itemize}
+  \item Expand $A$ ($g=0, h=2, f=2$): add $B$ ($f=6+30=36$), $C$ ($f=5+2=7$).
+  \item Expand $C$ ($f=7$): add $E$ ($g=6, h=1, f=7$).
+  \item Expand $E$ ($f=7$): add $G$ ($g=26, h=0, f=26$).
+  \item Expand $G$ ($f=26$): add $H$ ($g=27, h=0, f=27$).
+  \item Expand $H$ ($f=27$): goal found.
+\end{itemize}
+
+\[
+p = (A,\,C,\,E,\,G,\,H),\quad \textsf{cst}(p) = 5+1+20+1 = 27,\quad P = (A,\,C,\,E,\,G,\,H).
+\]
+
+(The cheaper path $A \to B \to D \to G \to H$ of cost 9 is never found because $h(B)=30$ inflates $B$'s $f$-value far above any path through $C$.)
+\end{solution}
+\vspace{50pt}
+
+\end{enumerate}
+
+\clearpage
+\section{Probabilistic Inference}
+\subsection{Dependence Separation}
+Consider the Bayesian network shown below:
+        \begin{figure}[H]
+          \centering
+          \begin{tikzpicture}[
+              auto,
+              node distance = 2cm,
+              semithick
+            ]
+
+            \tikzstyle{every state}=[
+              draw = black,
+              thick,
+              fill = white,
+              minimum size = 4mm
+            ]
+
+            \node[state] (a) at (-1, 1.5) {$A$};
+            \node[state] (b) at (-2, 0) {$B$};
+            \node[state] (c) at (0, 0) {$C$};
+            \node[state] (d) at (-2, -1.5) {$D$};
+            \node[state] (e) at (0, -1.5) {$E$};
+            \node[state] (f) at (2, -1.5) {$F$};
+            \node[state] (g) at (-2, -3) {$G$};
+            \node[state] (h) at (0, -3) {$H$};
+            \node[state] (i) at (2, -3) {$I$};
+
+            % Edges:
+            % fork at A: A -> B, A -> C
+            \path[-latex] (a) edge node {} (b);
+            \path[-latex] (a) edge node {} (c);
+
+            % chain: B -> D -> G -> H
+            \path[-latex] (b) edge node {} (d);
+            \path[-latex] (d) edge node {} (g);
+            \path[-latex] (g) edge node {} (h);
+
+            % collider at E: C -> E <- D
+            \path[-latex] (c) edge node {} (e);
+            \path[-latex] (d) edge node {} (e);
+
+            % collider at I: F -> I <- H, with E -> F (chain to F)
+            \path[-latex] (e) edge node {} (f);
+            \path[-latex] (f) edge node {} (i);
+            \path[-latex] (h) edge node {} (i);
+
+          \end{tikzpicture}
+        \end{figure}
+
+\noindent
+Determine whether each of the following statements are \textbf{True} or \textbf{False}, and show your work.
+  \begin{enumerate}
+    \item \points[2] It is guaranteed that $B \perp C \mid A$.
+
+    \begin{solution}
+    \textbf{True.} The only path between $B$ and $C$ passes through $A$ via the fork $B \leftarrow A \rightarrow C$. Conditioning on $A$ blocks this fork. No other paths exist between $B$ and $C$. Hence $B \perp C \mid A$.
+    \end{solution}
+    \vspace{30pt}
+
+    \item \points[2] It is guaranteed that $C \perp D$.
+
+    \begin{solution}
+    \textbf{False.} Consider the path $C \leftarrow A \rightarrow B \rightarrow D$. This is a chain/fork with no colliders, and $A$ is not conditioned on, so the path is active. Hence $C$ and $D$ are not guaranteed to be independent.
+    \end{solution}
+    \vspace{30pt}
+
+    \item \points[2] It is guaranteed that $C \perp D \mid F$.
+
+    \begin{solution}
+    \textbf{False.} The path $C \leftarrow A \rightarrow B \rightarrow D$ remains active: it contains no colliders and we are not conditioning on $A$. Conditioning on $F$ does not block this path. (Note: conditioning on $F$, a descendant of the collider $E$, does open the path through $E$, but the path through $A$ is already active regardless.)
+    \end{solution}
+    \vspace{30pt}
+
+    \item \points[2] It is guaranteed that $B \perp H \mid D$.
+
+    \begin{solution}
+    \textbf{True.} We check all paths from $B$ to $H$:
+    \begin{itemize}
+      \item $B \rightarrow D \rightarrow G \rightarrow H$: a chain. Conditioning on $D$ blocks it. \checkmark
+      \item $B \leftarrow A \rightarrow C \rightarrow E \leftarrow D \rightarrow G \rightarrow H$: $E$ is a collider ($C \rightarrow E \leftarrow D$). We are not conditioning on $E$ or any of its descendants ($F$, $I$), so this path is blocked at $E$. \checkmark
+    \end{itemize}
+    All paths are blocked, so $B \perp H \mid D$.
+    \end{solution}
+    \vspace{30pt}
+  \end{enumerate}
+
+    \clearpage
+\subsection{Exact Inference on a Bayesian Network via Variable Elimination}
+Consider the following Bayesian network, where $A, B, C, D$ are binary random variables over $\lbrace 0, 1 \rbrace$.
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}[
+      auto,
+      node distance = 2cm,
+      semithick
+    ]
+
+    \tikzstyle{every state}=[
+      draw = black,
+      thick,
+      fill = white,
+      minimum size = 4mm
+    ]
+
+    \node[state] (A) at (0, 0) {$A$};
+    \node[state] (B) at (-2, -1.2) {$B$};
+    \node[state] (C) at (-4, -2.4) {$C$};
+    \node[state] (D) at (2, -2.4) {$D$};
+
+    \path[-latex] (A) edge node {} (B);
+    \path[-latex] (B) edge node {} (C);
+    \path[-latex] (A) edge node {} (D);
+    \path[-latex] (C) edge node {} (D);
+  \end{tikzpicture}
+\end{figure}
+\noindent The conditional probability tables for the network are:
+\begin{table}[H]
+  \centering
+    \begin{tabular}{|r|c|}
+    \hline
+    $B$ & $P(C=1\mid B)$ \\\hline
+    $0$ & 0.1 \\\hline
+    $1$ & 0.6 \\\hline
+  \end{tabular}
+  \hspace{1cm}
+    \begin{tabular}{|r|c|}
+    \hline
+    $A$ & $P(B=1\mid A)$ \\\hline
+    $0$ & 0.2 \\\hline
+    $1$ & 0.7 \\\hline
+  \end{tabular}
+  \hspace{1cm}
+  \begin{tabular}{|c|}
+    \hline
+    $P(A=1)$ \\\hline
+    0.3      \\\hline
+  \end{tabular}
+
+\end{table}
+\vspace{-1em}
+\begin{table}[H]
+  \centering
+  \hspace{5cm}
+  \begin{tabular}{|r|r|c|}
+    \hline
+    $A$ & $C$ & $P(D=1\mid A,C)$ \\\hline
+    $0$ & $0$ & 0.05 \\\hline
+    $0$ & $1$ & 0.40 \\\hline
+    $1$ & $0$ & 0.30 \\\hline
+    $1$ & $1$ & 0.80 \\\hline
+  \end{tabular}
+\end{table}
+
+\begin{enumerate}
+  \item \points[4] Find the exact value of $P(A=1\mid C=0)$. Show your work.
+
+  \begin{solution}
+  By Bayes' rule:
+  \[
+    P(A=1\mid C=0) = \frac{P(C=0\mid A=1)\,P(A=1)}{P(C=0)}.
+  \]
+  We marginalize over $B$ to compute $P(C=0\mid A)$:
+  \begin{align*}
+    P(C=0\mid A=0) &= P(C=0\mid B=0)\,P(B=0\mid A=0) + P(C=0\mid B=1)\,P(B=1\mid A=0) \\
+                   &= 0.9 \times 0.8 + 0.4 \times 0.2 = 0.72 + 0.08 = 0.80,\\[4pt]
+    P(C=0\mid A=1) &= P(C=0\mid B=0)\,P(B=0\mid A=1) + P(C=0\mid B=1)\,P(B=1\mid A=1) \\
+                   &= 0.9 \times 0.3 + 0.4 \times 0.7 = 0.27 + 0.28 = 0.55.
+  \end{align*}
+  Then:
+  \[
+    P(C=0) = P(C=0\mid A=0)\,P(A=0) + P(C=0\mid A=1)\,P(A=1)
+           = 0.80\times 0.7 + 0.55\times 0.3
+  \]
+  \[= 0.56 + 0.165 = 0.725.\]
+  Therefore:
+  \[
+    P(A=1\mid C=0) = \frac{0.55 \times 0.3}{0.725} = \frac{0.165}{0.725} = \frac{33}{145} \approx 0.2276.
+  \]
+  \end{solution}
+\end{enumerate}
+\clearpage
+
+\clearpage
+\section{Markov Decision Processes (MDPs)}
+\subsection{Value Iteration}
+Consider an MDP with $\mathcal{S} = \lbrace s_1, s_2, s_3 \rbrace$ and $\mathcal{A} = \lbrace \text{A}, \text{B} \rbrace$ as shown below:
+   \begin{figure}[H]
+          \centering
+          \begin{tikzpicture}[
+              auto,
+              node distance = 2cm,
+              semithick % line style
+            ]
+
+            \tikzstyle{every state}=[
+            draw = black,
+            thick,
+            fill = white,
+            minimum size = 10mm,
+            ]
+
+            \node[state] at (4,0) (s3) {$s_3$};
+            \node[state] at (0,0) (s1) {$s_1$};
+            \node[state] at (2,0) (s2) {$s_2$};
+
+            \node[state, dashed] at (0,2) (a11) {A};
+            \node[state, dashed] at (0,-2) (a12) {B};
+
+            \node[state, dashed] at (2,2) (a21) {A};
+            \node[state, dashed] at (2,-2) (a22) {B};
+
+            \path[-latex, dashed, bend left] (s1) edge (a11);
+            \path[-latex, dashed, bend right] (s1) edge (a12);
+
+            \path[-latex] (a11) edge (s3);
+            \path[-latex] (a12) edge (s2);
+            \path[-latex, bend right] (a12) edge (s1);
+
+            \node[state, dashed] at (4,2) (a31) {A};
+            \node[state, dashed] at (4,-2) (a32) {B};
+            
+            \path[-latex, dashed, bend left]  (s3) edge (a31);
+            \path[-latex, dashed, bend right] (s3) edge (a32);
+            
+            \path[-latex] (a31) edge (s2);
+            \path[-latex, bend right] (a32) edge (s3);
+
+
+            \path[-latex, dashed, bend left] (s2) edge (a21);
+            \path[-latex, dashed, bend right] (s2) edge (a22);
+
+            \path[-latex] (a21) edge (s3);
+
+            \path[-latex, bend right] (a22) edge (s2);
+            \path[-latex] (a22) edge (s1);
+
+          \end{tikzpicture}
+        \end{figure}
+\textbf{Assumptions:}
+\begin{itemize}
+  \item $s$ is the current state, $a$ is the action, and $s'$ is the next state.
+  \item for any fixed $(s,a)$, the transition distribution $p(s' \mid s,a)$ is uniform over the outgoing edges shown from the action node. That is,
+  \[
+    p(s'\mid s,a)=\frac{1}{|\mathrm{succ}(s,a)|}\quad \text{for each } s'\in \mathrm{succ}(s,a),
+  \]
+  where $\mathrm{succ}(s,a)$ is the set of possible next states from $(s,a)$
+  \item the rewards are as follows:
+  \begin{itemize}
+      \item for action A: $r(s,\text{A},s_3) = -2$ for $s\in\{s_1,s_2\}$, and $r(s_3,\text{A},s_2)=0$.
+      \item for action B: $r(s,\text{B},s')=+1$ for all valid $s,s'$ except that $r(s_3,\text{B},s_3)=+5$.
+  \end{itemize}
+  \item the discount factor is $\gamma=0.9$
+  \item the time horizon is $T = 2$
+  \item all Q-values are updated synchronously via
+  \[
+    q(s,a; t)=\sum_{s'} p(s'\mid s,a)\Bigl[r(s,a,s')+\gamma \max_{a'\in\{\text{A},\text{B}\}} q(s',a';t+1)\Bigr].
+  \]
+\end{itemize}
+
+\begin{enumerate}
+\item \points[6] Let the initial Q-values be 0 (i.e., $q(s,a;2)\equiv 0$ for all $s\in \mathcal{S}$ and $a\in \mathcal{A}$). Use the Q-value iteration update rule to update the Q-values and list the results under $q(s,a;1)$. Then, update the Q-values again and list the results under $q(s,a;0)$.
+
+\renewcommand{\arraystretch}{1.7}
+\setlength{\tabcolsep}{10pt}
+\begin{table}[H]
+  \centering
+  \begin{tabular}{|c|c|c|c|c|}
+    \hline
+    $s$ & $a$ & $q(s,a; 2)$ & $q(s,a; 1)$ & $q(s,a; 0)$ \\\hline
+    $s_1$ & A & 0.0 & \ansnt{$-2.0$} & \ansnt{$2.5$} \\\hline
+    $s_1$ & B & 0.0 & \ansnt{$1.0$} & \ansnt{$1.9$} \\\hline
+    $s_2$ & A & 0.0 & \ansnt{$-2.0$} & \ansnt{$2.5$} \\\hline
+    $s_2$ & B & 0.0 & \ansnt{$1.0$} & \ansnt{$1.9$} \\\hline
+    $s_3$ & A & 0.0 & \ansnt{$0.0$} & \ansnt{$0.9$} \\\hline
+    $s_3$ & B & 0.0 & \ansnt{$5.0$} & \ansnt{$9.5$} \\\hline
+  \end{tabular}
+\end{table}
+
+\begin{solution}
+\textbf{Transitions (uniform over successors):}
+\begin{itemize}
+  \item $(s_1, A) \to s_3$ (deterministic). \quad $r = -2$.
+  \item $(s_1, B) \to \{s_2, s_1\}$ each with prob $\tfrac{1}{2}$. \quad $r = +1$.
+  \item $(s_2, A) \to s_3$ (deterministic). \quad $r = -2$.
+  \item $(s_2, B) \to \{s_2, s_1\}$ each with prob $\tfrac{1}{2}$. \quad $r = +1$.
+  \item $(s_3, A) \to s_2$ (deterministic). \quad $r = 0$.
+  \item $(s_3, B) \to s_3$ (deterministic). \quad $r = +5$.
+\end{itemize}
+
+\medskip
+\noindent\textbf{Step 1: $q(s,a;1)$ from $q(\cdot;2) = 0$.}
+
+Since all $q(\cdot;2)=0$, the max term vanishes and we simply sum the immediate rewards:
+\begin{align*}
+  q(s_1, A; 1) &= 1\cdot(-2 + 0) = -2.0 \\
+  q(s_1, B; 1) &= \tfrac{1}{2}(1+0) + \tfrac{1}{2}(1+0) = 1.0 \\
+  q(s_2, A; 1) &= 1\cdot(-2 + 0) = -2.0 \\
+  q(s_2, B; 1) &= \tfrac{1}{2}(1+0) + \tfrac{1}{2}(1+0) = 1.0 \\
+  q(s_3, A; 1) &= 1\cdot(0 + 0) = 0.0 \\
+  q(s_3, B; 1) &= 1\cdot(5 + 0) = 5.0
+\end{align*}
+
+\medskip
+\noindent\textbf{Step 2: $q(s,a;0)$ from $q(\cdot;1)$.}
+
+The greedy values at $t=1$ are:
+\[
+  \max_{a'} q(s_1, a'; 1) = \max(-2, 1) = 1, \quad
+  \max_{a'} q(s_2, a'; 1) = 1, \quad
+  \max_{a'} q(s_3, a'; 1) = \max(0, 5) = 5.
+\]
+\begin{align*}
+  q(s_1, A; 0) &= -2 + 0.9\cdot 5 = -2 + 4.5 = 2.5 \\
+  q(s_1, B; 0) &= \tfrac{1}{2}(1 + 0.9\cdot 1) + \tfrac{1}{2}(1 + 0.9\cdot 1) = 1.9 \\
+  q(s_2, A; 0) &= -2 + 0.9\cdot 5 = 2.5 \\
+  q(s_2, B; 0) &= \tfrac{1}{2}(1 + 0.9\cdot 1) + \tfrac{1}{2}(1 + 0.9\cdot 1) = 1.9 \\
+  q(s_3, A; 0) &= 0 + 0.9\cdot\max_{a'} q(s_2, a'; 1) = 0.9\cdot 1 = 0.9 \\
+  q(s_3, B; 0) &= 5 + 0.9\cdot\max_{a'} q(s_3, a'; 1) = 5 + 0.9\cdot 5 = 9.5
+\end{align*}
+\end{solution}
+
+\item \points[2] After a few iterations, suppose the Q-values are estimated to be:
+\renewcommand{\arraystretch}{1.7}
+\setlength{\tabcolsep}{10pt}
+\begin{table}[H]
+  \centering
+  \begin{tabular}{|c|c|c|c|}
+    \hline
+    $s$ & $a$ & $q(s,a)$ & $\pi(a|s)$\\\hline
+    $s_1$ & A & 6.30 & \\\hline
+    $s_1$ & B & 2.00 & \\\hline
+    $s_2$ & A & 6.10 & \\\hline
+    $s_2$ & B & 1.95 & \\\hline
+    $s_3$ & A & 5.50 & \\\hline
+    $s_3$ & B & 48.00 & \\\hline
+  \end{tabular}
+\end{table}
+List the greedy policy $\pi(a \mid s)$ for each $s\in \mathcal{S}$ in the table above.
+
+\begin{solution}
+The greedy policy selects the action with the largest $q(s,a)$ at each state:
+\[
+  \pi(A \mid s_1) = 1 \;\; (6.30 > 2.00), \quad
+  \pi(A \mid s_2) = 1 \;\; (6.10 > 1.95), \quad
+  \pi(B \mid s_3) = 1 \;\; (48.00 > 5.50).
+\]
+\end{solution}
+
+\item \points[2] Without doing any computations, what would happen to $\pi$ if $\gamma$ was much smaller?
+
+\begin{solution}
+A much smaller $\gamma$ heavily discounts future rewards, causing the agent to act greedily with respect to immediate rewards only. Action $B$ yields $r=+1$ from $s_1$ and $s_2$, and $r=+5$ from $s_3$, whereas action $A$ yields $r=-2$ from $s_1$ and $s_2$, and $r=0$ from $s_3$. The policy would therefore switch to $\pi(B \mid s) = 1$ for all $s \in \mathcal{S}$.
+\end{solution}
+\end{enumerate}
+\clearpage
+\subsection{State Estimation in Partially Observable MDPs}
+\item Consider the following Markov decision process with $\mathcal{S} = \lbrace s_1, s_2, s_3 \rbrace$ and $\mathcal{A} = \lbrace \text{A}, \text{B} \rbrace$, and where the numbers correspond to the transition probabilities $p(s' \mid s, a)$:
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+  auto, semithick,
+  every state/.style={draw=black, thick, fill=white, minimum size=10mm},
+  node distance=2.8cm
+]
+\node[state] (s1) {$s_1$};
+\node[state] (s2) [right of=s1] {$s_2$};
+\node[state] (s3) [right of=s2] {$s_3$};
+
+% Action B (top): pushes right; stochastic at state 2
+\path[-latex] (s1) edge[bend left=18] node[above] {$B:1.0$} (s2);
+\path[-latex] (s2) edge[bend left=18] node[above] {$B:0.7$} (s3);
+\path[-latex] (s2) edge[loop above] node {$B:0.3$} (s2);
+\path[-latex] (s3) edge[loop above] node {$B:1.0$} (s3);
+
+% Action A (bottom): pushes left
+\path[-latex] (s2) edge[bend left=18] node[below] {$A:0.7$} (s1);
+\path[-latex] (s2) edge[loop below] node {$A:0.3$} (s2);
+\path[-latex] (s3) edge[bend left=18] node[below] {$A:1.0$} (s2);
+\path[-latex] (s1) edge[loop below] node {$A:1.0$} (s1);
+
+\end{tikzpicture}
+\end{figure}
+\noindent
+The state is not directly known. However, we have $O$, a random variable over $\lbrace s_1, s_2, s_3 \rbrace$ corresponding to measurements of the state. Its distribution is $m(o|s)$, given by
+\[
+m(o \mid s) =
+\begin{cases}
+0.6, & o = s,\\[4pt]
+0.2, & o \neq s \quad \text{(each of the other two states).}
+\end{cases}
+\]
+\begin{enumerate}
+\item \points[6] Suppose the prior belief in the initial state is $80\%$ for state $s_2$, and evenly split between the other two states. The agent takes action $\text{A}$, then receives an observation that the resulting state is in $s_3$. Fill in the posterior probabilities, $b(s|a=A,o=s_3)$.
+\renewcommand{\arraystretch}{1.7}
+\setlength{\tabcolsep}{10pt}
+  \begin{table}[H]
+  \centering
+  \begin{tabular}{|c|c|c|c|}
+    \hline
+    $s$ & $s_1$ & $s_2$ & $s_3$ \\\hline
+    $b(s)$ & 0.1 & 0.8 & 0.1 \\\hline
+    $b(s \mid a=A, o=s_3)$ & \ansnt{$0.66$} & \ansnt{$0.34$} & \ansnt{$0.00$} \\\hline
+  \end{tabular}
+\end{table}
+
+\begin{solution}
+\textbf{Step 1: Predict} (propagate belief through action $A$).
+
+Reading transition probabilities from the diagram:
+\begin{align*}
+  b'(s_1) &= b(s_1)\,p(s_1\mid s_1,A) + b(s_2)\,p(s_1\mid s_2,A) + b(s_3)\,p(s_1\mid s_3,A) \\
+           &= 0.1\times 1.0 + 0.8\times 0.7 + 0.1\times 0 = 0.1 + 0.56 = 0.66, \\[4pt]
+  b'(s_2) &= b(s_1)\,p(s_2\mid s_1,A) + b(s_2)\,p(s_2\mid s_2,A) + b(s_3)\,p(s_2\mid s_3,A) \\
+           &= 0.1\times 0 + 0.8\times 0.3 + 0.1\times 1.0 = 0.24 + 0.10 = 0.34, \\[4pt]
+  b'(s_3) &= b(s_1)\,p(s_3\mid s_1,A) + b(s_2)\,p(s_3\mid s_2,A) + b(s_3)\,p(s_3\mid s_3,A) \\
+           &= 0 + 0 + 0 = 0.
+\end{align*}
+Note that $b'(s_3) = 0$ because action $A$ can never lead to $s_3$ from any state.
+
+\medskip
+\noindent\textbf{Step 2: Update} (condition on observation $o = s_3$).
+
+\[
+  b(s \mid a=A, o=s_3) \propto m(o=s_3 \mid s)\cdot b'(s).
+\]
+\begin{align*}
+  m(s_3 \mid s_1) \cdot b'(s_1) &= 0.2 \times 0.66 = 0.132, \\
+  m(s_3 \mid s_2) \cdot b'(s_2) &= 0.2 \times 0.34 = 0.068, \\
+  m(s_3 \mid s_3) \cdot b'(s_3) &= 0.6 \times 0.00 = 0.
+\end{align*}
+Normaliser: $0.132 + 0.068 + 0 = 0.2$.
+
+\[
+  b(s_1 \mid a=A, o=s_3) = \frac{0.132}{0.2} = 0.66, \quad
+  b(s_2 \mid a=A, o=s_3) = \frac{0.068}{0.2} = 0.34, \quad
+  b(s_3 \mid a=A, o=s_3) = 0.
+\]
+\end{solution}
+\end{enumerate}
+\clearpage
+\begin{center}
+    \textit{(extra space)}
+\end{center}
+\clearpage
+\begin{center}
+    \textit{(extra space)}
+\end{center}
+\clearpage

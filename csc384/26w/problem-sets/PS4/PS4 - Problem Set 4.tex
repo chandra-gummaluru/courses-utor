@@ -1,0 +1,163 @@
+\documentclass[12pt]{article}
+
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{float}
+\usepackage{tikz}
+\usepackage{amsmath}
+\usepackage{pgfplots}
+\usepackage{multirow}
+\usepackage{caption}
+\usepackage{amssymb}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{subcaption}
+\usepackage{etoolbox}
+\usepackage{enumerate}
+\usetikzlibrary{automata,positioning,arrows}
+\usepackage[top=1.7in, left=0.75in,right=0.75in,headsep=1mm,footskip=.5in]{geometry}
+
+
+
+\pgfplotsset{compat=1.18}
+\setlength{\headheight}{14.9pt}
+\addtolength{\topmargin}{-2.9pt}
+
+\makeatletter
+\newcommand\cdotfill{%
+    \leavevmode\cleaders\hb@xt@.44em{\hss$.$\hss}\hfill\kern\z@
+}
+\makeatother
+
+\usepackage{comment}
+
+\newbool{solutions}
+\booltrue{solutions}   % <-- uncomment for solutions version
+\ifbool{solutions}{%
+  \newenvironment{sol}{\par\begingroup\color{blue}}{\endgroup\par\ignorespacesafterend}
+}{%
+  \newenvironment{sol}{\setbox0\vbox\bgroup}{\egroup}
+}
+
+\newcommand{\ansnt}[1]{%
+\ifbool{solutions}{%
+  \textcolor{blue}{#1}
+}{}%
+}
+
+\pagestyle{fancy}
+\let\headrule\empty
+\let\footrule\empty
+\rhead{\hrule}
+\chead{\hrule}
+\lhead{\hrule}
+\lfoot{CSC\,384\,H1, Winter 2026}
+\cfoot{Page \thepage\space of \pageref{LastPage}}
+\rfoot{Assignment 4}
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+\newcommand{\points}[1][0]{{[#1 pts]}}
+
+\begin{document}
+
+\newcommand{\checkbox}[1][Option]{
+  \begin{tikzpicture}[baseline=0]
+    \node[draw=black, minimum size = 0.5cm] (s) {};
+    \node[right = 0cm of s, align = left]{#1};
+  \end{tikzpicture}%
+}
+
+\newcommand{\checkboxmath}[1][Option]{
+  \begin{tikzpicture}[baseline=0]
+    \node[draw=black, minimum size = 0.5cm] (s) {};
+    \node[right = 0cm of s, yshift=-1mm, align = left]{#1};
+  \end{tikzpicture}%
+}
+
+\newcommand{\choice}[1][Option]{
+  \begin{tikzpicture}[baseline=0]
+    \node[circle, draw=black, minimum size = 0.5cm] (s) {};
+    \node[right = 0cm of s, yshift=-0.7mm, align = left]{#1};
+  \end{tikzpicture}%
+}
+
+\newcommand{\tf}{
+  \\~\\
+  \begin{tikzpicture}
+    \node[circle, draw=black, minimum size = 0.5cm] at (0,0) (t) {};
+    \node[right = 0cm of t, yshift=-1mm, align = left]{True};
+    \node[circle, draw=black, minimum size = 0.5cm] at (4,0) (f) {};
+    \node[right = 0cm of f, yshift=-1mm, align = left]{False};
+  \end{tikzpicture}%
+}
+
+\newcommand{\numbox}[1][5em]{
+  \begin{tabular}{|c|}         \hline \hspace{#1} \\ \\ \\ \hline     \end{tabular}
+}
+
+\newcommand{\blank}[1][2cm]{
+\underline{\hspace{#1}}
+}
+
+\newcommand{\infobox}[1][Title]{
+  \noindent #1
+  \begin{table}[H]
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+      \hline
+      \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; \\
+      \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; \\\hline
+    \end{tabular}%
+  \end{table}
+}
+
+\noindent
+\begin{minipage}{0.45\textwidth}
+\large
+\noindent  UNIVERSITY OF TORONTO\\
+  Computer Science\\[1.75ex]
+  Winter 2026\\[1.75ex]
+  \textbf{Assignment 4} \\
+  \textbf{{CSC\,384\,H1}}
+\end{minipage}%
+\hspace{-1cm}
+\begin{minipage}{0.6\textwidth}
+\raggedleft
+\textbf{UTORid (e.g. \texttt{gummalur}):} \\[1ex]
+\begin{tabular}{|c|c|c|c|c|c|c|c|}
+  \hline
+  \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; \\
+  \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\;\\
+  \hline
+\end{tabular}\\[2ex]
+\textbf{Student \# (9 or 10 digits):} \\[1ex]
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+  \hline
+  \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; \\
+  \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\;\\
+  \hline
+\end{tabular}
+\end{minipage}
+\\[0.75cm]
+\infobox[\textbf{First Name:}]
+\infobox[\textbf{Last Name:}]
+\noindent \textbf{Instructors:}\cdotfill Chandra Gummaluru, Bahar Aameri\\
+\textbf{Weight:}\cdotfill 5\% \\
+\textbf{Instructions:}
+\begin{itemize}
+    \item Download this document as a PDF and complete all questions by annotating it. You may either print and write on it, then scan your work, \textbf{or} annotate it directly on a tablet/computer.
+    \item Upload your completed PDF to MarkUs.
+    \item Read each question carefully. Marks cannot be awarded for responses based on misinterpretation.
+    \item Show your work where instructed. Answers without clear justification will not receive marks.
+\end{itemize}
+\vspace{0.25cm}
+\begin{center}
+    \textit{Good Luck!}
+\end{center}
+
+\clearpage
+
+\input{26W/problem-sets/PS4/problems}
+
+\end{document}

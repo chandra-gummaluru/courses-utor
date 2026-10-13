@@ -1,0 +1,365 @@
+\documentclass[mathserif, handout]{beamer}
+
+\usepackage{url}
+\input{includes}
+\input{tikz_figures}
+
+\newif\ifbeamerplus
+\beamerplustrue   % turn ON
+%\beamerplusfalse % turn OFF
+
+% title
+\title{ROB311: Artificial Intelligence}
+\subtitle{Winter 2026}
+\author[C. Gummaluru]{Chandra Gummaluru}
+\titlegraphic{\includegraphics[width=0.15\linewidth]{images/signature.pdf}}
+\institute[]{\url{chandra-gummaluru.github.io} }
+\date[ROB311]{}
+\begin{document}
+
+% beamer
+\beamertemplatenavigationsymbolsempty
+\setbeamertemplate{enumerate item}{(\arabic{enumi})}
+\setbeamertemplate{enumerate subitem}{(\alph{enumii})}
+\setbeamertemplate{enumerate subsubitem}{(\roman{enumiii})}
+
+\setbeamertemplate{itemize item}[circle]
+\setbeamertemplate{itemize subitem}{\circ}
+\setbeamertemplate{itemize subsubitem}{-}
+\setbeamercolor{item}{fg=black!40}
+
+\setbeamercovered{transparent=10}
+
+% pgfplots
+\pgfplotsset{compat=1.7}
+
+% tikz
+\tikzset{
+   invisible/.style={opacity=0},
+   visible on/.style={alt=#1{}{invisible}},
+   alt/.code args={<#1>#2#3}{%
+      \alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}}
+   },
+}
+
+\begin{frame}
+  \maketitle
+\end{frame}
+
+\begin{frame}
+\begin{center}
+\Large \highlight{\textbf{Course Meetings}}
+\end{center}
+\vspace{0.5cm}
+\begin{center}
+\highlight{\textbf{Lectures}}\\
+\graytext{Mondays 09:00-11:00 (GB120)}\\
+\graytext{Thursdays 15:00-17:00 (GB119)}\\
+\graytext{\textit{not recorded to create a more natural classroom environment}} \\
+\graytext{\textit{all annotated material will be posted}}
+
+\vspace{0.5cm}
+
+\highlight{\textbf{Office Hours}}\\
+\graytext{Mondays 11:15-12:15 (BA4202A / Discord)}\\
+\graytext{\textit{not recorded to create a more natural discussion environment}}
+
+\vspace{0.5cm}
+
+\highlight{\textbf{Communication}}\\
+\graytext{All course discussion on Discord}\\
+\graytext{No email responses for course questions}
+\end{center}
+
+\end{frame}
+
+\begin{frame}
+\begin{center}
+\Large \highlight{\textbf{Course Objective}}
+\end{center}
+\begin{thmbox}
+\begin{center}
+    Create artificially intelligent machines.
+\end{center}
+\end{thmbox}
+
+\end{frame}
+
+\begin{frame}
+\begin{center}
+\Large \highlight{\textbf{Topics}}
+\end{center}
+\vspace{0.5cm}
+\begin{center}
+
+\highlight{\textbf{Statistical Learning}}\\
+\graytext{supervised learning, decision trees}
+
+\vspace{0.3cm}
+
+\highlight{\textbf{Search Processes}}\\
+\graytext{BFS, DFS, A* search, heuristics}
+
+\vspace{0.3cm}
+
+\highlight{\textbf{Probabilistic Inference}}\\
+\graytext{exact methods, sampling}
+
+\vspace{0.3cm}
+
+\highlight{\textbf{Markov Decision Processes}}\\
+\graytext{planning under uncertainty}
+\end{center}
+
+\end{frame}
+
+\begin{frame}
+\begin{center}
+\Large \highlight{\textbf{Topics (cont'd)}}
+\end{center}
+\vspace{0.5cm}
+
+\begin{center}
+\highlight{\textbf{Reinforcement Learning}}\\
+\graytext{single-agent and multi-agent}
+
+\vspace{0.3cm}
+
+\highlight{\textbf{Game Theory}}\\
+\graytext{normal-form and extensive-form games}
+
+\vspace{0.3cm}
+
+\highlight{\textbf{Evolutionary Learning}}\\
+\graytext{genetic algorithms and optimization}
+\end{center}
+
+\end{frame}
+
+\begin{frame}
+\begin{center}
+\Large \highlight{\textbf{Assignments}}\\
+\graytext{\normalsize programming assignments via AutoLab}  \\
+\graytext{\normalsize approximately 3 weeks each} \\
+\graytext{\normalsize 2 x 10\%} \\
+\end{center}
+\vspace{0.5cm}
+
+
+\textbf{Policies:}
+\begin{itemize}
+    \item Use any resources (including AI)
+    \item Must write all code yourself
+    \item Must understand your code
+    \item \highlight{\textbf{-20\% penalty per 24 hours late}}
+    \item \highlight{\textbf{5 grace credits}} (24-hour extensions)
+    \item grace credits are intended for extenuating circumstances (illness, emergencies, etc.)
+    \item No weight transfer to other evaluations
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\begin{center}
+\Large \highlight{\textbf{Quizzes}}\\
+\graytext{\normalsize written on paper in-person}  \\
+\graytext{\normalsize 90 minutes each} \\
+\graytext{\normalsize 2 x 15\%} \\
+\end{center}
+\vspace{0.5cm}
+
+\textbf{Policies:}
+\begin{itemize}
+    \item Non-programmable calculator allowed
+    \item \highlight{\textbf{Missed quiz weight transfers to final exam}}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\begin{center}
+\Large \highlight{\textbf{Project}} \\
+\graytext{\normalsize programming assignment and competition}  \\
+\graytext{\normalsize approximately 12 weeks} \\
+\graytext{\normalsize 10\%} \\
+\end{center}
+\vspace{0.5cm}
+
+\vspace{0.5cm}
+
+\textbf{Policies:}
+\begin{itemize}
+    \item Use any resources (including AI)
+    \item Must write all code yourself
+    \item \highlight{\textbf{No extensions or grace credits}}
+    \item \highlight{\textbf{No weight transfer to other evaluations}}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\begin{center}
+\Large \highlight{\textbf{Final Exam}} \\
+\graytext{\normalsize written on paper in-person}  \\
+\graytext{\normalsize 150 minutes} \\
+\graytext{\normalsize 40\%} \\
+\end{center}
+\vspace{0.5cm}
+
+\textbf{Policies:}
+\begin{itemize}
+    \item Non-programmable calculator allowed
+    \item Covers all course material
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\begin{center}
+\Large \highlight{\textbf{Course Timeline}}
+\end{center}
+\vspace{0.5cm}
+
+\begin{tikzpicture}
+    \draw[->, very thick, gray] (0,0) -- (12,0);
+    
+    % Timeline markers
+    \node[anchor=north, smallgraytext] at (0,-0.3) {Jan};
+    \node[anchor=north, smallgraytext] at (3,-0.3) {Feb};
+    \node[anchor=north, smallgraytext] at (6,-0.3) {Mar};
+    \node[anchor=north, smallgraytext] at (9,-0.3) {Apr};
+    
+    % Key events
+    \fill[fill=myyellow, draw=black, thick] (1.5,0) circle (3pt);
+    \node[anchor=south, text width=2cm, align=center, smallgraytext] at (1.5,0.3) {Assignment 1};
+    
+    \fill[fill=myyellow, draw=black, thick] (3.5,0) circle (3pt);
+    \node[anchor=south, text width=2cm, align=center, smallgraytext] at (3.5,0.3) {Quiz 1};
+    
+    \fill[fill=myyellow, draw=black, thick] (6.5,0) circle (3pt);
+    \node[anchor=south, text width=2cm, align=center, smallgraytext] at (6.5,0.3) {Assignment 2};
+    
+    \fill[fill=myyellow, draw=black, thick] (8,0) circle (3pt);
+    \node[anchor=south, text width=2cm, align=center, smallgraytext] at (8,0.3) {Quiz 2};
+    
+    \fill[fill=myyellow, draw=black, thick] (9.5,0) circle (3pt);
+    \node[anchor=south, text width=2cm, align=center, smallgraytext] at (9.5,0.3) {Project\\Showcase};
+    
+    \fill[fill=myyellow, draw=black, thick] (11,0) circle (3pt);
+    \node[anchor=south, text width=2cm, align=center, smallgraytext] at (11,0.3) {Final\\Exam};
+\end{tikzpicture}
+
+\vspace{1cm}
+
+\begin{center}
+\graytext{Reading Week: Feb 16-19}
+\end{center}
+
+\end{frame}
+
+
+\begin{frame}
+\begin{center}
+\Large \highlight{\textbf{Academic Integrity}}
+\end{center}
+\vspace{0.5cm}
+
+\highlightc{mygreen}{\textbf{You may...}}
+\begin{itemize}
+    \item Use any online resources
+    \item Use generative AI (ChatGPT, Copilot, etc.)
+    \item Discuss concepts with classmates
+\end{itemize}
+
+\vspace{0.5cm}
+
+\highlightc{myred}{\textbf{You may not...}}
+\begin{itemize}
+    \item Copy code from other students
+    \item Share your code with other students
+    \item Submit code you don't understand
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\begin{center}
+\Large \highlight{\textbf{Teaching Team}}
+\end{center}
+\vspace{0.5cm}
+\begin{center}
+
+\highlight{\textbf{Instructor}}\\
+Chandra Gummaluru\\
+\graytext{Assistant Professor, Computer Science}\\
+\graytext{chandra-gummaluru.github.io}\\
+\graytext{chandra@cs.toronto.edu}\\
+\graytext{BA4202A}
+
+\vspace{0.5cm}
+
+\highlight{\textbf{Teaching Assistants}}\\
+\graytext{2 TAs supporting the course}\\
+\graytext{Available on Discord}
+\end{center}
+
+\end{frame}
+
+\begin{frame}
+\begin{center}
+\Large \highlight{\textbf{Getting Help}}
+\end{center}
+\vspace{0.5cm}
+\begin{center}
+\highlight{\textbf{Discord}}\\
+\graytext{ask questions, discuss concepts, get help}
+
+\vspace{0.5cm}
+
+\highlight{\textbf{Quercus}}\\
+\graytext{find announcements and course resources}
+
+\vspace{0.5cm}
+
+\highlight{\textbf{Email}}\\
+\graytext{not to be used for course related questions}\\
+
+\end{center}
+\end{frame}
+
+\begin{frame}
+\begin{center}
+\Large \highlight{\textbf{Tips for Success}}
+\end{center}
+\vspace{1cm}
+
+\begin{itemize}
+    \item Attend lectures (not recorded!)
+    \item Start assignments early
+    \item Use grace credits wisely
+    \item Engage on Discord
+    \item Understand your code deeply
+    \item Practice problems regularly
+    \item Form study groups
+    \item Ask questions early and often
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\begin{center}
+\vspace{2cm}
+\Large \highlight{\textbf{Questions?}}
+
+\vspace{1cm}
+
+\large Let's build some intelligent agents!
+
+\vspace{1cm}
+
+\graytext{Join the Discord server}\\
+\graytext{Check the course schedule}\\
+\graytext{Get ready for an exciting semester}
+\end{center}
+\end{frame}
+
+\end{document}

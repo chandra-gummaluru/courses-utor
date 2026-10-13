@@ -1,0 +1,273 @@
+% ============================================================
+%  ROB 311 H1  –  KR & Probabilistic Inference  (Harder Variants)
+% ============================================================
+%
+%  Assumes the following in includes.tex (or preamble):
+%    \usepackage{enumerate, enumitem, amsmath, amssymb, tikz, xcolor, booktabs}
+%    \newcounter{qnum}
+%    \newcommand{\question}[2]{...}        % as before
+%    \newcommand{\points}[1]{[#1 pts]}
+%    \newenvironment{sol}{...}{...}         % blue solution block
+%    \newcommand{\choice}[1]{\underline{\hspace{1cm}}}  % circle/write answer
+%    \newcommand{\numbox}[1]{\framebox[2cm]{\rule{0pt}{10pt}}}
+%
+%  \choice produces a labelled blank for multiple-choice items.
+%  \numbox produces a box for a numerical answer.
+%  Students are expected to show work on the page; final answers
+%  in the boxes allow rapid grading.
+% ============================================================
+
+\newcounter{qnum}
+\setcounter{qnum}{0}
+\newcommand{\question}[2]{%
+  \stepcounter{qnum}%
+  \noindent\textbf{Question \theqnum} \hfill \textbf{[#1 pts]}\\[1mm]
+  \noindent #2
+  \vspace{4mm}
+}
+
+
+% ============================================================
+%  QUESTION 2  –  Clausal Form Conversion  (new)
+% ============================================================
+\question{12}{%
+\textbf{Conversion to Clausal Form.}\\[2mm]
+Convert the following FOL sentence to clausal (conjunctive normal) form, showing \textbf{each transformation step} and naming it. Write your final clauses in the box provided.
+
+\[
+  \varphi \;=\; \forall x\,\Bigl(
+    \texttt{animal}(x)
+    \;\to\;
+    \bigl(\exists y\,(\texttt{food}(y) \wedge \texttt{eats}(x,y))\bigr)
+    \;\vee\;
+    \neg\,\forall z\,(\texttt{plant}(z) \to \texttt{eats}(x,z))
+  \Bigr)
+\]
+
+\noindent The steps you must show, in order, are:
+\begin{enumerate}
+  \item Eliminate implications.
+  \item Move negations inward (NNF).
+  \item Standardise variables apart.
+  \item Skolemise (eliminate existentials).
+  \item Drop universal quantifiers.
+  \item Distribute $\vee$ over $\wedge$ (CNF).
+\end{enumerate}
+
+\vspace{4mm}
+\noindent\textbf{Show each step below.} After every step, write the resulting formula. If a step is not required, you may write \texttt{N/A} for it.
+
+\vspace{3mm}
+\noindent\textbf{Step 1 – Eliminate implications.}
+\vspace{2.5cm}
+
+\noindent\textbf{Step 2 – Move negations inward.}
+\vspace{2.5cm}
+
+\noindent\textbf{Step 3 – Standardise variables apart.}
+\vspace{2.5cm}
+
+\clearpage
+\noindent\textbf{Step 4 – Skolemise} (indicate any Skolem constants/functions).
+\vspace{2.5cm}
+
+\noindent\textbf{Step 5 – Drop universal quantifiers.}
+\vspace{2.5cm}
+
+\noindent\textbf{Step 6 – Distribute $\wedge$ over $\vee$.}
+\vspace{2.5cm}
+
+\noindent\textbf{Final clauses} (write each clause in its own box - you may not need them all): \\~\\
+\noindent\numbox[14cm]\\
+\numbox[14cm]\\
+\numbox[14cm]\\
+\numbox[14cm]\\
+\numbox[14cm]\\
+\numbox[14cm]\\
+}
+
+\clearpage
+
+% ============================================================
+%  QUESTION 3  –  Logical Ambiguity + Structures  (harder)
+% ============================================================
+\question{12}{%
+\textbf{Logical Ambiguity and Structures.}\\[2mm]
+Consider the following knowledge base $\Phi$ in clausal form:
+\begin{enumerate}[(1)]
+  \item $\texttt{raptor}(\texttt{a})$
+  \item $\texttt{nocturnal}(\texttt{b})$
+  \item $\neg\,\texttt{nocturnal}(x) \;\vee\; \texttt{raptor}(x)$
+  \item $\neg\,\texttt{raptor}(x) \;\vee\; \texttt{hunts}(x, \texttt{mouse})$
+  \item $\neg\,\texttt{raptor}(x) \;\vee\; \texttt{nocturnal}(x) \;\vee\; \texttt{diurnal}(x)$
+  \item $\neg\,\texttt{nocturnal}(x) \;\vee\; \neg\,\texttt{diurnal}(x)$
+\end{enumerate}
+Let $\Phi' = \texttt{nocturnal}(\texttt{a})$.
+
+\begin{enumerate}[(a)]
+
+\item \points{2} Is $\Phi'$ logically ambiguous given $\Phi$? Circle: \;\choice{Yes} \;/\; \choice{No}\\[2mm]
+Justify in 1--2 sentences.
+
+\item \points{5} Construct a structure $\mathcal{S}_1$ such that $\mathcal{S}_1 \vDash \Phi$ \textbf{and} $\mathcal{S}_1 \vDash \Phi'$.\\
+Specify domain, constant interpretations, and predicate interpretations.
+Verify \textbf{every} clause.
+
+
+\item \points{5} Construct a structure $\mathcal{S}_2$ such that $\mathcal{S}_2 \vDash \Phi$ \textbf{and} $\mathcal{S}_2 \not\vDash \Phi'$.\\
+Specify domain, constant interpretations, and predicate interpretations.
+Verify \textbf{every} clause.
+
+
+\end{enumerate}
+}
+
+\clearpage
+
+% ============================================================
+%  QUESTION 4  –  Resolution by Refutation  (harder)
+% ============================================================
+\question{12}{%
+\textbf{Resolution by Refutation.}\\[2mm]
+Consider the knowledge base $\Phi$ in clausal form:
+\begin{enumerate}
+  \item $\texttt{scout}(\texttt{c0})$
+  \item $\texttt{forager}(\texttt{c0})$
+  \item $\texttt{target}(\texttt{r1})$
+  \item $\neg\,\texttt{scout}(x) \;\vee\; \neg\,\texttt{target}(y) \;\vee\; \texttt{marks}(x, y)$
+  \item $\neg\,\texttt{forager}(x) \;\vee\; \neg\,\texttt{marks}(x, y) \;\vee\; \texttt{exploits}(x, y)$
+  \item $\neg\,\texttt{exploits}(x, y) \;\vee\; \texttt{depletes}(y)$
+  \item $\neg\,\texttt{depletes}(y) \;\vee\; \neg\,\texttt{target}(y) \;\vee\; \texttt{scarce}(y)$
+\end{enumerate}
+We wish to prove $\Phi' = \texttt{scarce}(\texttt{r1})$ by \textbf{resolution by refutation}.
+
+\begin{enumerate}
+
+\item \points[2] Write the clause that must be added to begin the proof.
+
+\begin{enumerate}
+    \item[8.] \numbox[12cm]
+\end{enumerate}
+
+
+\item \points[8] Carry out the full resolution proof labeling each step using the notation \texttt{\#.\;r[i,j]\{$\delta$\}}, where \texttt{\#.}\;is the new clause number, \texttt{i} and \texttt{j} are the clauses being resolved, and $\delta$ is a substitution if required.
+
+
+\end{enumerate}
+}
+
+\clearpage
+
+\begin{center}\textit{(extra space)}\end{center}
+\clearpage
+
+% ============================================================
+%  QUESTION 5  –  D-Separation  (harder)
+% ============================================================
+\question{10}{%
+\textbf{Bayesian Network: D-Separation.}\\[2mm]
+Consider the Bayesian network below, which models a wildfire detection system:
+
+\vspace{3mm}
+\begin{center}
+\begin{tikzpicture}[
+    > = stealth, shorten > = 1pt, auto, node distance = 2.2cm, semithick
+]
+\tikzstyle{every state}=[draw=black, thick, fill=white, minimum size=7mm, font=\small]
+
+\node[state] (L) {$L$};
+\node[state] (H) [right of=L] {$H$};
+\node[state] (W) [right of=H] {$W$};
+\node[state] (F) [below of=H] {$F$};
+\node[state] (S) [below left of=F] {$S$};
+\node[state] (A) [below right of=F] {$A$};
+\node[state] (R) [below of=A] {$R$};
+
+\path[->] (L) edge (F);
+\path[->] (H) edge (F);
+\path[->] (W) edge (F);
+\path[->] (W) edge (A);
+\path[->] (F) edge (S);
+\path[->] (F) edge (A);
+\path[->] (A) edge (R);
+
+\node[above=2mm of L, font=\footnotesize\color{gray}] {Lightning};
+\node[above=2mm of H, font=\footnotesize\color{gray}] {Heat};
+\node[above=2mm of W, font=\footnotesize\color{gray}] {Wind};
+\node[left=2mm of S, font=\footnotesize\color{gray}] {Smoke};
+\node[right=2mm of A, font=\footnotesize\color{gray}] {Alarm};
+\node[right=2mm of R, font=\footnotesize\color{gray}] {Response};
+\node[left=1mm of F, font=\footnotesize\color{gray}] {Fire};
+\end{tikzpicture}
+\end{center}
+
+\noindent For each query, circle \textbf{one} answer and provide a justification.
+
+\vspace{3mm}
+\begin{enumerate}
+
+  \item \points[2] $L$ is unconditionally independent of $W$ \\
+  \hfill \choice[True] \choice[False] \choice[Cannot be determined]
+\clearpage
+  \item \points[2] $L$ is independent of $W$ given $F$ \\
+  \hfill \choice[True] \choice[False] \choice[Cannot be determined]
+\vspace{5cm}
+  \item \points[3] $S$ is independent of $R$ given $F$ \\
+  \hfill \choice[True] \choice[False] \choice[Cannot be determined]
+\vspace{5cm}
+  \item \points[3] $H$ is independent of $W$ given $A$ \\
+  \hfill \choice[True] \choice[False] \choice[Cannot be determined]
+
+\end{enumerate}
+}
+
+\clearpage
+
+% ============================================================
+%  QUESTION 6  –  Probabilistic Inference with Scaffolding
+% ============================================================
+\question{16}{%
+\textbf{Bayesian Network: Variable Elimination with Scaffolding.}\\[2mm]
+Consider a Bayesian network with binary variables $E$ (Earthquake), $B$ (Burglar), $A$ (Alarm), where $E \to A$, $B \to A$ (i.e.\ $A$ has parents $E$ and $B$, and $E$, $B$ are marginally independent).
+
+\vspace{3mm}
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline $E$ & $P(E)$ \\ \hline
+$0$ & $0.98$ \\ $1$ & $0.02$ \\ \hline
+\end{tabular}
+\hspace{6mm}
+\begin{tabular}{|c|c|}
+\hline $B$ & $P(B)$ \\ \hline
+$0$ & $0.99$ \\ $1$ & $0.01$ \\ \hline
+\end{tabular}
+\hspace{6mm}
+\begin{tabular}{|c|c|c|c|}
+\hline $E$ & $B$ & $A$ & $P(A \mid E, B)$ \\ \hline
+$0$ & $0$ & $1$ & $0.001$ \\
+$0$ & $1$ & $1$ & $0.94$ \\
+$1$ & $0$ & $1$ & $0.29$ \\
+$1$ & $1$ & $1$ & $0.95$ \\ \hline
+\end{tabular}
+\end{center}
+
+\vspace{4mm}
+\noindent We wish to compute $P(B{=}1 \mid A{=}1)$.
+\begin{enumerate}
+    \item \points[2] Write $\textsf{pr}(B=1|A=1)$ in terms of the joint distribution between $A$ and $B$ (i.e., $\textsf{pr}(A,B)$).
+\[\textsf{pr}(B=1|A=1) = \numbox[5cm] \; \bigg/ \; \numbox[5cm]\]
+
+\item \points[2] Write $\textsf{pr}(A,B)$ in terms of the joint distribution between $A,B$ and $E$ (i.e., $\textsf{pr}(A,B,E)$).
+\[\textsf{pr}(A,B) = \numbox[8cm]\]
+
+\item \points[2] Write $\textsf{pr}(A,B,E)$ in terms of the original factors from the Bayesian network. Recall that for a variable, $X$, the associated factor will have the form $\textsf{pr}(X|\textsf{pnt}(X))$, where $\textsf{pnt}(X)$ is the set of $X$'s parents.
+\[\textsf{pr}(A,B,E) = \numbox[12cm]\]
+
+\item  \points[4] Calculate $\textsf{pr}(B=1|A=1)$. Show your work.
+\[\textsf{pr}(B=1|A=1) = \numbox[5cm]\]
+\end{enumerate}
+}
+
+\clearpage
+\begin{center}\textit{(extra space)}\end{center}
+\clearpage

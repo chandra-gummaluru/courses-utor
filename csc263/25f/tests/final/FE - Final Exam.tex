@@ -1,0 +1,993 @@
+\documentclass[12pt]{article}
+
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{float}
+\usepackage{tikz}
+\usepackage{amsmath}
+\usepackage{makecell}
+\usepackage{pgfplots}
+\usepackage{multirow}
+\usepackage{caption}
+\usepackage{amssymb}
+\usepackage{subcaption}
+\usepackage{listings}
+\usepackage{diagbox}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usetikzlibrary{automata,positioning,arrows}
+\usepackage[top=2.2in, left=0.75in,right=0.75in,headsep=1mm,footskip=.5in]{geometry}
+
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{float}
+\usepackage{booktabs}
+
+
+\usepackage{ifthen}
+\newboolean{showsolutions}
+\setboolean{showsolutions}{false} % change to show/hide solutions.
+\ifthenelse{\boolean{showsolutions}}{%
+  % When showing solutions
+  \newenvironment{solution}
+    {\par\noindent\textbf{\textcolor{blue}{Solution:}}\par}
+    {}
+}{%
+  % When hiding solutions: just ignore content
+  \newenvironment{solution}
+    {\expandafter\ignorespaces}
+    {}
+}
+\usepackage{xcolor}
+
+
+\makeatletter
+\newcommand\cdotfill{%
+    \leavevmode\cleaders\hb@xt@.44em{\hss$.$\hss}\hfill\kern\z@
+}
+\makeatother
+
+% Custom line background command
+\definecolor{lightgray}{gray}{0.95}
+\definecolor{white}{gray}{1.0}
+\makeatletter
+\lst@AddToHook{OnLine}{%
+  \ifnum\value{lstnumber}=0\relax\else
+    \ifodd\value{lstnumber}
+      \color{white}\lst@basicstyle\colorbox{white}{\strut}
+    \else
+      \color{lightgray}\lst@basicstyle\colorbox{lightgray}{\strut}
+    \fi
+  \fi
+}
+\makeatother
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+\pagestyle{fancy}
+\let\headrule\empty
+\let\footrule\empty
+\rhead{\hrule}
+\chead{\hrule}
+\lhead{\hrule}
+\lfoot{CSC\,263\,H1, Fall 2025}
+\cfoot{Page \thepage\space of \pageref{LastPage}}
+    \rfoot{Final Examination}
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+\begin{document}
+
+\newcommand{\checkbox}[1][Option]{
+  \begin{tikzpicture}[baseline=0]
+    \node[draw=black, minimum size = 0.5cm] (s) {};
+    \node[right = 0cm of s, align = left]{#1};
+  \end{tikzpicture}%
+}
+
+\newcommand{\checkboxmath}[1][Option]{
+  \begin{tikzpicture}[baseline=0]
+    \node[draw=black, minimum size = 0.5cm] (s) {};
+    \node[right = 0cm of s, yshift=-1mm, align = left]{#1};
+  \end{tikzpicture}%
+}
+
+\newcommand{\points}[1][0]{
+  {[#1 pts]}
+}
+
+\newcommand{\choice}[1][Option]{
+  \begin{tikzpicture}[baseline=0]
+    \node[circle, draw=black, minimum size = 0.5cm] (s) {};
+    \node[right = 0cm of s, yshift=-0.7mm, align = left]{#1};
+  \end{tikzpicture}%
+}
+
+\newcommand{\tf}{
+  \\~\\
+  \begin{tikzpicture}
+    \node[circle, draw=black, minimum size = 0.5cm] at (0,0) (t) {};
+    \node[right = 0cm of t, yshift=-1mm, align = left]{True};
+
+
+    \node[circle, draw=black, minimum size = 0.5cm] at (4,0) (f) {};
+    \node[right = 0cm of f, yshift=-1mm, align = left]{False};
+  \end{tikzpicture}%
+}
+
+\newcommand{\numbox}[1][5em]{
+  \begin{tabular}{|c|}         \hline \hspace{#1} \\ \\ \\ \hline     \end{tabular}
+}
+
+\newcommand{\fractional}[1][]{
+  #1 \begin{tabular}{|c|}         \hline \hspace{5em} \\ \\ \\ \hline     \end{tabular} $\Bigg/$ \begin{tabular}{|c|}         \hline \hspace{5em} \\ \\ \\ \hline     \end{tabular}
+}
+
+\newcommand{\tableanswer}[1][Title]{
+  \begin{tabular}{|l|}         \hline #1 \\ \hspace{5em} \\ \\ \hline     \end{tabular}%
+}
+
+\newcommand{\blank}[1][2cm]{
+\underline{\hspace{#1}}
+}
+
+\newcommand{\infobox}[1][Title]{
+  \noindent #1
+  \begin{table}[H]
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+      \hline
+      \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; \\
+      \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; \\\hline
+    \end{tabular}%
+  \end{table}
+}
+
+\newcommand{\spacer}[]{
+  \vspace{5mm}\\
+}
+
+\newcommand{\hspacer}[]{\\
+}
+
+\begin{center}\large
+  UNIVERSITY OF TORONTO\\
+  Faculty of Arts and Science\\[1.75ex]
+  December 2025 Examination\\[1.75ex]
+  \textbf{Final Examination} \\
+  \textbf{{CSC\,263\,H1F}}
+\end{center}
+
+\infobox[\textbf{First Name:}\vspace{-2mm}]
+\infobox[\textbf{Last Name:}\vspace{-2mm}]
+
+\noindent \textbf{Student \# (9 or 10 digits):\vspace{-2mm}} \begin{table}[H]
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+      \hline
+      \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; \\
+      \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\;\\\hline
+    \end{tabular}%
+  \end{table}
+\noindent \textbf{UTORid (e.g. \texttt{gummalur}):\vspace{-2mm}} \begin{table}[H]
+    \begin{tabular}{|c|c|c|c|c|c|c|c|}
+      \hline
+      \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; \\
+      \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\;\\\hline
+    \end{tabular}%
+  \end{table}
+\noindent \textbf{Duration:}\cdotfill {180 minutes}\\
+\textbf{Instructor:}\cdotfill Chandra Gummaluru\\
+\textbf{Weight:}\cdotfill 40\% \\
+\textbf{Aids Allowed:} \cdotfill None \\
+\textbf{Exam Type:} \cdotfill A \\
+\textbf{Points Breakdown:}
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
+        \hline
+          \# & A1 & A2 & A3 & A4 & A5 & A6 & B1 & B2 & B3 & Total  \\\hline
+          Points & 8 & 8 & 8 & 8 & 8 & 8 & 4 & 8 & 6 & 66  \\ \hline  
+    \end{tabular}
+\end{table}
+\begin{center}
+    \textit{In order to pass the course, you must obtain at least 40\% (40/100) on this exam.}
+\end{center}
+
+\clearpage
+
+% Instructions %
+\subsection*{Instructions}
+\begin{itemize}
+  \item This test contains \pageref{LastPage} pages printed two-sided. Make sure you have all of them. Do not tear any pages from this test.
+  \item Answer each question directly on the exam paper, in the space provided. Use ``blank`` pages for rough work, or
+for answers that did not fit elsewhere—indicate clearly the pages that should be marked.
+  \item Make sure to express your answer(s) in the format specified. A correct answer will not receive marks if it is not formatted correctly.
+\item Make sure to clearly explain your answer(s). A correct answer will not receive marks if it is not supported with a clear explanation.
+  \item Make sure to write within the margins using a dark pencil/pen (pencil is strongly recommended). A correct answer will not receive marks if it cannot be read when scanned.
+  \item There are 66 points in total.
+  \item As a student, you help create a fair and inclusive writing environment. If you possess an unauthorized aid during
+the exam, you may be charged with an academic offence.
+\item Turn off and place all cell phones, smart watches, electronic devices, and unauthorized study materials in your
+bag under your desk. If it is left in your pocket, it may be an academic offence.
+\item When you are done your exam, raise your hand for someone to come and collect your exam. Do not collect your
+bag and jacket before your exam is handed in.
+\item If you are feeling ill and unable to finish your exam, please bring it to the attention of the Exam Facilitator so it can be recorded before leaving the room.
+\item In the event of a fire alarm, do not check your cell phone when escorted outside.
+\end{itemize}
+\clearpage
+
+\lstdefinestyle{mypython}{
+    language=Python,
+    keywordstyle=\color{blue}\bfseries,
+    stringstyle=\color{orange},
+    commentstyle=\color{gray}\itshape,
+    basicstyle=\ttfamily\normalsize,
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    numbersep=5pt,
+    xleftmargin=15pt,
+    frame=none,
+    showstringspaces=false,
+    breaklines=true,
+    breakatwhitespace=true,
+    tabsize=4,
+    columns=flexible
+}
+\lstset{style=mypython} % Apply default style
+
+\begin{document}
+\setcounter{chapter}{1}
+\MakeScribeTop
+
+\setlength\parindent{0pt}
+
+\section*{Part A: Data-Structures}
+
+\subsection*{Question A.1: Graphs}
+\points[8] Consider the implementation of \texttt{Graph} as defined in \textit{Standard Data Structures}. Suppose an application needs to continuously add and remove vertices and edges—potentially many times per second. Describe, in plain language, how you would modify the Graph implementation so that it efficiently supports frequent insertions and deletions of both vertices and edges. In addition, explain how the \textit{graph} algorithms described in \textit{Standard Algorithms} would need to be adapted to work with your modified implementation.
+\clearpage
+
+\newpage
+\begin{center}
+    \textit{(extra space)}
+\end{center}
+\clearpage
+
+\subsection*{Question A.2: Union-Find}
+\points[8] Consider the implementation of \texttt{UnionFind} as defined in \textit{Standard Data-Structures}.
+\begin{enumerate}
+\item[(a)]\points[2] An implementation of \texttt{union} is provided below:
+\begin{lstlisting}[style=mypython]
+def union(self: UnionFind, key1: Key, key2: Key):
+    root1 = self.find(key1)
+    root2 = self.find(key2)
+    if root1 is not None and root2 is not None:
+        self.parents[root1] = root2
+\end{lstlisting} 
+Explain why this implementation is incorrect and provide an example showing the issue.
+\clearpage
+
+\item[(b)]\points[2] Provide a correct implementation of \texttt{union} (using union-by-rank).
+ \begin{lstlisting}[numberblanklines=true, keepspaces=true,showlines=true, numberstyle=\large\ttfamily\color{gray}, lineskip=12pt]
+def union(self: UnionFind, key1: Key, key2: Key):
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{lstlisting}
+
+\clearpage
+
+\item[(c)]\points[4] A graph is called \textit{bipartite} if its vertices can be divided into two groups such that every edge connects vertices in different groups. We want to use \texttt{UnionFind} to determine if a graph is bipartite. Describe the steps (in plain language) how you would use \texttt{UnionFind} to do this.
+\\~\\
+\textbf{Hint}: You can modify the implementation of \texttt{UnifNode} in \textit{Standard Data-Structures}.
+\end{enumerate}
+
+\newpage
+
+\subsection*{Question A.3: Dictionaries (via Hash Tables)}
+\points[8] Consider a \texttt{Dict} with an initial size of 7, which uses the hash function defined below:
+\[
+h(k) = k \bmod s
+\]
+where $s$ is the current size of the dictionary. Suppose the following operations are done in order. For each operation, indicate the number of indices that will be probed (including the last one) before the operation is complete using each of the following methods:
+\begin{enumerate}
+    \item[(a)] Linear probing with wrap around.
+    \item[(b)] Quadratic probing (always adding to the current index) with wrap around.
+\end{enumerate}
+If the dictionary is ``full'', \texttt{insert} will create a new array twice as large and rehash all existing keys in index order. When an element is removed, \texttt{delete} will mark its slot with a special \texttt{pass} flag. During probing (for insertion, deletion, or search), the probe continues past any \texttt{pass} flags until it finds the target element, reaches an empty slot, or returns past the starting index.
+
+\hspace{47mm} (a) \hspace{28mm} (b)
+
+\texttt{insert(12, val1)}: \numbox[2cm] \hspace{6mm} \numbox[2cm]\\
+\texttt{insert(27, val2)}: \numbox[2cm] \hspace{6mm} \numbox[2cm]\\
+\texttt{insert(33, val3)}: \numbox[2cm] \hspace{6mm} \numbox[2cm]\\ 
+\texttt{insert(44, val4)}: \numbox[2cm] \hspace{6mm} \numbox[2cm] \\ 
+\texttt{insert(15, val5)}: \numbox[2cm] \hspace{6mm} \numbox[2cm] \\
+\texttt{delete(27)}:\hspace{13mm} \numbox[2cm] \hspace{6mm} \numbox[2cm]  \\
+\texttt{delete(44)}:\hspace{13mm} \numbox[2cm] \hspace{6mm} \numbox[2cm]
+
+\newpage
+
+\subsection*{Question A.4: Sorted Dictionaries (via Balanced Binary Search Trees)}
+\points[8] Consider a \texttt{SortDict}, \texttt{dict}, represented by the balanced binary search tree shown below:
+\begin{center}
+
+\tikzset{
+    defaultnode/.style={
+        circle,
+        draw,
+        minimum size=9mm,
+        inner sep=1pt,
+        font=\ttfamily
+    }
+}
+\begin{tikzpicture}[scale=0.9, transform shape]
+\node[defaultnode] (n1) at (0,0) {\texttt{50}};
+\node[defaultnode] (n2) at (-4,-2) {\texttt{28}};
+\node[defaultnode] (n3) at (4,-2)  {\texttt{72}};
+\node[defaultnode] (n4) at (-6,-4) {\texttt{16}};
+\node[defaultnode] (n5) at (-2,-4) {\texttt{35}};
+\node[defaultnode] (n6) at (-7.5,-6) {\texttt{10}};
+\node[defaultnode] (n7) at (-4.5,-6) {\texttt{22}};
+\node[defaultnode] (n8) at (-3.5,-6) {\texttt{31}};
+\node[defaultnode] (n9) at (-0.5,-6) {\texttt{42}};
+\node[defaultnode] (n10) at (2,-4)  {\texttt{60}};
+\node[defaultnode] (n11) at (6,-4)  {\texttt{85}};
+\node[defaultnode] (n12) at (0.5,-6) {\texttt{55}};
+\node[defaultnode] (n13) at (3.5,-6) {\texttt{66}};
+\node[defaultnode] (n14) at (5,-6)  {\texttt{78}};
+\node[defaultnode] (n15) at (7,-6)  {\texttt{92}};
+
+% Edges
+\draw[->] (n1) -- (n2);
+\draw[->] (n1) -- (n3);
+\draw[->] (n2) -- (n4);
+\draw[->] (n2) -- (n5);
+\draw[->] (n4) -- (n6);
+\draw[->] (n4) -- (n7);
+\draw[->] (n5) -- (n8);
+\draw[->] (n5) -- (n9);
+\draw[->] (n3) -- (n10);
+\draw[->] (n3) -- (n11);
+\draw[->] (n10) -- (n12);
+\draw[->] (n10) -- (n13);
+\draw[->] (n11) -- (n14);
+\draw[->] (n11) -- (n15);
+\end{tikzpicture}
+\end{center}
+
+Suppose \texttt{28} is deleted from the dictionary, i.e., we call \texttt{dict.delete(28)}.
+\begin{enumerate}
+    \item[(a)]\points[3]
+    Draw the tree \textit{after} \texttt{28} has been detached but \textit{before} the tree has been rebalanced.
+    \vspace{30em}
+    
+    \item[(b)]\points[1]
+    After \texttt{28} has been detached, which node in the tree (if any) is an anchor node? 
+    \[
+        \numbox[2cm] \quad
+        \checkbox[None]
+    \]
+    
+    \item[(c)]\points[1]
+    After \texttt{28} has been detached, which rotation (if nay) is required at the anchor node to restore balance?
+    \[
+        \checkbox[Left] \quad
+        \checkbox[Right] \quad
+        \checkbox[Left\text{-}Right] \quad
+        \checkbox[Right\text{-}Left] \quad
+        \checkbox[None]
+    \]
+
+    \item[(d)]\points[1]
+    After rebalancing, what is the height of the tree?
+    \numbox[2cm]
+
+    \item[(e)]\points[2]
+    After rebalancing, suppose \texttt{22} is queried, i.e., we call \texttt{dict.get(22)}. List the sequence of nodes visited during the search. You may not need all the boxes. \\~\\
+    \numbox[7mm] $\rightarrow$ \numbox[7mm] $\rightarrow$ \numbox[7mm] $\rightarrow$ \numbox[7mm] $\rightarrow$ \numbox[7mm] $\rightarrow$ \numbox[7mm] $\rightarrow$ \numbox[7mm] $\rightarrow$ \numbox[7mm] 
+
+\end{enumerate}
+
+\newpage
+
+\subsection*{Question A.5: Tries}
+\points[8] Suppose we use a \texttt{Trie}, \texttt{trie}, to store DNA sequences (strings composed of \texttt{A}, \texttt{T}, \texttt{C}, and \texttt{G}) in order to identify genetic similarities. Initially, it contains the following 5 sequences, inserted in the following order:
+\[\texttt{ATGCA}, \texttt{ATGAA}, \texttt{ATCCA}, \texttt{CTGCA}, \texttt{TTGCA}\]
+\begin{enumerate}
+\item[(a)] \points[4] Suppose \texttt{ATGAA} is deleted, i.e., we call \texttt{trie.delete("ATGAA")}. Draw the resulting trie, clearly differentiating end-of-word nodes.
+\vspace{12cm}
+\clearpage
+\item[(b)] \points[4] Suppose we want to define a new function, \texttt{match(self: Trie, key: Key) -> List[Key]} to support the wildcard symbol \texttt{?}, which should match any single nucleotide (i.e., \texttt{A}, \texttt{G}, \texttt{C}, or \texttt{T}).
+\begin{enumerate}
+    \item[(i)]\points[2] Provide an implementation of \texttt{match}.
+    \begin{lstlisting}[numberblanklines=true, keepspaces=true,showlines=true, numberstyle=\large\ttfamily\color{gray}, lineskip=12pt]
+def match(self: Trie, key: Key) -> List[Key]:
+
+
+
+
+
+
+
+
+
+
+
+
+\end{lstlisting}
+    \item[(ii)]\points[2] Suppose \texttt{AT?CA} is queried, i.e., we call \texttt{trie.match("AT?CA"}). List all stored sequences matching the query.
+\end{enumerate}
+\end{enumerate}
+\newpage
+
+
+\subsection*{Question A.6: Queues}
+\points[8] Consider a \texttt{Queue}, \texttt{queue}, implemented using a binary max-heap. Initially, it contains the following 7 elements with associated priorities, inserted in the order below:
+\[
+\texttt{12},\ \texttt{35},\ \texttt{20},\ \texttt{50},\ \texttt{15},\ \texttt{28},\ \texttt{42}.
+\]
+
+\begin{enumerate}
+\item[(a)]\points[2] Draw the tree representation of the underlying binary max-heap after all 7 insertions (in the order given).
+
+\vspace{7cm}
+
+\item[(b)]\points[2]
+Suppose \texttt{38} is inserted into the queue, i.e., we call \texttt{queue.push(obj, 38)}. Draw the resulting binary max-heap after the operation is fully complete.
+
+\vspace{7cm}
+
+\item[(c)] \points[2]
+After Part (a), suppose an element is popped from the queue, i.e., we call \texttt{queue.pop()}.
+Immediately after part (b), we pop the highest-priority element: Draw the binary max-heap after the operation is fully complete.
+
+\vspace{7cm}
+
+\item[(d)] \points[2]
+After Parts (a) and (b), suppose we make the following three calls:
+\[
+\texttt{queue.push(obj, 18)}, \qquad
+\texttt{queue.pop()}, \qquad
+\texttt{queue.push(obj, 46)}.
+\]
+
+Write the array representation of the heap immediately after all three operations (in the order shown). You may not need all the boxes.
+\begin{center}
+\numbox[7mm]\hspace{-3mm}\numbox[7mm]\hspace{-3mm}\numbox[7mm]\hspace{-3mm}\numbox[7mm]\hspace{-3mm}\numbox[7mm]\hspace{-3mm}\numbox[7mm]\hspace{-3mm}\numbox[7mm]\hspace{-3mm}\numbox[7mm]\hspace{-3mm}\numbox[7mm]\hspace{-3mm}\numbox[7mm]\hspace{-3mm}\numbox[7mm]\hspace{-3mm}\numbox[7mm]\hspace{-3mm}\numbox[7mm]\hspace{-3mm}\numbox[7mm]
+\end{center}\end{enumerate}
+
+\newpage
+
+
+\section*{Part B: Analysis}
+
+\subsection*{Question B.1: Proofs}
+\points[4] Consider Prim's algorithm for finding a minimum spanning tree of a graph:
+\begin{lstlisting}[style=mypython]
+def mst_prim(graph: Graph, open_set: Set, closed_set: Set, mst: Graph):
+    if len(open_set) == 0:
+        return mst
+    (v1, v2, wgt12) = open_set.pop()
+    if v2 not in closed_set:
+        mst.add_edge(v1, v2, wgt12)
+        closed.insert(v2)
+        for (v2, v3, wgt23) in graph.get_children(v2):
+            if v3 not in closed_set:
+                open_set.insert(v2, v3, wgt23)
+    return find_mst_prim(graph, open_set, closed_set, mst)
+\end{lstlisting}    
+Formally prove that the algorithm is correct.
+\\~\\
+\textbf{Note:} Your answer will be graded on clarity. See \textit{Structuring a Formal Proof} on how to structure a formal proof.
+
+\newpage
+\begin{center}
+    \textit{(extra space)}
+\end{center}
+\clearpage
+
+\subsection*{Question B.2: Combining Data-Structures}
+\points[8] You are designing a cache, \texttt{Cache}, that stores key–value pairs, each associated with an expiration time. To support this, assume we have the following data structure:
+\begin{lstlisting}[style=mypython]
+def CacheNode:
+    key: Key # the key
+    value: Object # the value (an abstract object)
+    expt: Integer # the expiration time
+\end{lstlisting}    
+The cache supports three operations:
+\begin{itemize}
+    \item \texttt{set(self: Cache, key: Key, val: Object, lspn: Integer) -> Object}: creates or updates (and then returns) \texttt{val} under the provided provided \texttt{key}, in which the expiration time is set to the current global time plus the lifespan, \texttt{lspn}.
+    \item \texttt{get(self: Cache, key: Key) -> Optional[Object]}: Returns the value under \texttt{key} if it exists and has not expired. Otherwise, returns \texttt{None}.
+    \item \texttt{tick(self: Cache, t: Integer)}: Advances the global clock by \texttt{t} units and removes any expired items.
+\end{itemize}
+The cache also has a capacity, $C$. If an operation would cause the cache to exceed its capacity, it must evict the least recently used non-expired key.
+\\~\\
+\textbf{Note}: A successful \texttt{set}/\texttt{get} is considered to be a ``recent use''.
+\begin{enumerate}
+\item[(a)] \points[2] Provide a constructor, \texttt{\_init}, for the \texttt{Cache} class, including any necessary attributes.
+\begin{lstlisting}[numberblanklines=true, keepspaces=true,showlines=true, numberstyle=\large\ttfamily\color{gray}, lineskip=12pt]
+def _init(self: Cache,
+
+
+
+
+
+
+\end{lstlisting}
+\clearpage
+\item[(b)]\points[2] Provide an implementation of \texttt{set}.
+\begin{lstlisting}[numberblanklines=true, keepspaces=true,showlines=true, numberstyle=\large\ttfamily\color{gray}, lineskip=12pt]
+def set(self: Cache, key: Key, val: Object, lspn: Integer) -> Object:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{lstlisting}
+\clearpage
+\item[(c)]\points[2] Provide an implementation of \texttt{get}.
+\begin{lstlisting}[numberblanklines=true, keepspaces=true,showlines=true, numberstyle=\large\ttfamily\color{gray}, lineskip=12pt]
+def get(self: Cache, key: Key) -> Optional[Object]:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{lstlisting}
+\clearpage
+\item[(d)]\points[2] Provide an implementation of \texttt{tick}.
+\begin{lstlisting}[numberblanklines=true, keepspaces=true,showlines=true, numberstyle=\large\ttfamily\color{gray}, lineskip=12pt]
+def tick(self: Cache, t: Integer):
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{lstlisting}
+
+\end{enumerate}
+
+\subsection*{Question B.3: Algorithm Design}
+\points[6]
+A city is redesigning its downtown to reduce congestion and improve walkability. The goal is to pedestrianize as much street length as possible, while still making sure that a set of key locations (hospitals, fire stations, delivery hubs, shops, etc.) have vehicular access from at least one city entry point (or from a designated depot).
+\\~\\
+Formally, the street map is given in the form of a \emph{connected} weighted undirected graph $\mathcal{G} = (V, E, \textsf{wgt})$, where $V$ is the set of locations, $E \subseteq V \times V$ is the set of streets, and $\textsf{wgt}: E \rightarrow \mathbb{R}_{+}$ assigns each street its length. The streets to close should be represented as a list of edges.
+\begin{itemize}
+\item[(a)] \points[3] 
+    Provide an algorithm that could be used to solve this problem. You may make use of any of the algorithms provided in \textit{Standard Data Structures} as part of your solution.
+
+    \begin{lstlisting}[numberblanklines=true, keepspaces=true,showlines=true, numberstyle=\large\ttfamily\color{gray}, lineskip=12pt]
+    def closed_streets(graph: Graph) -> List[Edge]:
+
+
+
+
+
+
+
+
+
+
+
+
+\end{lstlisting}
+
+\item[(b)] \points[1] What is the time-complexity of your algorithm from Part (a)? Define any relevant variables and state any assumptions.
+\\~\\
+The time complexity of \texttt{closed\_streets} is $O\left(\numbox[6cm] \right)$, where:
+\vspace{6cm}
+
+\item[(b)] \points[2] 
+    Suppose the city recently opened a new bridge, represented as a new edge $f$ with length $\textsf{wgt}(f)$.
+    Given the set of streets you previously selected to pedestrianize, describe the steps (in plain language) how you would update your solution to incorporate this new bridge.
+
+
+
+
+
+
+
+
+
+
+
+
+    \vspace{20em}
+
+\end{itemize}
+
+\clearpage
+\section*{Part C: Bonus}
+\subsection*{Question C.1: Memes}
+\points[2] A meme is a cultural idea, joke, image, video, or piece of text that spreads quickly from person to person, often with slight variations. Design a creative meme relevant to this course.
+
+\clearpage
+
+\newpage
+\begin{center}
+    \textit{(extra space)}
+\end{center}
+\clearpage
+
+\clearpage
+\begin{center}
+    \textit{(extra space)}
+\end{center}
+\clearpage
+
+\newpage
+\begin{center}
+    \textit{(extra space)}
+\end{center}
+\clearpage
+
+\newpage
+\begin{center}
+    \textit{(extra space)}
+\end{center}
+\clearpage
+
+\section*{Standard Data Structures}
+The following data structures are provided. All attributes are initialized in their constructors using the same names as listed.
+
+\subsubsection*{Graph (via Adjacency Lists)}
+\begin{lstlisting}
+Vertex:
+# attributes
+    - key: Key
+        # the key of this vertex
+    - in_edges: List[Edge]
+        # list of all incoming edges
+    - out_edges: List[Edge]
+        # list of all outgoing edges
+    - val: Object
+        # the value of this vertex
+Edge:
+# attributes
+    - key: Key
+        # the key of this edge
+    - from: Vertex
+        # the origin of this edge
+    - to: Vertex
+        # the destination of this edge
+    - wgt: Integer
+        # the weight of this edge
+
+Path:
+# attributes
+    - edges: List[Edge]
+        # a list of edges representing the path
+    - len: Integer
+        # the number of edges in the path
+    - wgt: Integer
+        # the cumulative weight of the edges in the path
+        
+Graph:
+# attributes
+    - vertices: Dictionary[Key, Vertex]
+        # maps keys to Vertex objects
+# functions
+    - add_vertex(key: Key, val: Object) -> Optional[Vertex]
+        # adds/updates val of vertex with key (if it does not exist)
+    - add_edge(key: Key, u: Key, v: Key, wgt: Integer) -> Optional[Edge]
+        # inserts/updates an edge from u to v
+    - get_vertex(key: Key) -> Optional[Vertex]
+        # returns the vertex with key (if it exists)
+    - get_vertices() -> List[Vertex]
+        # returns the vertex with key (if it exists)
+    - get_edges_btw(key1: Key, key2: Key) -> List[Edge]
+        # returns all edges from vertex with key1 from to vertex with key2
+    - get_edges_from(key: Key) -> List[Edge]
+        # returns all edges from vertex with key1 from to vertex with key2
+    - get_edges_to(key: Key) -> List[Edge]
+        # returns all edges from vertex with key1 from to vertex with key2
+    - get_edges() -> List[Edge]
+        # returns all edges from vertex with key1 from to vertex with key2
+\end{lstlisting}
+
+\clearpage
+
+\subsubsection*{Lists}
+\begin{lstlisting}
+ListNode:
+# attributes
+    - idx: Integer
+        # the index of this node
+    - val: Object
+        # the value of this node
+
+List:
+# attributes
+    - size: Integer
+        # number of elements currently stored
+    - capacity: Integer
+        # current capacity of the list (starts at 1, and doubles whenever full)
+# functions
+    - insert(idx: Integer, val: Object) -> Optional[ListNode]
+        # inserts or updates idx with val, resizing and rehashing if needed
+    - get(idx: Integer) -> Optional[ListNode]
+        # returns the node with idx (if it exists)
+    - delete(idx: Integer) -> Optional[ListNode]
+        # removes the node with key (if it exists)
+\end{lstlisting}
+
+\clearpage
+
+\subsubsection*{Union-Finds}
+\begin{lstlisting}
+UnifNode:
+# attributes
+    - key: Key
+        # the key of this node
+    - val: Object
+        # the value of this node
+    - parent: Optional[UnifNode]
+        # parent in this node
+    - rank: Integer
+        # rank (or size) for union by rank/size
+        
+UnionFind:
+# attributes
+    - nodes: Dict[Key, UnifNode]
+        # maps keys to their corresponding UnifNode
+# functions
+    - make_set(key: Key, val: Object) -> Optional[UnifNode]
+        # creates a new set containing the single element key with the provided value
+    - find(key: Key) -> Optional[UnifNode]
+        # returns the representative of the set containing key (with path compression)
+    - union(key1: Key, key2: Key)
+        # merges the sets containing key1 and key2 using union by rank/size
+\end{lstlisting}
+
+\clearpage
+
+\subsubsection*{Dictionaries (via Hash Tables)}
+\begin{lstlisting}
+DictNode:
+# attributes
+    - key: Key
+        # the key of this node
+    - val: Object
+        # the value stored at this node
+    - next: Optional[DictNode]
+        # next node in the bucket (for chaining)
+        
+Dict:
+# attributes
+    - buckets: List[Optional[DictNode]]
+        # underlying array of buckets
+    - size: Integer
+        # number of elements currently stored
+    - capacity: Integer
+        # current capacity of the table
+    - hash_func: Function[[Key], Integer]
+        # function to compute hash of a key
+# functions
+    - insert(key: Key, val: Object) -> Optional[DictNode]
+        # inserts or updates key with val, resizing and rehashing if needed
+    - get(key: Key) -> Optional[DictNode]
+        # returns the node with key (if it exists)
+    - delete(key: Key) -> Optional[DictNode]
+        # removes the node with key (if it exists)
+    - keys() -> List[Key]
+        # returns all keys stored in the dictionary
+\end{lstlisting}
+
+\clearpage
+
+\subsubsection*{Sorted Dictionaries (via Balanced Binary Trees)}
+\begin{lstlisting}
+OrdictNode:
+# attributes
+    - key: Key
+        # the key of this node
+    - val: Object
+        # the value stored at this node
+    - left: Optional[OrdictNode]
+        # left child
+    - right: Optional[OrdictNode]
+        # right child
+    - height: Integer
+        # height of this node (for balancing)
+        
+Ordict:
+# attributes
+    - root: Optional[OrdictNode]
+        # root of the dictionary
+# functions
+    - insert(key: Key, val: Object) -> Optional[OrdictNode]
+        # inserts/updates val for node with key, rebalancing as needed
+    - get(key: Key) -> Optional[OrdictNode]
+        # returns node with key (if it exists)
+    - delete(key: Key) -> Optional[OrdictNode]
+        # removes node with key (if it exists), rebalancing as needed
+    - keys() -> List[Key]
+        # returns all keys in sorted order
+\end{lstlisting}
+
+\clearpage
+
+\subsubsection*{Tries}
+
+\begin{lstlisting}
+TrieNode:
+# attributes
+    - key: Key
+        # the key of this node
+    - val: Object
+        # the value of this node
+    - children: Dict[Key, TrieNode]
+        # the children of this TrieNode
+        
+Trie:
+# attributes
+    - root: TrieNode
+        # the root of this Trie
+# functions
+    - insert(key: Key, val: Object) -> Optional[TrieNode]
+        # inserts/updates val for node with key (creating nodes for each character as needed) 
+    - get(key: Key) -> Optional[TrieNode]
+        # returns node with key (if it exists)
+    - delete(key: Key) -> Optional[TrieNode]
+        # removes node with key (if it exists)
+\end{lstlisting}
+
+\clearpage
+
+\subsubsection*{Queues (via Heaps)}
+\begin{lstlisting}
+QueueNode:
+# attributes
+    - val: Object
+        # the value of this node
+    - pri: Integer
+        # the priority value of this node
+    - left: Optional[QueueNode]
+        # the next node in the queue
+    - right: Optional[QueueNode]
+        # the next node in the queue
+    - pnt: Optional[QueueNode]
+        # the next node in the queue
+Queue:
+# attributes
+    - root: Optional[QueueNode]
+        # underlying list representing the heap
+# functions
+    - push(val: Object, pri: Integer) -> Optional[QueueNode]
+        # inserts val for node with key and priority pri
+    - pop() -> Optional[QueueNode]
+        # removes the node with the smallest/largest priority
+    - peek() -> Optional[QueueNode]
+        # returns (without removing) the node with the smallest/largest priority
+\end{lstlisting}
+
+\clearpage
+
+
+\newpage
+
+\section*{Standard Algorithms}
+The following standard algorithms are provided. Assume that \texttt{args*} contains any additional arguments that are needed to implement the algorithm.
+\begin{itemize}
+    \item \texttt{bfs(graph: Graph, goals: List[Vertex], args*) -> Optional[Path]}: \\
+    returns a \texttt{Path} in \texttt{graph} to one of the goal vertices defined in \texttt{goals}, using breadth-first search
+    \item \texttt{dfs(graph: Graph, goals: List[Vertex], args*) -> Optional[Path]}: \\
+    returns a \texttt{Path} in \texttt{graph} to one of the goal vertices defined in \texttt{goals}, using depth-first search
+    \item \texttt{cfs(graph: Graph, goals: List[Vertex], args*) -> Optional[Path]}: \\
+    returns a \texttt{Path} in \texttt{graph} to one of the goal vertices defined in \texttt{goals}, using cheapest-first search
+    \item \texttt{mst\_prim(graph: Graph, args*) -> Optional[Graph]}: \\
+    returns a \texttt{Graph} representing a minimum spanning tree (if it exists), computed using Prim's algorithm
+    \item \texttt{mst\_kruskal(graph: Graph, args*) -> Optional[Graph]}: \\
+    returns a \texttt{Graph} representing a minimum spanning tree (if it exists), computed using Kruskal's algorithm
+    \item \texttt{top\_khans(graph: Graph, args*) -> Optional[Graph]}: \\
+    returns a \texttt{Graph} representing a topological sorting (if it exists), computed using Khan's algorithm
+\end{itemize}
+\newpage
+\section*{Structuring a Formal Proof}
+A formal proof does not mean writing large amounts of mathematical
+notation. Instead, it means giving a well-structured, easy-to-follow explanation that
+clearly shows why a claim is true.
+\\~\\
+Please follow the guidelines below:
+\begin{enumerate}
+    \item \textbf{State the claim you are proving.}  
+    Describe, in plain language, what the claim means.  
+    \emph{``The algorithm correctly finds the shortest path from the source
+    vertex to every other vertex.''}
+
+    \item \textbf{Explain the structure of your proof.}  
+    Briefly describe how you will organize the argument (e.g., using induction,
+    loop invariants, or case analysis).  
+    \emph{``I will prove correctness using a loop invariant that holds at
+    initialization, after each iteration, and at termination.''}
+
+    \item \textbf{Define any key terms or conditions.}  
+    Do not introduce notation or concepts without explanation.
+    \emph{``The invariant is: after each iteration, the variable
+    \texttt{dist[v]} contains the length of the shortest known path from the
+    source to $v$ using only processed vertices.''}
+
+    \item \textbf{Prove correctness step-by-step, using examples when appropriate.}  
+    For each major component of the proof (initialization, maintenance,
+    termination, induction step, etc.):
+    \begin{itemize}
+        \item Clearly state what must be shown.
+        \item Explain why it is true.
+        \item If possible, include a small example to illustrate the idea.
+    \end{itemize}
+    \emph{``At initialization, only the source vertex has distance $0$.
+    In the example graph below, this corresponds to setting \texttt{dist[A] = 0}
+    and all other distances to infinity.''}
+
+    \item \textbf{Make sure every step logically follows.}  
+    Avoid gaps in reasoning that force the reader to ask ``why?''. Each conclusion
+    should naturally follow from the previous one.
+
+    \item \textbf{End with a clear conclusion.}  
+    Summarize what you have shown and why it completes the proof.  
+    \emph{``Because the invariant holds at initialization, remains true
+    throughout every iteration, and implies the correctness of the output at
+    termination, the algorithm is correct.''}
+\end{enumerate}
+
+
+
+
+\end{document}

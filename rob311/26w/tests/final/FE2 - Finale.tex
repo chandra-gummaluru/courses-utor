@@ -1,0 +1,250 @@
+\documentclass[12pt]{article}
+
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{float}
+\usepackage{tikz}
+\usepackage{amsmath}
+\usepackage{pgfplots}
+\usepackage{multirow}
+\usepackage{caption}
+\usepackage{amssymb}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{subcaption}
+\usepackage{etoolbox}
+\usetikzlibrary{automata,positioning,arrows}
+\usepackage[top=1.7in, left=0.75in,right=0.75in,headsep=1mm,footskip=.5in]{geometry}
+
+\pgfplotsset{compat=1.18}
+\setlength{\headheight}{14.9pt}
+\addtolength{\topmargin}{-2.9pt}
+
+\makeatletter
+\newcommand\cdotfill{%
+    \leavevmode\cleaders\hb@xt@.44em{\hss$.$\hss}\hfill\kern\z@
+}
+\makeatother
+
+%% ============================================================
+%%  SOLUTION VISIBILITY FLAG
+%%  Set to `true` to show solutions in blue, `false` to hide.
+%% ============================================================
+\newif\ifshowsolutions
+\showsolutionsfalse   % <-- change to \showsolutionsfalse to hide
+
+%% ============================================================
+%%  SOLUTION ENVIRONMENT SETUP
+%% ============================================================
+\usepackage{xcolor}
+\usepackage{environ}
+
+\ifshowsolutions
+  \NewEnviron{solution}{%
+    \par\medskip
+    \noindent{\color{blue}\textbf{Solution.}}\par
+    \begingroup\color{blue}%
+    \BODY
+    \endgroup
+    \medskip
+  }
+  \newcommand{\ansnt}[1]{{\color{blue}#1}}
+\else
+  \NewEnviron{solution}{}
+  \newcommand{\ansnt}[1]{\phantom{#1}}
+\fi
+\newcommand{\choice}[1][Option]{%
+  \begin{tikzpicture}[baseline=0]
+    \node[circle, draw=black, minimum size=0.5cm] (s) {};
+    \node[right=0cm of s, yshift=-0.3mm, align=left] {#1};
+  \end{tikzpicture}%
+}
+
+\newcommand{\choicecorrect}[1][Option]{%
+  \begin{tikzpicture}[baseline=0]
+    \node[circle, draw=black, minimum size=0.5cm] (s) {%
+      \ifshowsolutions \textcolor{blue}{\checkmark} \fi
+    };
+    \node[right=0cm of s, yshift=-0.3mm, align=left] {%
+      \ifshowsolutions \textcolor{blue}{#1} \else #1 \fi
+    };
+  \end{tikzpicture}%
+}
+\newcommand{\checkboxcorrect}[1][Option]{%
+  \begin{tikzpicture}[baseline=0]
+    \node[draw=black, minimum size=0.5cm, minimum height=0.5cm] (s) {%
+      \ifshowsolutions \textcolor{blue}{\checkmark} \fi
+    };
+    \node[right=0cm of s, yshift=-0.3mm, align=left] {%
+      \ifshowsolutions \textcolor{blue}{#1} \else #1 \fi
+    };
+  \end{tikzpicture}%
+}
+\newcommand{\ansbox}[2][2cm]{%
+  \ifshowsolutions
+    \begingroup
+      \sbox0{\ansnt{#2}}%
+      \makebox[0pt][l]{\hspace*{\dimexpr(#1-\wd0)/2\relax}\usebox0}%
+      \numbox[#1]%
+    \endgroup
+  \else
+    \numbox[#1]%
+  \fi
+}
+\pagestyle{fancy}
+\let\headrule\empty
+\let\footrule\empty
+\rhead{\hrule}
+\chead{\hrule}
+\lhead{\hrule}
+\lfoot{ROB\,311\,H1, Winter 2026}
+\cfoot{Page \thepage\space of \pageref{LastPage}}
+\rfoot{Finale (Deferred)}
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+\begin{document}
+
+\newcommand{\checkbox}[1][Option]{
+  \begin{tikzpicture}[baseline=0]
+    \node[draw=black, minimum size = 0.5cm] (s) {};
+    \node[right = 0cm of s, align = left]{#1};
+  \end{tikzpicture}%
+}
+
+\newcommand{\checkboxmath}[1][Option]{
+  \begin{tikzpicture}[baseline=0]
+    \node[draw=black, minimum size = 0.5cm] (s) {};
+    \node[right = 0cm of s, yshift=-1mm, align = left]{#1};
+  \end{tikzpicture}%
+}
+
+\newcommand{\points}[1][0]{
+  {[#1 pts]}
+}
+
+\newcommand{\choice}[1][Option]{
+  \begin{tikzpicture}[baseline=0]
+    \node[circle, draw=black, minimum size = 0.5cm] (s) {};
+    \node[right = 0cm of s, yshift=-0.3mm, align = left]{#1};
+  \end{tikzpicture}%
+}
+
+\newcommand{\tf}{
+  \\~\\
+  \begin{tikzpicture}
+    \node[circle, draw=black, minimum size = 0.5cm] at (0,0) (t) {};
+    \node[right = 0cm of t, yshift=-1mm, align = left]{True};
+
+    \node[circle, draw=black, minimum size = 0.5cm] at (4,0) (f) {};
+    \node[right = 0cm of f, yshift=-1mm, align = left]{False};
+  \end{tikzpicture}%
+}
+
+\newcommand{\numbox}[1][5em]{
+  \begin{tabular}{|c|}         \hline \hspace{#1} \\ \\ \\ \hline     \end{tabular}
+}
+
+\newcommand{\fractional}[1][]{
+  #1 \begin{tabular}{|c|}         \hline \hspace{5em} \\ \\ \\ \hline     \end{tabular} $\Bigg/$ \begin{tabular}{|c|}         \hline \hspace{5em} \\ \\ \\ \hline     \end{tabular}
+}
+
+\newcommand{\tableanswer}[1][Title]{
+  \begin{tabular}{|l|}         \hline #1 \\ \hspace{5em} \\ \\ \hline     \end{tabular}%
+}
+
+\newcommand{\blank}[1][2cm]{
+\underline{\hspace{#1}}
+}
+
+\newcommand{\infobox}[1][Title]{
+  \noindent #1
+  \begin{table}[H]
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+      \hline
+      \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; \\
+      \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; \\\hline
+    \end{tabular}%
+  \end{table}
+}
+
+\newcommand{\spacer}{
+  \vspace{5mm}\\
+}
+
+\newcommand{\hspacer}{\\
+}
+
+\noindent
+\begin{minipage}{0.45\textwidth}
+\large
+\noindent  UNIVERSITY OF TORONTO\\
+  Engineering Science\\[1.75ex]
+  Winter 2026\\[1.75ex]
+  \textbf{Finale (Deferred)} \\
+  \textbf{{ROB\,311\,H1}}
+\end{minipage}%
+\hspace{-1cm}
+\begin{minipage}{0.6\textwidth}
+\raggedleft
+\textbf{UTORid (e.g. \texttt{gummalur}):} \\[1ex]
+\begin{tabular}{|c|c|c|c|c|c|c|c|}
+  \hline
+  \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; \\
+  \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\;\\
+  \hline
+\end{tabular}\\[2ex]
+\textbf{Student \# (9 or 10 digits):} \\[1ex]
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+  \hline
+  \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; \\
+  \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\; & \hspace{1.2em}\;\\
+  \hline
+\end{tabular}
+\end{minipage}
+\\[0.75cm]
+\infobox[\textbf{First Name:}]
+\infobox[\textbf{Last Name:}]
+\noindent \textbf{Duration:}\cdotfill {150 minutes}\\
+\textbf{Instructor:}\cdotfill Chandra Gummaluru\\
+\textbf{Weight:}\cdotfill 40\% \\
+\textbf{Aids Allowed:}
+\begin{enumerate}
+    \item[(1)] Non-Programmable Calculator
+\end{enumerate}
+\textbf{Instructions:}
+\begin{itemize}
+    \item This exam contains 32 pages. Please verify that you have received all pages before beginning.
+    \item Read each question carefully and show your work unless otherwise instructed. Marks cannot be awarded for responses based on misinterpretation of the question or without clear justification.
+    \item The blank space at the top of each page is provided for rough work and will not be graded.
+    \item The blank pages within the test may be used for either rough work or solutions. If you wish to have work on these pages graded, you must indicate this next to the question.
+\end{itemize}
+\\[0.25cm]
+\begin{center}
+    \textit{Good Luck!}
+\end{center}
+
+\vfill
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
+  \hline
+  \textbf{Q1} & \textbf{Q2} & \textbf{Q3} & \textbf{Q4} & \textbf{Q5} &
+  \textbf{Q6} & \textbf{Q7} & \textbf{Q8} & \textbf{Q9} & \textbf{Total} \\
+  \hline
+  /5 & /12 & /16 & /18 & /20 & /18 & /14 & /10 & /8 & /121 \\[1.2em]
+  \hline
+\end{tabular}
+\end{center}
+
+\clearpage
+
+\input{26W/exam/FE1/probs2}
+
+\clearpage
+
+\begin{center}
+    \textit{(extra space)}
+\end{center}
+
+\end{document}

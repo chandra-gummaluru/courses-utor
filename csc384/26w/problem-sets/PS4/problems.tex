@@ -1,0 +1,352 @@
+% ============================================================
+%  ROB 311 H1  –  KR & Probabilistic Inference Problems
+%  With solutions in blue
+% ============================================================
+
+\newcounter{qnum}
+\setcounter{qnum}{0}
+\newcommand{\question}[2]{%
+  \stepcounter{qnum}%
+  \noindent\textbf{Question \theqnum} \hfill \textbf{[#1 pts]}\\[1mm]
+  \noindent #2
+  \vspace{4mm}
+}
+
+% ============================================================
+%  QUESTION 1  –  FOL Translation
+% ============================================================
+\question{8}{%
+\textbf{First-Order Logic Translation.}\\[2mm]
+A caveman is exploring the jungle and encounters various animals and objects. We use the following vocabulary:
+
+\vspace{2mm}
+\begin{center}
+\begin{tabular}{ll}
+\hline
+\textbf{Predicates} & \textbf{Meaning} \\
+\hline
+$\texttt{snake}(x)$ & $x$ is a snake \\
+$\texttt{mushroom}(x)$ & $x$ is a mushroom \\
+$\texttt{poisonous}(x)$ & $x$ is poisonous \\
+$\texttt{eats}(x, y)$ & $x$ eats $y$ \\
+$\texttt{harms}(x, y)$ & $x$ harms $y$ \\
+$\texttt{avoids}(x, y)$ & $x$ avoids $y$ \\
+$\texttt{human}(x)$ & $x$ is a human \\
+$\texttt{warns}(x, y)$ & $x$ warns $y$ \\
+\hline
+\end{tabular}
+\end{center}
+
+\vspace{2mm}
+\noindent \textbf{Constants:} $\texttt{c0}$ (the caveman), $\texttt{s1}$ (a snake), $\texttt{m1}$ (a red mushroom), $\texttt{m2}$ (a brown mushroom).
+
+\vspace{4mm}
+\noindent
+Translate each of the following English statements into a \textbf{sentence} of FOL (no free variables).
+
+\begin{enumerate}[(a)]
+  \item \points[2] All snakes are poisonous.
+  \begin{sol}
+    \[\forall x\,\bigl(\texttt{snake}(x) \rightarrow \texttt{poisonous}(x)\bigr)\]
+  \end{sol}
+
+  \item \points[2] Any poisonous thing harms every human that eats it.
+  \begin{sol}
+    \[\forall x\,\forall y\,\bigl(\texttt{poisonous}(x) \wedge \texttt{human}(y) \wedge \texttt{eats}(y, x) \rightarrow \texttt{harms}(x, y)\bigr)\]
+  \end{sol}
+
+  \item \points[2] Every snake avoids everything that is not a mushroom.
+  \begin{sol}
+    \[\forall x\,\forall y\,\bigl(\texttt{snake}(x) \wedge \neg\texttt{mushroom}(y) \rightarrow \texttt{avoids}(x, y)\bigr)\]
+  \end{sol}
+
+  \item \points[2] If something warns a human, the human avoids everything that harms it.
+  \begin{sol}
+    \[\forall x\,\forall y\,\forall z\,\bigl(\texttt{warns}(x, y) \wedge \texttt{human}(y) \wedge \texttt{harms}(z, y) \rightarrow \texttt{avoids}(y, z)\bigr)\]
+  \end{sol}
+\end{enumerate}
+}
+
+\clearpage
+
+% ============================================================
+%  QUESTION 2  –  Logical Ambiguity
+% ============================================================
+\question{10}{%
+\textbf{Logical Ambiguity via Contradictory Structures.}\\[2mm]
+Consider the following knowledge base $\Phi$ in clausal form:
+\begin{enumerate}[(1)]
+  \item $\texttt{bird}(\texttt{a})$
+  \item $\texttt{penguin}(\texttt{b})$
+  \item $\neg\texttt{penguin}(x) \vee \texttt{bird}(x)$
+  \item $\neg\texttt{penguin}(x) \vee \neg\texttt{flies}(x)$
+  \item $\neg\texttt{bird}(x) \vee \texttt{flies}(x) \vee \texttt{penguin}(x)$
+\end{enumerate}
+\noindent
+Consider the query $\Phi' = \texttt{flies}(\texttt{a})$.
+
+\begin{enumerate}[(a)]
+
+\item \points[2] Explain briefly (1--2 sentences) why $\Phi'$ is \emph{logically ambiguous} given $\Phi$ --- that is, why it is neither a logical consequence nor a contradiction.
+
+\begin{sol}
+Clause (5) says every bird either flies or is a penguin, and $\texttt{a}$ is a bird by clause (1), but $\Phi$ says nothing about whether $\texttt{a}$ is a penguin. Therefore $\texttt{a}$ can satisfy clause (5) by flying \emph{or} by being a penguin, so neither $\texttt{flies}(\texttt{a})$ nor $\neg\texttt{flies}(\texttt{a})$ is forced by $\Phi$.
+\end{sol}
+
+\clearpage
+\item \points[4] Construct a structure $\mathcal{S}_1$ such that $\mathcal{S}_1 \vDash \Phi$ \textbf{and} $\mathcal{S}_1 \vDash \Phi'$. Specify the domain $\mathcal{D}$, constant interpretations, and predicate interpretations.
+
+\begin{sol}
+$\mathcal{D} = \{\,\alpha,\, \beta\,\}$; constant interpretations: $\texttt{a}^{\mathcal{S}_1} = \alpha$,\; $\texttt{b}^{\mathcal{S}_1} = \beta$.
+
+Predicate interpretations:
+\begin{align*}
+\texttt{bird}^{\mathcal{S}_1} &= \{\langle \alpha \rangle,\, \langle \beta \rangle\} \\
+\texttt{penguin}^{\mathcal{S}_1} &= \{\langle \beta \rangle\} \\
+\texttt{flies}^{\mathcal{S}_1} &= \{\langle \alpha \rangle\}
+\end{align*}
+
+Verification: (1) $\alpha \in \texttt{bird}^{\mathcal{S}_1}$ \checkmark;\; (2) $\beta \in \texttt{penguin}^{\mathcal{S}_1}$ \checkmark;\; (3) $\beta$ is a penguin and a bird \checkmark;\; (4) $\beta$ is a penguin but not in $\texttt{flies}^{\mathcal{S}_1}$ \checkmark;\; (5) $\alpha$ flies \checkmark, $\beta$ is a penguin \checkmark.\; $\Phi'$: $\alpha \in \texttt{flies}^{\mathcal{S}_1}$ \checkmark.
+\end{sol}
+
+\vspace{6mm}
+
+\item \points[4] Construct a structure $\mathcal{S}_2$ such that $\mathcal{S}_2 \vDash \Phi$ \textbf{and} $\mathcal{S}_2 \not\vDash \Phi'$. Specify the domain $\mathcal{D}$, constant interpretations, and predicate interpretations.
+
+\begin{sol}
+$\mathcal{D} = \{\,\alpha,\, \beta\,\}$; constant interpretations: $\texttt{a}^{\mathcal{S}_2} = \alpha$,\; $\texttt{b}^{\mathcal{S}_2} = \beta$.
+
+Predicate interpretations:
+\begin{align*}
+\texttt{bird}^{\mathcal{S}_2} &= \{\langle \alpha \rangle,\, \langle \beta \rangle\} \\
+\texttt{penguin}^{\mathcal{S}_2} &= \{\langle \alpha \rangle,\, \langle \beta \rangle\} \\
+\texttt{flies}^{\mathcal{S}_2} &= \varnothing
+\end{align*}
+
+Verification: Every bird is also a penguin, so clause (5) is satisfied by the $\texttt{penguin}$ disjunct for all objects; clause (4) holds since $\texttt{flies}^{\mathcal{S}_2} = \varnothing$; clauses (1)--(3) hold directly. $\Phi'$: $\alpha \notin \texttt{flies}^{\mathcal{S}_2}$, so $\mathcal{S}_2 \not\vDash \Phi'$ \checkmark.
+\end{sol}
+
+\end{enumerate}
+}
+
+\clearpage
+
+% ============================================================
+%  QUESTION 3  –  Resolution by Refutation
+% ============================================================
+\question{10}{%
+\textbf{Resolution by Refutation.}\\[2mm]
+Consider the following knowledge base $\Phi$ in clausal form:
+\begin{enumerate}[(1)]
+  \item $\texttt{mammal}(\texttt{c0})$
+  \item $\texttt{carnivore}(\texttt{c0})$
+  \item $\texttt{prey}(\texttt{c1})$
+  \item $\neg\texttt{carnivore}(x) \vee \neg\texttt{prey}(y) \vee \texttt{hunts}(x, y)$
+  \item $\neg\texttt{mammal}(x) \vee \neg\texttt{hunts}(x, y) \vee \texttt{tires}(x)$
+  \item $\neg\texttt{tires}(x) \vee \texttt{rests}(x)$
+\end{enumerate}
+
+\noindent We wish to prove the query $\Phi' = \texttt{rests}(\texttt{c0})$ by \textbf{resolution by refutation}.
+
+\begin{enumerate}[(a)]
+\item \points[2] State the clause that must be added to $\Phi$ to begin the proof.
+
+\begin{sol}
+Add the negation of the query: $\;(7)\;\neg\texttt{rests}(\texttt{c0})$.
+\end{sol}
+
+\item \points[8] Carry out the resolution proof. For each step, write the new clause derived and indicate which clauses were resolved and what substitution was used using the notation $r[i, j]\{\delta\}$.
+
+\begin{sol}
+\begin{enumerate}[(\arabic*)]
+  \setcounter{enumi}{7}
+  \item $\neg\texttt{prey}(y) \vee \texttt{hunts}(\texttt{c0}, y)$
+    \hfill $r[2,4]\{x = \texttt{c0}\}$
+
+  \item $\texttt{hunts}(\texttt{c0}, \texttt{c1})$
+    \hfill $r[3,8]\{y = \texttt{c1}\}$
+
+  \item $\neg\texttt{mammal}(\texttt{c0}) \vee \texttt{tires}(\texttt{c0})$
+    \hfill $r[9,5]\{x = \texttt{c0},\, y = \texttt{c1}\}$
+
+  \item $\texttt{tires}(\texttt{c0})$
+    \hfill $r[1,10]\{\}$
+
+  \item $\texttt{rests}(\texttt{c0})$
+    \hfill $r[11,6]\{x = \texttt{c0}\}$
+
+  \item $\varnothing$
+    \hfill $r[7,12]\{\}$
+\end{enumerate}
+The empty clause has been derived, confirming that $\texttt{rests}(\texttt{c0})$ is a logical consequence of $\Phi$.
+\end{sol}
+\end{enumerate}
+}
+
+\clearpage
+
+\begin{center}
+    \textit{(extra space)}
+\end{center}
+
+\clearpage
+
+% ============================================================
+%  QUESTION 4  –  D-Separation
+% ============================================================
+\question{8}{%
+\textbf{Bayesian Network: D-Separation.}\\[2mm]
+Consider the Bayesian network below:
+
+\vspace{3mm}
+\begin{center}
+\begin{tikzpicture}[
+    > = stealth, shorten > = 1pt, auto, node distance = 2.2cm, semithick
+]
+\tikzstyle{every state}=[draw=black, thick, fill=white, minimum size=7mm, font=\small]
+
+\node[state] (W) {$W$};
+\node[state] (S) [right of=W] {$S$};
+\node[state] (R) [right of=S] {$R$};
+\node[state] (T) [below of=W] {$T$};
+\node[state] (F) [below of=S] {$F$};
+\node[state] (D) [below of=R] {$D$};
+
+\path[->] (W) edge (T);
+\path[->] (W) edge (F);
+\path[->] (S) edge (F);
+\path[->] (S) edge (D);
+\path[->] (R) edge (D);
+\path[->] (F) edge (D);
+
+\node[above=2mm of W, align=center, font=\footnotesize\color{gray}] {Weather};
+\node[above=2mm of S, align=center, font=\footnotesize\color{gray}] {Season};
+\node[above=2mm of R, align=center, font=\footnotesize\color{gray}] {Rain};
+\node[below=2mm of T, align=center, font=\footnotesize\color{gray}] {Temperature};
+\node[below=2mm of F, align=center, font=\footnotesize\color{gray}] {Flooding};
+\node[below=2mm of D, align=center, font=\footnotesize\color{gray}] {Damage};
+\end{tikzpicture}
+\end{center}
+
+\noindent
+For each pair below, state whether the variables are \textbf{independent} or \textbf{dependent} given the conditioning set $\mathcal{K}$. Justify your answer by identifying the relevant path(s) and junction type(s).
+\vspace{3mm}
+\begin{enumerate}[(a)]
+  \item \points[2] $W \perp\!\!\!\perp R \mid \varnothing$
+
+  \begin{sol}
+  \textbf{Independent.} The only path between $W$ and $R$ is $W \to F \leftarrow S \to D \leftarrow R$. The junction at $F$ is a \textbf{common effect} (collider) of $W$ and $S$. Since neither $F$ nor its descendant $D$ is observed, the collider is blocked. The path is therefore blocked and $W \perp\!\!\!\perp R$.
+  \end{sol}
+
+  \item \points[2] $W \perp\!\!\!\perp R \mid \{F\}$
+
+  \begin{sol}
+  \textbf{Independent.} Conditioning on $F$ opens the collider at $F$ on the path $W \to F \leftarrow S \to D \leftarrow R$, but the path also passes through the junction at $D$, a \textbf{common effect} (collider) of $S$ and $R$. Since $D$ is unobserved, the junction at $D$ remains blocked. All paths between $W$ and $R$ are blocked, so $W \perp\!\!\!\perp R \mid \{F\}$.
+  \end{sol}
+
+  \item \points[2] $T \perp\!\!\!\perp D \mid \{W, S\}$
+
+  \begin{sol}
+  \textbf{Independent.} All paths from $T$ to $D$ pass through $W$ (the only parent of $T$). Both paths $T \leftarrow W \to F \to D$ and $T \leftarrow W \to F \leftarrow S \to D$ contain a \textbf{common cause} junction at $W$. Since $W$ is conditioned on, both junctions are blocked. All paths are blocked, so $T \perp\!\!\!\perp D \mid \{W, S\}$.
+  \end{sol}
+
+  \item \points[2] $R \perp\!\!\!\perp W \mid \{D\}$
+
+  \begin{sol}
+  \textbf{Dependent.} The path $R \to D \leftarrow F \leftarrow W$ passes through $D$, a \textbf{common effect} (collider) of $F$ and $R$. Conditioning on $D$ opens this collider. The remainder of the path, $D \leftarrow F \leftarrow W$, is an unblocked \textbf{causal chain} (F is unobserved). The full path is therefore open, so $R \not\!\perp\!\!\!\perp W \mid \{D\}$.
+  \end{sol}
+
+\end{enumerate}
+}
+
+\clearpage
+
+% ============================================================
+%  QUESTION 5  –  Probabilistic Inference
+% ============================================================
+\question{12}{%
+\textbf{Bayesian Network: Probabilistic Inference.}\\[2mm]
+Consider the Bayesian network with three binary variables $A$, $B$, $C$, where $A \to B$, $A \to C$, and $B \to C$ (i.e.\ $C$ has parents $B$ and $A$).
+\vspace{2mm}
+\noindent The conditional probability tables are given below:
+
+\vspace{3mm}
+\begin{center}
+% P(A)
+\begin{tabular}{|c|c|}
+\hline
+$A$ & $P(A)$ \\ \hline
+$0$ & $0.4$ \\
+$1$ & $0.6$ \\ \hline
+\end{tabular}
+\hspace{8mm}
+% P(B|A)
+\begin{tabular}{|c|c|c|}
+\hline
+$A$ & $B$ & $P(B\mid A)$ \\ \hline
+$0$ & $0$ & $0.7$ \\
+$0$ & $1$ & $0.3$ \\
+$1$ & $0$ & $0.2$ \\
+$1$ & $1$ & $0.8$ \\ \hline
+\end{tabular}
+\hspace{8mm}
+% P(C|A,B)
+\begin{tabular}{|c|c|c|c|}
+\hline
+$A$ & $B$ & $C$ & $P(C\mid A,B)$ \\ \hline
+$0$ & $0$ & $0$ & $0.9$ \\
+$0$ & $0$ & $1$ & $0.1$ \\
+$0$ & $1$ & $0$ & $0.6$ \\
+$0$ & $1$ & $1$ & $0.4$ \\
+$1$ & $0$ & $0$ & $0.5$ \\
+$1$ & $0$ & $1$ & $0.5$ \\
+$1$ & $1$ & $0$ & $0.2$ \\
+$1$ & $1$ & $1$ & $0.8$ \\ \hline
+\end{tabular}
+\end{center}
+
+\vspace{4mm}
+\noindent Compute $P(A = 1 \mid C = 1)$ \textbf{analytically} (using variable elimination). Show all steps, including how you eliminate variables and normalize. \points[12]
+
+\begin{sol}
+\textbf{Step 1: Set up the elimination.}
+
+By the factorization of this network, $P(A,B,C) = P(A)\,P(B\mid A)\,P(C\mid A,B)$, so eliminating $B$:
+\[P(A,\,C{=}1) \;=\; \sum_{B} P(A)\,P(B\mid A)\,P(C{=}1\mid A, B)\]
+
+\textbf{Step 2: Compute $P(A{=}0,\, C{=}1)$.}
+\begin{align*}
+P(A{=}0,\,C{=}1)
+  &= 0.4\bigl[0.7 \times 0.1 \;+\; 0.3 \times 0.4\bigr]\\
+  &= 0.4\bigl[0.07 + 0.12\bigr] \;=\; 0.4 \times 0.19 \;=\; 0.076
+\end{align*}
+
+\textbf{Step 3: Compute $P(A{=}1,\, C{=}1)$.}
+\begin{align*}
+P(A{=}1,\,C{=}1)
+  &= 0.6\bigl[0.2 \times 0.5 \;+\; 0.8 \times 0.8\bigr]\\
+  &= 0.6\bigl[0.10 + 0.64\bigr] \;=\; 0.6 \times 0.74 \;=\; 0.444
+\end{align*}
+
+\textbf{Step 4: Normalize.}
+\[
+P(C{=}1) \;=\; 0.076 + 0.444 \;=\; 0.520
+\qquad\Longrightarrow\qquad
+P(A{=}1\mid C{=}1) \;=\; \frac{0.444}{0.520} \;\approx\; \mathbf{0.854}
+\]
+\end{sol}
+}
+
+\clearpage
+
+\begin{center}
+    \textit{(extra space)}
+\end{center}
+
+\clearpage
+
+\begin{center}
+    \textit{(extra space)}
+\end{center}
+
+\clearpage
