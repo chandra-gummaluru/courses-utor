@@ -11,6 +11,25 @@
   .cpb-slot { display: block !important; width: auto !important; padding-right: 0 !important; }
   .cpb-free, .cpb-lfade { display: none !important; }
 }
+
+a.cpb-btn:hover { background-color: var(--accent-bg, #fdf8e8) !important; border-color: var(--accent, #c99a06) !important; }
+/* ── Buttons: three kinds, the same in every part of Lectern ──────────
+   Primary (black): the one main action where you are, e.g. Save, Done.
+   Secondary (white with a grey outline, light yellow on hover): every other button, e.g. Edit, Duplicate, Build, Upload marks.
+   Add (dashed yellow outline, fills yellow on hover): making something new, e.g. + Add week, + New makeup.
+   Delete buttons are secondary with a red hover, and ask for a second click. */
+button.btn:not(.main):not(.primary), button.c:not(.add):not(.primary):not(.x), button.ec-btn2, span.ec-btn, button.dd-btn, button.when-btn, button.e-eye, button.e-datesbtn, button.ic:not(.trash):not(.x) {
+  background: var(--field) !important; border: 1px solid var(--line) !important; color: var(--ink) !important; transition: background .12s, border-color .12s, color .12s; }
+button.ic:not(.trash):not(.x) { border-color: transparent !important; background: transparent !important; }
+button.btn:not(.main):not(.primary):hover:not(:disabled), button.c:not(.add):not(.primary):not(.x):hover:not(:disabled), button.ec-btn2:hover:not(:disabled), .erow:hover span.ec-btn, span.ec-btn:hover, button.dd-btn:hover, button.when-btn:hover, button.e-eye:hover, button.e-datesbtn:hover, button.ic:not(.trash):not(.x):hover:not(:disabled) {
+  background: var(--accent-bg) !important; border-color: var(--accent) !important; color: var(--ink) !important; }
+button.btn.main, button.btn.primary, button.c.primary, .tb button.primary {
+  background: var(--ink) !important; border: 1px solid var(--ink) !important; color: var(--bar) !important; }
+button.btn.main:hover:not(:disabled), button.btn.primary:hover:not(:disabled), button.c.primary:hover:not(:disabled), .tb button.primary:hover:not(:disabled) { opacity: .88; }
+button.c.add, button.add-mk, button.e-addlec, button.e-addcard {
+  background: transparent !important; border: 1.5px dashed var(--accent) !important; color: var(--accent) !important; }
+button.c.add:hover, button.add-mk:hover, button.e-addlec:hover, button.e-addcard:hover { background: var(--accent-bg) !important; border-style: solid !important; }
+button.ic.trash:hover:not(:disabled), button.ic.x:hover:not(:disabled), button.c.x:hover:not(:disabled) { background: var(--danger-bg) !important; border-color: var(--danger-line, var(--danger)) !important; color: var(--danger) !important; }
 </style>
 </head>
 <body style="margin: 0;">
@@ -38,7 +57,7 @@
           <div style="padding: 16px 18px 10px 18px;">
             <h3 class="cpb-ctitle" style="font-family: 'EB Garamond', Garamond, Georgia, serif; font-weight: 500; font-size: 22px; line-height: 1.2; color: #1f2329; margin: 0 0 6px 0; min-height: 27px;">Prologue</h3>
             <p class="cpb-cdesc" style="font-size: 14px; line-height: 1.55; color: #4a4f57; margin: 0 0 14px 0; min-height: 66px;">The road map for the course: from combinational logic, to sequential logic, to processor architecture.</p>
-            <div class="cpb-files"><a class="cpb-btn" href="https://chandra-gummaluru.github.io/courses-utor/csc258/f26/slides/00%20-%20Prologue.pdf" target="_blank" rel="noopener" style="display: inline-block; padding: 7px 18px; background-color: #5f6166; color: #ffffff; border: 1px solid #3f4146; border-radius: 8px; font-size: 14px; font-weight: 600; text-decoration: none; margin: 0 6px 6px 0;">Download</a></div>
+            <div class="cpb-files"><a class="cpb-btn" href="https://chandra-gummaluru.github.io/courses-utor/csc258/f26/slides/00%20-%20Prologue.pdf" target="_blank" rel="noopener" style="display: inline-block; padding: 7px 16px; background-color: #ffffff; color: #1f2329; border: 1px solid #d4d5d8; border-radius: 8px; font-size: 14px; font-weight: 600; text-decoration: none; margin: 0 6px 6px 0;">Download</a></div>
           </div>
         </div></div><div class="cpb-slot" data-at="1" data-hours="2" style="display: inline-block; vertical-align: top; box-sizing: border-box; padding: 0 14px 14px 0; white-space: normal; font-size: 14px; line-height: normal; width: 66.6667%;">
         <div class="cpb-card" style="display: block; width: 100%; box-sizing: border-box; background-color: #ffffff; border: 1px solid #b4b6ba; border-radius: 10px; overflow: hidden;">
@@ -46,7 +65,7 @@
           <div style="padding: 16px 18px 10px 18px;">
             <h3 class="cpb-ctitle" style="font-family: 'EB Garamond', Garamond, Georgia, serif; font-weight: 500; font-size: 22px; line-height: 1.2; color: #1f2329; margin: 0 0 6px 0; min-height: 27px;">Transistors and Logic Gates</h3>
             <p class="cpb-cdesc" style="font-size: 14px; line-height: 1.55; color: #4a4f57; margin: 0 0 14px 0; min-height: 66px;">How transistors act as switches, and how they combine into the basic logic gates.</p>
-            <div class="cpb-files"><a class="cpb-btn" href="https://chandra-gummaluru.github.io/courses-utor/csc258/f26/slides/01%20-%20Transistors%20and%20Logic%20Gates.pdf" target="_blank" rel="noopener" style="display: inline-block; padding: 7px 18px; background-color: #5f6166; color: #ffffff; border: 1px solid #3f4146; border-radius: 8px; font-size: 14px; font-weight: 600; text-decoration: none; margin: 0 6px 6px 0;">Download</a></div>
+            <div class="cpb-files"><a class="cpb-btn" href="https://chandra-gummaluru.github.io/courses-utor/csc258/f26/slides/01%20-%20Transistors%20and%20Logic%20Gates.pdf" target="_blank" rel="noopener" style="display: inline-block; padding: 7px 16px; background-color: #ffffff; color: #1f2329; border: 1px solid #d4d5d8; border-radius: 8px; font-size: 14px; font-weight: 600; text-decoration: none; margin: 0 6px 6px 0;">Download</a></div>
           </div>
         </div></div></div></div>
         </div>
@@ -62,7 +81,7 @@
           <div style="padding: 16px 18px 10px 18px;">
             <h3 class="cpb-ctitle" style="font-family: 'EB Garamond', Garamond, Georgia, serif; font-weight: 500; font-size: 22px; line-height: 1.2; color: #1f2329; margin: 0 0 6px 0; min-height: 27px;">Boolean Algebra</h3>
             <p class="cpb-cdesc" style="font-size: 14px; line-height: 1.55; color: #4a4f57; margin: 0 0 14px 0; min-height: 66px;">Notation and laws for writing and simplifying expressions over binary values.</p>
-            <div class="cpb-files"><a class="cpb-btn" href="https://chandra-gummaluru.github.io/courses-utor/csc258/f26/slides/02%20-%20Boolean%20Algebra.pdf" target="_blank" rel="noopener" style="display: inline-block; padding: 7px 18px; background-color: #5f6166; color: #ffffff; border: 1px solid #3f4146; border-radius: 8px; font-size: 14px; font-weight: 600; text-decoration: none; margin: 0 6px 6px 0;">Download</a></div>
+            <div class="cpb-files"><a class="cpb-btn" href="https://chandra-gummaluru.github.io/courses-utor/csc258/f26/slides/02%20-%20Boolean%20Algebra.pdf" target="_blank" rel="noopener" style="display: inline-block; padding: 7px 16px; background-color: #ffffff; color: #1f2329; border: 1px solid #d4d5d8; border-radius: 8px; font-size: 14px; font-weight: 600; text-decoration: none; margin: 0 6px 6px 0;">Download</a></div>
           </div>
         </div></div><div class="cpb-slot" data-at="1" data-hours="2" style="display: inline-block; vertical-align: top; box-sizing: border-box; padding: 0 14px 14px 0; white-space: normal; font-size: 14px; line-height: normal; width: 66.6667%;">
         <div class="cpb-card" style="display: block; width: 100%; box-sizing: border-box; background-color: #ffffff; border: 1px solid #b4b6ba; border-radius: 10px; overflow: hidden;">
@@ -70,7 +89,7 @@
           <div style="padding: 16px 18px 10px 18px;">
             <h3 class="cpb-ctitle" style="font-family: 'EB Garamond', Garamond, Georgia, serif; font-weight: 500; font-size: 22px; line-height: 1.2; color: #1f2329; margin: 0 0 6px 0; min-height: 27px;">Combinational Circuit Design</h3>
             <p class="cpb-cdesc" style="font-size: 14px; line-height: 1.55; color: #4a4f57; margin: 0 0 14px 0; min-height: 66px;">Circuits whose output depends only on their current input, simplified with Karnaugh maps.</p>
-            <div class="cpb-files"><a class="cpb-btn" href="https://chandra-gummaluru.github.io/courses-utor/csc258/f26/slides/03%20-%20Combinational%20Circuit%20Design.pdf" target="_blank" rel="noopener" style="display: inline-block; padding: 7px 18px; background-color: #5f6166; color: #ffffff; border: 1px solid #3f4146; border-radius: 8px; font-size: 14px; font-weight: 600; text-decoration: none; margin: 0 6px 6px 0;">Download</a></div>
+            <div class="cpb-files"><a class="cpb-btn" href="https://chandra-gummaluru.github.io/courses-utor/csc258/f26/slides/03%20-%20Combinational%20Circuit%20Design.pdf" target="_blank" rel="noopener" style="display: inline-block; padding: 7px 16px; background-color: #ffffff; color: #1f2329; border: 1px solid #d4d5d8; border-radius: 8px; font-size: 14px; font-weight: 600; text-decoration: none; margin: 0 6px 6px 0;">Download</a></div>
           </div>
         </div></div></div></div>
         </div>
@@ -80,14 +99,14 @@
         <summary style="display: block; list-style: none; cursor: pointer;"><div style="margin: 0 0 12px 0; padding: 0 0 8px 0; border-bottom: 1px solid #ecedef;"><span style="float: right; width: 26px; height: 26px; margin: 1px 0 0 10px; border: 1px solid #dfe0e2; border-radius: 50%; background-color: #f6f5f2; color: #5f6166; font-size: 13px; line-height: 25px; text-align: center;">&#9662;</span><span class="cpb-pill" style="float: right; display: inline-block; margin: 4px 0 0 8px; padding: 3px 11px; border: 1px solid #b4b6ba; border-radius: 999px; background-color: #f6f5f2; font-size: 12px; font-weight: 600; line-height: 18px; color: #4a4f57;">Lab 2</span><span class="cpb-wlabel" style="font-family: 'EB Garamond', Garamond, Georgia, serif; font-weight: 500; font-size: 22px; color: #1f2329;">Week 3</span><span class="cpb-wdates" style="font-size: 13px; font-weight: 600; color: #7a7f87; margin-left: 10px;">Sept 21 – 25</span>
           <span class="cpb-wtopic" style="display: block; font-size: 14px; color: #4a4f57; margin: 2px 0 0 0;">Logical devices (muxes, adders, decoders)</span>
         </div></summary>
-        <div class="cpb-lrow" data-hours="3" style="position: relative; margin: 0 0 4px 0;">
+        <div class="cpb-lrow" data-hours="2" style="position: relative; margin: 0 0 4px 0;">
           <div class="cpb-lscroll" style="overflow-x: auto; overflow-y: hidden;"><div class="cpb-ltrack" style="white-space: nowrap; font-size: 0; line-height: 0; width: 100%;"><div class="cpb-slot" data-at="0" data-hours="1" style="display: inline-block; vertical-align: top; box-sizing: border-box; padding: 0 14px 14px 0; white-space: normal; font-size: 14px; line-height: normal; width: 33.3333%;">
         <div class="cpb-card" style="display: block; width: 100%; box-sizing: border-box; background-color: #ffffff; border: 1px solid #b4b6ba; border-radius: 10px; overflow: hidden;">
           <div style="background-color: #f6f5f2; border-bottom: 1px solid #dfe0e2; padding: 8px 14px; font-size: 10px; font-weight: bold; letter-spacing: 0.08em; text-transform: uppercase; color: #7a7f87;"><span class="cpb-clabel" style="">Lecture 04</span></div>
           <div style="padding: 16px 18px 10px 18px;">
             <h3 class="cpb-ctitle" style="font-family: 'EB Garamond', Garamond, Georgia, serif; font-weight: 500; font-size: 22px; line-height: 1.2; color: #1f2329; margin: 0 0 6px 0; min-height: 27px;">Logical Devices</h3>
             <p class="cpb-cdesc" style="font-size: 14px; line-height: 1.55; color: #4a4f57; margin: 0 0 14px 0; min-height: 66px;">Multiplexers, de-multiplexers, decoders and encoders, plus don't-care values.</p>
-            <div class="cpb-files"><a class="cpb-btn" href="https://chandra-gummaluru.github.io/courses-utor/csc258/f26/slides/04%20-%20Logical%20Devices.pdf" target="_blank" rel="noopener" style="display: inline-block; padding: 7px 18px; background-color: #5f6166; color: #ffffff; border: 1px solid #3f4146; border-radius: 8px; font-size: 14px; font-weight: 600; text-decoration: none; margin: 0 6px 6px 0;">Download</a></div>
+            <div class="cpb-files"><a class="cpb-btn" href="https://chandra-gummaluru.github.io/courses-utor/csc258/f26/slides/04%20-%20Logical%20Devices.pdf" target="_blank" rel="noopener" style="display: inline-block; padding: 7px 16px; background-color: #ffffff; color: #1f2329; border: 1px solid #d4d5d8; border-radius: 8px; font-size: 14px; font-weight: 600; text-decoration: none; margin: 0 6px 6px 0;">Download</a></div>
           </div>
         </div></div><div class="cpb-slot" data-at="1" data-hours="1" style="display: inline-block; vertical-align: top; box-sizing: border-box; padding: 0 14px 14px 0; white-space: normal; font-size: 14px; line-height: normal; width: 33.3333%;">
         <div class="cpb-card" style="display: block; width: 100%; box-sizing: border-box; background-color: #ffffff; border: 1px solid #b4b6ba; border-radius: 10px; overflow: hidden;">
@@ -95,9 +114,9 @@
           <div style="padding: 16px 18px 10px 18px;">
             <h3 class="cpb-ctitle" style="font-family: 'EB Garamond', Garamond, Georgia, serif; font-weight: 500; font-size: 22px; line-height: 1.2; color: #1f2329; margin: 0 0 6px 0; min-height: 27px;">Binary Arithmetic</h3>
             <p class="cpb-cdesc" style="font-size: 14px; line-height: 1.55; color: #4a4f57; margin: 0 0 14px 0; min-height: 66px;">Unsigned binary, hexadecimal, and how signed numbers are represented.</p>
-            <div class="cpb-files"><a class="cpb-btn" href="https://chandra-gummaluru.github.io/courses-utor/csc258/f26/slides/05%20-%20Binary%20Arithmetic.pdf" target="_blank" rel="noopener" style="display: inline-block; padding: 7px 18px; background-color: #5f6166; color: #ffffff; border: 1px solid #3f4146; border-radius: 8px; font-size: 14px; font-weight: 600; text-decoration: none; margin: 0 6px 6px 0;">Download</a></div>
+            <div class="cpb-files"><a class="cpb-btn" href="https://chandra-gummaluru.github.io/courses-utor/csc258/f26/slides/05%20-%20Binary%20Arithmetic.pdf" target="_blank" rel="noopener" style="display: inline-block; padding: 7px 16px; background-color: #ffffff; color: #1f2329; border: 1px solid #d4d5d8; border-radius: 8px; font-size: 14px; font-weight: 600; text-decoration: none; margin: 0 6px 6px 0;">Download</a></div>
           </div>
-        </div></div><div class="cpb-slot cpb-free" style="display: inline-block; vertical-align: top; box-sizing: border-box; padding: 0 14px 14px 0; white-space: normal; font-size: 14px; line-height: normal; width: 33.3333%;"></div></div></div>
+        </div></div></div></div>
         </div>
         <div class="cpb-erow" style="margin: 0 0 14px 0; padding: 10px 0 0 0; border-top: 1px solid #ecedef;"><span style="display: inline-block; margin: 0 12px 8px 0; font-size: 10px; font-weight: bold; letter-spacing: 0.08em; text-transform: uppercase; color: #7a7f87; vertical-align: middle;">Evaluations</span><span class="cpb-ev" style="display: inline-block; vertical-align: middle; margin: 0 8px 8px 0; padding: 7px 14px; border: 1px solid #b4b6ba; border-radius: 8px; background-color: #ffffff; font-size: 14px; font-weight: 600; color: #1f2329;">Lab 2</span></div>
       </details>
@@ -105,16 +124,16 @@
         <summary style="display: block; list-style: none; cursor: pointer;"><div style="margin: 0 0 12px 0; padding: 0 0 8px 0; border-bottom: 1px solid #ecedef;"><span style="float: right; width: 26px; height: 26px; margin: 1px 0 0 10px; border: 1px solid #dfe0e2; border-radius: 50%; background-color: #f6f5f2; color: #5f6166; font-size: 13px; line-height: 25px; text-align: center;">&#9662;</span><span class="cpb-pill" style="float: right; display: inline-block; margin: 4px 0 0 8px; padding: 3px 11px; border: 1px solid #b4b6ba; border-radius: 999px; background-color: #f6f5f2; font-size: 12px; font-weight: 600; line-height: 18px; color: #4a4f57;">Lab 3</span><span class="cpb-wlabel" style="font-family: 'EB Garamond', Garamond, Georgia, serif; font-weight: 500; font-size: 22px; color: #1f2329;">Week 4</span><span class="cpb-wdates" style="font-size: 13px; font-weight: 600; color: #7a7f87; margin-left: 10px;">Sept 28 – Oct 2</span>
           <span class="cpb-wtopic" style="display: block; font-size: 14px; color: #4a4f57; margin: 2px 0 0 0;">Latches &amp; flip-flops</span>
         </div></summary>
-        <div class="cpb-lrow" data-hours="3" style="position: relative; margin: 0 0 4px 0;">
+        <div class="cpb-lrow" data-hours="1" style="position: relative; margin: 0 0 4px 0;">
           <div class="cpb-lscroll" style="overflow-x: auto; overflow-y: hidden;"><div class="cpb-ltrack" style="white-space: nowrap; font-size: 0; line-height: 0; width: 100%;"><div class="cpb-slot" data-at="0" data-hours="1" style="display: inline-block; vertical-align: top; box-sizing: border-box; padding: 0 14px 14px 0; white-space: normal; font-size: 14px; line-height: normal; width: 33.3333%;">
         <div class="cpb-card" style="display: block; width: 100%; box-sizing: border-box; background-color: #ffffff; border: 1px solid #b4b6ba; border-radius: 10px; overflow: hidden;">
           <div style="background-color: #f6f5f2; border-bottom: 1px solid #dfe0e2; padding: 8px 14px; font-size: 10px; font-weight: bold; letter-spacing: 0.08em; text-transform: uppercase; color: #7a7f87;"><span class="cpb-clabel" style="">Lecture 06</span></div>
           <div style="padding: 16px 18px 10px 18px;">
             <h3 class="cpb-ctitle" style="font-family: 'EB Garamond', Garamond, Georgia, serif; font-weight: 500; font-size: 22px; line-height: 1.2; color: #1f2329; margin: 0 0 6px 0; min-height: 27px;">Arithmetic Devices</h3>
             <p class="cpb-cdesc" style="font-size: 14px; line-height: 1.55; color: #4a4f57; margin: 0 0 14px 0; min-height: 66px;">Adders, subtractors, overflow, comparators, shifters and multipliers.</p>
-            <div class="cpb-files"><a class="cpb-btn" href="https://chandra-gummaluru.github.io/courses-utor/csc258/f26/slides/06%20-%20Arithmetic%20Devices.pdf" target="_blank" rel="noopener" style="display: inline-block; padding: 7px 18px; background-color: #5f6166; color: #ffffff; border: 1px solid #3f4146; border-radius: 8px; font-size: 14px; font-weight: 600; text-decoration: none; margin: 0 6px 6px 0;">Download</a></div>
+            <div class="cpb-files"><a class="cpb-btn" href="https://chandra-gummaluru.github.io/courses-utor/csc258/f26/slides/06%20-%20Arithmetic%20Devices.pdf" target="_blank" rel="noopener" style="display: inline-block; padding: 7px 16px; background-color: #ffffff; color: #1f2329; border: 1px solid #d4d5d8; border-radius: 8px; font-size: 14px; font-weight: 600; text-decoration: none; margin: 0 6px 6px 0;">Download</a></div>
           </div>
-        </div></div><div class="cpb-slot cpb-free" style="display: inline-block; vertical-align: top; box-sizing: border-box; padding: 0 14px 14px 0; white-space: normal; font-size: 14px; line-height: normal; width: 66.6667%;"></div></div></div>
+        </div></div></div></div>
         </div>
         <div class="cpb-erow" style="margin: 0 0 14px 0; padding: 10px 0 0 0; border-top: 1px solid #ecedef;"><span style="display: inline-block; margin: 0 12px 8px 0; font-size: 10px; font-weight: bold; letter-spacing: 0.08em; text-transform: uppercase; color: #7a7f87; vertical-align: middle;">Evaluations</span><span class="cpb-ev" style="display: inline-block; vertical-align: middle; margin: 0 8px 8px 0; padding: 7px 14px; border: 1px solid #b4b6ba; border-radius: 8px; background-color: #ffffff; font-size: 14px; font-weight: 600; color: #1f2329;">Lab 3</span></div>
       </details>
@@ -122,31 +141,31 @@
         <summary style="display: block; list-style: none; cursor: pointer;"><div style="margin: 0 0 12px 0; padding: 0 0 8px 0; border-bottom: 1px solid #ecedef;"><span style="float: right; width: 26px; height: 26px; margin: 1px 0 0 10px; border: 1px solid #dfe0e2; border-radius: 50%; background-color: #f6f5f2; color: #5f6166; font-size: 13px; line-height: 25px; text-align: center;">&#9662;</span><span class="cpb-pill" style="float: right; display: inline-block; margin: 4px 0 0 8px; padding: 3px 11px; border: 1px solid #b4b6ba; border-radius: 999px; background-color: #f6f5f2; font-size: 12px; font-weight: 600; line-height: 18px; color: #4a4f57;">Lab 4</span><span class="cpb-wlabel" style="font-family: 'EB Garamond', Garamond, Georgia, serif; font-weight: 500; font-size: 22px; color: #1f2329;">Week 5</span><span class="cpb-wdates" style="font-size: 13px; font-weight: 600; color: #7a7f87; margin-left: 10px;">Oct 5 – 9</span>
           <span class="cpb-wtopic" style="display: block; font-size: 14px; color: #4a4f57; margin: 2px 0 0 0;">Registers, counters, finite state machines</span>
         </div></summary>
-        <div class="cpb-lrow" data-hours="3" style="position: relative; margin: 0 0 4px 0;">
+        <div class="cpb-lrow" data-hours="1" style="position: relative; margin: 0 0 4px 0;">
           <div class="cpb-lscroll" style="overflow-x: auto; overflow-y: hidden;"><div class="cpb-ltrack" style="white-space: nowrap; font-size: 0; line-height: 0; width: 100%;"><div class="cpb-slot" data-at="0" data-hours="1" style="display: inline-block; vertical-align: top; box-sizing: border-box; padding: 0 14px 14px 0; white-space: normal; font-size: 14px; line-height: normal; width: 33.3333%;">
         <div class="cpb-card" style="display: block; width: 100%; box-sizing: border-box; background-color: #ffffff; border: 1px solid #b4b6ba; border-radius: 10px; overflow: hidden;">
           <div style="background-color: #f6f5f2; border-bottom: 1px solid #dfe0e2; padding: 8px 14px; font-size: 10px; font-weight: bold; letter-spacing: 0.08em; text-transform: uppercase; color: #7a7f87;"><span class="cpb-clabel" style="">Lecture 07</span></div>
           <div style="padding: 16px 18px 10px 18px;">
             <h3 class="cpb-ctitle" style="font-family: 'EB Garamond', Garamond, Georgia, serif; font-weight: 500; font-size: 22px; line-height: 1.2; color: #1f2329; margin: 0 0 6px 0; min-height: 27px;">Latches and Flip-Flops</h3>
             <p class="cpb-cdesc" style="font-size: 14px; line-height: 1.55; color: #4a4f57; margin: 0 0 14px 0; min-height: 66px;">SR and D latches, edge-triggering, and D flip-flop timing with setup and hold.</p>
-            <div class="cpb-files"><a class="cpb-btn" href="https://chandra-gummaluru.github.io/courses-utor/csc258/f26/slides/07%20-%20Latches%20and%20Flip-Flops.pdf" target="_blank" rel="noopener" style="display: inline-block; padding: 7px 18px; background-color: #5f6166; color: #ffffff; border: 1px solid #3f4146; border-radius: 8px; font-size: 14px; font-weight: 600; text-decoration: none; margin: 0 6px 6px 0;">Download</a></div>
+            <div class="cpb-files"><a class="cpb-btn" href="https://chandra-gummaluru.github.io/courses-utor/csc258/f26/slides/07%20-%20Latches%20and%20Flip-Flops.pdf" target="_blank" rel="noopener" style="display: inline-block; padding: 7px 16px; background-color: #ffffff; color: #1f2329; border: 1px solid #d4d5d8; border-radius: 8px; font-size: 14px; font-weight: 600; text-decoration: none; margin: 0 6px 6px 0;">Download</a></div>
           </div>
-        </div></div><div class="cpb-slot cpb-free" style="display: inline-block; vertical-align: top; box-sizing: border-box; padding: 0 14px 14px 0; white-space: normal; font-size: 14px; line-height: normal; width: 66.6667%;"></div></div></div>
+        </div></div></div></div>
         </div>
         <div class="cpb-erow" style="margin: 0 0 14px 0; padding: 10px 0 0 0; border-top: 1px solid #ecedef;"><span style="display: inline-block; margin: 0 12px 8px 0; font-size: 10px; font-weight: bold; letter-spacing: 0.08em; text-transform: uppercase; color: #7a7f87; vertical-align: middle;">Evaluations</span><span class="cpb-ev" style="display: inline-block; vertical-align: middle; margin: 0 8px 8px 0; padding: 7px 14px; border: 1px solid #b4b6ba; border-radius: 8px; background-color: #ffffff; font-size: 14px; font-weight: 600; color: #1f2329;">Lab 4</span></div>
       </details>
-      <details class="cpb-week" style="margin: 0 0 18px 0;" open>
+      <details class="cpb-week" style="margin: 0 0 18px 0;">
         <summary style="display: block; list-style: none; cursor: pointer;"><div style="margin: 0 0 12px 0; padding: 0 0 8px 0; border-bottom: 1px solid #ecedef;"><span style="float: right; width: 26px; height: 26px; margin: 1px 0 0 10px; border: 1px solid #dfe0e2; border-radius: 50%; background-color: #f6f5f2; color: #5f6166; font-size: 13px; line-height: 25px; text-align: center;">&#9662;</span><span class="cpb-pill" style="float: right; display: inline-block; margin: 4px 0 0 8px; padding: 3px 11px; border: 1px solid #b4b6ba; border-radius: 999px; background-color: #f6f5f2; font-size: 12px; font-weight: 600; line-height: 18px; color: #4a4f57;">Lab 5</span><span class="cpb-wlabel" style="font-family: 'EB Garamond', Garamond, Georgia, serif; font-weight: 500; font-size: 22px; color: #1f2329;">Week 6</span><span class="cpb-wdates" style="font-size: 13px; font-weight: 600; color: #7a7f87; margin-left: 10px;">Oct 12 – 16</span>
           <span class="cpb-wtopic" style="display: block; font-size: 14px; color: #4a4f57; margin: 2px 0 0 0;">Finite state machine design, midterm review</span>
         </div></summary>
-        <div class="cpb-lrow" data-hours="3" style="position: relative; margin: 0 0 4px 0;">
+        <div class="cpb-lrow" data-hours="2" style="position: relative; margin: 0 0 4px 0;">
           <div class="cpb-lscroll" style="overflow-x: auto; overflow-y: hidden;"><div class="cpb-ltrack" style="white-space: nowrap; font-size: 0; line-height: 0; width: 100%;"><div class="cpb-slot" data-at="0" data-hours="1" style="display: inline-block; vertical-align: top; box-sizing: border-box; padding: 0 14px 14px 0; white-space: normal; font-size: 14px; line-height: normal; width: 33.3333%;">
         <div class="cpb-card" style="display: block; width: 100%; box-sizing: border-box; background-color: #ffffff; border: 1px solid #b4b6ba; border-radius: 10px; overflow: hidden;">
           <div style="background-color: #f6f5f2; border-bottom: 1px solid #dfe0e2; padding: 8px 14px; font-size: 10px; font-weight: bold; letter-spacing: 0.08em; text-transform: uppercase; color: #7a7f87;"><span class="cpb-clabel" style="">Lecture 08</span></div>
           <div style="padding: 16px 18px 10px 18px;">
             <h3 class="cpb-ctitle" style="font-family: 'EB Garamond', Garamond, Georgia, serif; font-weight: 500; font-size: 22px; line-height: 1.2; color: #1f2329; margin: 0 0 6px 0; min-height: 27px;">Registers and Memory</h3>
             <p class="cpb-cdesc" style="font-size: 14px; line-height: 1.55; color: #4a4f57; margin: 0 0 14px 0; min-height: 66px;">Storing multi-bit values in registers and organizing them into register files.</p>
-            <div class="cpb-files"><a class="cpb-btn" href="https://chandra-gummaluru.github.io/courses-utor/csc258/f26/slides/08%20-%20Registers%20and%20Memory.pdf" target="_blank" rel="noopener" style="display: inline-block; padding: 7px 18px; background-color: #5f6166; color: #ffffff; border: 1px solid #3f4146; border-radius: 8px; font-size: 14px; font-weight: 600; text-decoration: none; margin: 0 6px 6px 0;">Download</a></div>
+            <div class="cpb-files"><a class="cpb-btn" href="https://chandra-gummaluru.github.io/courses-utor/csc258/f26/slides/08%20-%20Registers%20and%20Memory.pdf" target="_blank" rel="noopener" style="display: inline-block; padding: 7px 16px; background-color: #ffffff; color: #1f2329; border: 1px solid #d4d5d8; border-radius: 8px; font-size: 14px; font-weight: 600; text-decoration: none; margin: 0 6px 6px 0;">Download</a></div>
           </div>
         </div></div><div class="cpb-slot" data-at="1" data-hours="1" style="display: inline-block; vertical-align: top; box-sizing: border-box; padding: 0 14px 14px 0; white-space: normal; font-size: 14px; line-height: normal; width: 33.3333%;">
         <div class="cpb-card" style="display: block; width: 100%; box-sizing: border-box; background-color: #ffffff; border: 1px solid #b4b6ba; border-radius: 10px; overflow: hidden;">
@@ -154,26 +173,26 @@
           <div style="padding: 16px 18px 10px 18px;">
             <h3 class="cpb-ctitle" style="font-family: 'EB Garamond', Garamond, Georgia, serif; font-weight: 500; font-size: 22px; line-height: 1.2; color: #1f2329; margin: 0 0 6px 0; min-height: 27px;">Finite State Machines</h3>
             <p class="cpb-cdesc" style="font-size: 14px; line-height: 1.55; color: #4a4f57; margin: 0 0 14px 0; min-height: 66px;">State diagrams, how an FSM is structured, and a step-by-step design procedure.</p>
-            <div class="cpb-files"><a class="cpb-btn" href="https://chandra-gummaluru.github.io/courses-utor/csc258/f26/slides/09%20-%20Finite%20State%20Machines.pdf" target="_blank" rel="noopener" style="display: inline-block; padding: 7px 18px; background-color: #5f6166; color: #ffffff; border: 1px solid #3f4146; border-radius: 8px; font-size: 14px; font-weight: 600; text-decoration: none; margin: 0 6px 6px 0;">Download</a></div>
+            <div class="cpb-files"><a class="cpb-btn" href="https://chandra-gummaluru.github.io/courses-utor/csc258/f26/slides/09%20-%20Finite%20State%20Machines.pdf" target="_blank" rel="noopener" style="display: inline-block; padding: 7px 16px; background-color: #ffffff; color: #1f2329; border: 1px solid #d4d5d8; border-radius: 8px; font-size: 14px; font-weight: 600; text-decoration: none; margin: 0 6px 6px 0;">Download</a></div>
           </div>
-        </div></div><div class="cpb-slot cpb-free" style="display: inline-block; vertical-align: top; box-sizing: border-box; padding: 0 14px 14px 0; white-space: normal; font-size: 14px; line-height: normal; width: 33.3333%;"></div></div></div>
+        </div></div></div></div>
         </div>
         <div class="cpb-erow" style="margin: 0 0 14px 0; padding: 10px 0 0 0; border-top: 1px solid #ecedef;"><span style="display: inline-block; margin: 0 12px 8px 0; font-size: 10px; font-weight: bold; letter-spacing: 0.08em; text-transform: uppercase; color: #7a7f87; vertical-align: middle;">Evaluations</span><span class="cpb-ev" style="display: inline-block; vertical-align: middle; margin: 0 8px 8px 0; padding: 7px 14px; border: 1px solid #b4b6ba; border-radius: 8px; background-color: #ffffff; font-size: 14px; font-weight: 600; color: #1f2329;">Lab 5</span></div>
       </details>
-      <details class="cpb-week" style="margin: 0 0 18px 0;">
+      <details class="cpb-week" style="margin: 0 0 18px 0;" open>
         <summary style="display: block; list-style: none; cursor: pointer;"><div style="margin: 0 0 12px 0; padding: 0 0 8px 0; border-bottom: 1px solid #ecedef;"><span style="float: right; width: 26px; height: 26px; margin: 1px 0 0 10px; border: 1px solid #dfe0e2; border-radius: 50%; background-color: #f6f5f2; color: #5f6166; font-size: 13px; line-height: 25px; text-align: center;">&#9662;</span><span class="cpb-pill" style="float: right; display: inline-block; margin: 4px 0 0 8px; padding: 3px 11px; border: 1px solid #3f4146; border-radius: 999px; background-color: #5f6166; font-size: 12px; font-weight: 600; line-height: 18px; color: #ffffff;">Midterm Test</span><span class="cpb-wlabel" style="font-family: 'EB Garamond', Garamond, Georgia, serif; font-weight: 500; font-size: 22px; color: #1f2329;">Week 7</span><span class="cpb-wdates" style="font-size: 13px; font-weight: 600; color: #7a7f87; margin-left: 10px;">Oct 19 – 23</span>
           <span class="cpb-wtopic" style="display: block; font-size: 14px; color: #4a4f57; margin: 2px 0 0 0;">Midterm exam</span>
         </div></summary>
-        <div class="cpb-lrow" data-hours="3" style="position: relative; margin: 0 0 4px 0;">
-          <div class="cpb-lscroll" style="overflow-x: auto; overflow-y: hidden;"><div class="cpb-ltrack" style="white-space: nowrap; font-size: 0; line-height: 0; width: 100%;"><div class="cpb-slot" data-at="0" data-hours="1" style="display: inline-block; vertical-align: top; box-sizing: border-box; padding: 0 14px 14px 0; white-space: normal; font-size: 14px; line-height: normal; width: 33.3333%;">
+        <div class="cpb-lrow" data-hours="2" style="position: relative; margin: 0 0 4px 0;">
+          <div class="cpb-lscroll" style="overflow-x: auto; overflow-y: hidden;"><div class="cpb-ltrack" style="white-space: nowrap; font-size: 0; line-height: 0; width: 100%;"><div class="cpb-slot" data-at="0" data-hours="2" style="display: inline-block; vertical-align: top; box-sizing: border-box; padding: 0 14px 14px 0; white-space: normal; font-size: 14px; line-height: normal; width: 66.6667%;">
         <div class="cpb-card" style="display: block; width: 100%; box-sizing: border-box; background-color: #ffffff; border: 1px solid #b4b6ba; border-radius: 10px; overflow: hidden;">
           <div style="background-color: #f6f5f2; border-bottom: 1px solid #dfe0e2; padding: 8px 14px; font-size: 10px; font-weight: bold; letter-spacing: 0.08em; text-transform: uppercase; color: #7a7f87;"><span class="cpb-clabel" style="">Lecture 12</span></div>
           <div style="padding: 16px 18px 10px 18px;">
             <h3 class="cpb-ctitle" style="font-family: 'EB Garamond', Garamond, Georgia, serif; font-weight: 500; font-size: 22px; line-height: 1.2; color: #1f2329; margin: 0 0 6px 0; min-height: 27px;">Midterm Review</h3>
-            <p class="cpb-cdesc" style="font-size: 14px; line-height: 1.55; color: #4a4f57; margin: 0 0 14px 0; min-height: 66px;">A short mid-term review covering Weeks 1 to 6 of the course</p>
-            <div class="cpb-files"><span class="cpb-soon" style="display: inline-block; padding: 7px 16px; border: 1px dashed #b4b6ba; border-radius: 8px; color: #7a7f87; font-size: 14px; margin: 0 6px 6px 0;">Coming soon</span></div>
+            <p class="cpb-cdesc" style="font-size: 14px; line-height: 1.55; color: #4a4f57; margin: 0 0 14px 0; min-height: 66px;">A short mid-term review covering Weeks 1 to 6 of the course.</p>
+            <div class="cpb-files"><a class="cpb-btn" href="https://q.utoronto.ca/courses/440529/discussion_topics/3544771" target="_blank" rel="noopener" style="display: inline-block; padding: 7px 16px; background-color: #ffffff; color: #1f2329; border: 1px solid #d4d5d8; border-radius: 8px; font-size: 14px; font-weight: 600; text-decoration: none; margin: 0 6px 6px 0;">Midterm Details</a></div>
           </div>
-        </div></div><div class="cpb-slot cpb-free" style="display: inline-block; vertical-align: top; box-sizing: border-box; padding: 0 14px 14px 0; white-space: normal; font-size: 14px; line-height: normal; width: 66.6667%;"></div></div></div>
+        </div></div></div></div>
         </div>
         <div class="cpb-erow" style="margin: 0 0 14px 0; padding: 10px 0 0 0; border-top: 1px solid #ecedef;"><span style="display: inline-block; margin: 0 12px 8px 0; font-size: 10px; font-weight: bold; letter-spacing: 0.08em; text-transform: uppercase; color: #7a7f87; vertical-align: middle;">Evaluations</span><span class="cpb-ev" style="display: inline-block; vertical-align: middle; margin: 0 8px 8px 0; padding: 7px 14px; border: 1px solid #3f4146; border-radius: 8px; background-color: #5f6166; font-size: 14px; font-weight: 600; color: #ffffff;">Midterm Test</span></div>
       </details>
@@ -186,7 +205,7 @@
         <summary style="display: block; list-style: none; cursor: pointer;"><div style="margin: 0 0 12px 0; padding: 0 0 8px 0; border-bottom: 1px solid #ecedef;"><span style="float: right; width: 26px; height: 26px; margin: 1px 0 0 10px; border: 1px solid #dfe0e2; border-radius: 50%; background-color: #f6f5f2; color: #5f6166; font-size: 13px; line-height: 25px; text-align: center;">&#9662;</span><span class="cpb-pill" style="float: right; display: inline-block; margin: 4px 0 0 8px; padding: 3px 11px; border: 1px solid #b4b6ba; border-radius: 999px; background-color: #f6f5f2; font-size: 12px; font-weight: 600; line-height: 18px; color: #4a4f57;">Lab 6</span><span class="cpb-wlabel" style="font-family: 'EB Garamond', Garamond, Georgia, serif; font-weight: 500; font-size: 22px; color: #1f2329;">Week 9</span><span class="cpb-wdates" style="font-size: 13px; font-weight: 600; color: #7a7f87; margin-left: 10px;">Nov 2 – 6</span>
           <span class="cpb-wtopic" style="display: block; font-size: 14px; color: #4a4f57; margin: 2px 0 0 0;">Architecture &amp; microprogramming</span>
         </div></summary>
-        <div class="cpb-lrow" data-hours="3" style="position: relative; margin: 0 0 4px 0;">
+        <div class="cpb-lrow" data-hours="1" style="position: relative; margin: 0 0 4px 0;">
           <div class="cpb-lscroll" style="overflow-x: auto; overflow-y: hidden;"><div class="cpb-ltrack" style="white-space: nowrap; font-size: 0; line-height: 0; width: 100%;"><div class="cpb-slot" data-at="0" data-hours="1" style="display: inline-block; vertical-align: top; box-sizing: border-box; padding: 0 14px 14px 0; white-space: normal; font-size: 14px; line-height: normal; width: 33.3333%;">
         <div class="cpb-card" style="display: block; width: 100%; box-sizing: border-box; background-color: #ffffff; border: 1px solid #b4b6ba; border-radius: 10px; overflow: hidden;">
           <div style="background-color: #f6f5f2; border-bottom: 1px solid #dfe0e2; padding: 8px 14px; font-size: 10px; font-weight: bold; letter-spacing: 0.08em; text-transform: uppercase; color: #7a7f87;"><span class="cpb-clabel" style="">Lecture 10</span></div>
@@ -195,7 +214,7 @@
             <p class="cpb-cdesc" style="font-size: 14px; line-height: 1.55; color: #4a4f57; margin: 0 0 14px 0; min-height: 66px;">The datapath, control, and the instruction cycle.</p>
             <div class="cpb-files"><span class="cpb-soon" style="display: inline-block; padding: 7px 16px; border: 1px dashed #b4b6ba; border-radius: 8px; color: #7a7f87; font-size: 14px; margin: 0 6px 6px 0;">Coming soon</span></div>
           </div>
-        </div></div><div class="cpb-slot cpb-free" style="display: inline-block; vertical-align: top; box-sizing: border-box; padding: 0 14px 14px 0; white-space: normal; font-size: 14px; line-height: normal; width: 66.6667%;"></div></div></div>
+        </div></div></div></div>
         </div>
         <div class="cpb-erow" style="margin: 0 0 14px 0; padding: 10px 0 0 0; border-top: 1px solid #ecedef;"><span style="display: inline-block; margin: 0 12px 8px 0; font-size: 10px; font-weight: bold; letter-spacing: 0.08em; text-transform: uppercase; color: #7a7f87; vertical-align: middle;">Evaluations</span><span class="cpb-ev" style="display: inline-block; vertical-align: middle; margin: 0 8px 8px 0; padding: 7px 14px; border: 1px solid #b4b6ba; border-radius: 8px; background-color: #ffffff; font-size: 14px; font-weight: 600; color: #1f2329;">Lab 6</span></div>
       </details>
@@ -203,7 +222,7 @@
         <summary style="display: block; list-style: none; cursor: pointer;"><div style="margin: 0 0 12px 0; padding: 0 0 8px 0; border-bottom: 1px solid #ecedef;"><span style="float: right; width: 26px; height: 26px; margin: 1px 0 0 10px; border: 1px solid #dfe0e2; border-radius: 50%; background-color: #f6f5f2; color: #5f6166; font-size: 13px; line-height: 25px; text-align: center;">&#9662;</span><span class="cpb-pill" style="float: right; display: inline-block; margin: 4px 0 0 8px; padding: 3px 11px; border: 1px solid #b4b6ba; border-radius: 999px; background-color: #f6f5f2; font-size: 12px; font-weight: 600; line-height: 18px; color: #4a4f57;">Lab 7</span><span class="cpb-wlabel" style="font-family: 'EB Garamond', Garamond, Georgia, serif; font-weight: 500; font-size: 22px; color: #1f2329;">Week 10</span><span class="cpb-wdates" style="font-size: 13px; font-weight: 600; color: #7a7f87; margin-left: 10px;">Nov 9 – 13</span>
           <span class="cpb-wtopic" style="display: block; font-size: 14px; color: #4a4f57; margin: 2px 0 0 0;">Assembly language basics</span>
         </div></summary>
-        <div class="cpb-lrow" data-hours="3" style="position: relative; margin: 0 0 4px 0;">
+        <div class="cpb-lrow" data-hours="1" style="position: relative; margin: 0 0 4px 0;">
           <div class="cpb-lscroll" style="overflow-x: auto; overflow-y: hidden;"><div class="cpb-ltrack" style="white-space: nowrap; font-size: 0; line-height: 0; width: 100%;"><div class="cpb-slot" data-at="0" data-hours="1" style="display: inline-block; vertical-align: top; box-sizing: border-box; padding: 0 14px 14px 0; white-space: normal; font-size: 14px; line-height: normal; width: 33.3333%;">
         <div class="cpb-card" style="display: block; width: 100%; box-sizing: border-box; background-color: #ffffff; border: 1px solid #b4b6ba; border-radius: 10px; overflow: hidden;">
           <div style="background-color: #f6f5f2; border-bottom: 1px solid #dfe0e2; padding: 8px 14px; font-size: 10px; font-weight: bold; letter-spacing: 0.08em; text-transform: uppercase; color: #7a7f87;"><span class="cpb-clabel" style="">Lecture 11</span></div>
@@ -212,7 +231,7 @@
             <p class="cpb-cdesc" style="font-size: 14px; line-height: 1.55; color: #4a4f57; margin: 0 0 14px 0; min-height: 66px;">Instruction formats, kinds of instructions, a first program, and the whole stack.</p>
             <div class="cpb-files"><span class="cpb-soon" style="display: inline-block; padding: 7px 16px; border: 1px dashed #b4b6ba; border-radius: 8px; color: #7a7f87; font-size: 14px; margin: 0 6px 6px 0;">Coming soon</span></div>
           </div>
-        </div></div><div class="cpb-slot cpb-free" style="display: inline-block; vertical-align: top; box-sizing: border-box; padding: 0 14px 14px 0; white-space: normal; font-size: 14px; line-height: normal; width: 66.6667%;"></div></div></div>
+        </div></div></div></div>
         </div>
         <div class="cpb-erow" style="margin: 0 0 14px 0; padding: 10px 0 0 0; border-top: 1px solid #ecedef;"><span style="display: inline-block; margin: 0 12px 8px 0; font-size: 10px; font-weight: bold; letter-spacing: 0.08em; text-transform: uppercase; color: #7a7f87; vertical-align: middle;">Evaluations</span><span class="cpb-ev" style="display: inline-block; vertical-align: middle; margin: 0 8px 8px 0; padding: 7px 14px; border: 1px solid #b4b6ba; border-radius: 8px; background-color: #ffffff; font-size: 14px; font-weight: 600; color: #1f2329;">Lab 7</span></div>
       </details>
@@ -233,6 +252,24 @@
         </div></summary>
         <div class="cpb-erow" style="margin: 0 0 14px 0;"><span style="display: inline-block; margin: 0 12px 8px 0; font-size: 10px; font-weight: bold; letter-spacing: 0.08em; text-transform: uppercase; color: #7a7f87; vertical-align: middle;">Evaluations</span><span class="cpb-ev" style="display: inline-block; vertical-align: middle; margin: 0 8px 8px 0; padding: 7px 14px; border: 1px solid #3f4146; border-radius: 8px; background-color: #5f6166; font-size: 14px; font-weight: 600; color: #ffffff;">Project Demo #2</span></div>
       </details>
+    </div>
+  </details>
+  <details class="cpb-sec cpb-type-table" style="background-color: #ffffff; border: 1px solid #b4b6ba; border-radius: 12px; margin: 0 0 14px 0;">
+    <summary style="display: block; cursor: pointer; padding: 18px 22px;">
+      <span style="float: right; width: 32px; height: 32px; margin-top: 8px; border: 1px solid #dfe0e2; border-radius: 50%; background-color: #f6f5f2; color: #5f6166; font-size: 17px; line-height: 31px; text-align: center;">&#9662;</span>
+      <span class="cpb-sname" style="font-family: 'EB Garamond', Garamond, Georgia, serif; font-weight: 500; font-size: 30px; line-height: 1.1; color: #1f2329;">Instructors &amp; Contact</span>
+      <span class="cpb-scap" style="display: block; font-size: 14px; color: #4a4f57; margin: 4px 0 0 0;">Office hours and email</span>
+    </summary>
+    <div style="border-top: 1px solid #dfe0e2; padding: 22px 22px 10px 22px;">
+      <div style="background-color: #ffffff; border: 1px solid #b4b6ba; border-radius: 10px; overflow: hidden; margin: 0 0 18px 0;">
+        <div style="overflow-x: auto;">
+          <table class="cpb-tbl" style="width: 100%; border-collapse: collapse; font-size: 15px; line-height: 1.5; min-width: 520px;">
+            <thead><tr><th style="padding: 11px 16px; text-align: left; font-size: 11.5px; font-weight: bold; letter-spacing: 0.07em; text-transform: uppercase; color: #7a7f87; background-color: #f6f5f2; border-bottom: 1px solid #dfe0e2; white-space: nowrap; padding-left: 20px;">Name</th><th style="padding: 11px 16px; text-align: left; font-size: 11.5px; font-weight: bold; letter-spacing: 0.07em; text-transform: uppercase; color: #7a7f87; background-color: #f6f5f2; border-bottom: 1px solid #dfe0e2; white-space: nowrap;">Office</th><th style="padding: 11px 16px; text-align: left; font-size: 11.5px; font-weight: bold; letter-spacing: 0.07em; text-transform: uppercase; color: #7a7f87; background-color: #f6f5f2; border-bottom: 1px solid #dfe0e2; white-space: nowrap;">Email</th><th style="padding: 11px 16px; text-align: left; font-size: 11.5px; font-weight: bold; letter-spacing: 0.07em; text-transform: uppercase; color: #7a7f87; background-color: #f6f5f2; border-bottom: 1px solid #dfe0e2; white-space: nowrap;">Office Hours</th></tr></thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </details>
   <details class="cpb-sec cpb-type-scheme" style="background-color: #ffffff; border: 1px solid #b4b6ba; border-radius: 12px; margin: 0 0 14px 0;">
