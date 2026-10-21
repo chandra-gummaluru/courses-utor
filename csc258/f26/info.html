@@ -13,6 +13,7 @@
 }
 
 a.cpb-btn:hover { background-color: var(--accent-bg, #fdf8e8) !important; border-color: var(--accent, #c99a06) !important; }
+a.cpb-req:hover { background-color: #fdf8e8 !important; border-style: solid !important; }
 /* ── Buttons: three kinds, the same in every part of Lectern ──────────
    Primary (black): the one main action where you are, e.g. Save, Done.
    Secondary (white with a grey outline, light yellow on hover): every other button, e.g. Edit, Duplicate, Build, Upload marks.
@@ -205,7 +206,7 @@ button.ic.trash:hover:not(:disabled), button.ic.x:hover:not(:disabled), button.c
           <div style="padding: 16px 18px 10px 18px;">
             <h3 class="cpb-ctitle" style="font-family: 'EB Garamond', Garamond, Georgia, serif; font-weight: 500; font-size: 22px; line-height: 1.2; color: #1f2329; margin: 0 0 6px 0; min-height: 27px;">Midterm Review</h3>
             <p class="cpb-cdesc" style="font-size: 14px; line-height: 1.55; color: #4a4f57; margin: 0 0 14px 0; min-height: 66px;">A short mid-term review covering Weeks 1 to 6 of the course.</p>
-            <div class="cpb-files"><a class="cpb-btn" href="https://q.utoronto.ca/courses/440529/discussion_topics/3544771" target="_blank" rel="noopener" style="display: inline-block; padding: 7px 16px; background-color: #ffffff; color: #1f2329; border: 1px solid #d4d5d8; border-radius: 8px; font-size: 14px; font-weight: 600; text-decoration: none; margin: 0 6px 6px 0;">Midterm Details</a> <a class="cpb-btn" href="https://chandra-gummaluru.github.io/courses-utor/csc258/f26/slides/00b%20-%20Midterm%20Review%20v9.pdf" target="_blank" rel="noopener" style="display: inline-block; padding: 7px 16px; background-color: #ffffff; color: #1f2329; border: 1px solid #d4d5d8; border-radius: 8px; font-size: 14px; font-weight: 600; text-decoration: none; margin: 0 6px 6px 0;">Midterm Review Slides</a></div>
+            <div class="cpb-files"><a class="cpb-btn" href="https://q.utoronto.ca/courses/440529/discussion_topics/3544771" target="_blank" rel="noopener" style="display: inline-block; padding: 7px 16px; background-color: #ffffff; color: #1f2329; border: 1px solid #d4d5d8; border-radius: 8px; font-size: 14px; font-weight: 600; text-decoration: none; margin: 0 6px 6px 0;">Midterm Details</a> <a class="cpb-btn" href="https://chandra-gummaluru.github.io/courses-utor/csc258/f26/slides/00b%20-%20Midterm%20Review%20v9.pdf" target="_blank" rel="noopener" style="display: inline-block; padding: 7px 16px; background-color: #ffffff; color: #1f2329; border: 1px solid #d4d5d8; border-radius: 8px; font-size: 14px; font-weight: 600; text-decoration: none; margin: 0 6px 6px 0;">Midterm Review Slides</a> <a class="cpb-btn" href="https://chandra-gummaluru.github.io/courses-utor/csc258/f26/slides/00b%20-%20Midterm%20Review%20(Part%201).pdf" target="_blank" rel="noopener" style="display: inline-block; padding: 7px 16px; background-color: #ffffff; color: #1f2329; border: 1px solid #d4d5d8; border-radius: 8px; font-size: 14px; font-weight: 600; text-decoration: none; margin: 0 6px 6px 0;">Midterm Review Slides (Annotated)</a></div>
           </div>
         </div></div></div></div>
         </div>
@@ -341,6 +342,17 @@ button.ic.trash:hover:not(:disabled), button.ic.x:hover:not(:disabled), button.c
     if (!sc || !fade) return;
     var upd = function () { fade.style.display = sc.scrollLeft + sc.clientWidth >= sc.scrollWidth - 4 ? "none" : ""; };
     sc.addEventListener("scroll", upd); window.addEventListener("resize", upd); upd();
+  });
+  /* Request Accommodation: once its deadline has passed, say so instead. */
+  document.querySelectorAll("a.cpb-req[data-by]").forEach(function (a) {
+    var by = a.getAttribute("data-by"), d = by ? new Date(by) : null;
+    if (!d || isNaN(d) || d > new Date()) return;
+    var note = document.createElement("span");
+    note.className = "cpb-req-off"; note.setAttribute("style", "display: block; font-size: 12.5px; color: #7a7f87; margin: 0 0 6px 0;");
+    note.textContent = "The deadline for accommodation requests has passed.";
+    var hint = a.nextElementSibling;
+    if (hint && hint.classList.contains("cpb-req-by")) hint.remove();
+    a.replaceWith(note);
   });
 })();
 </script>
